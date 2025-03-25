@@ -39,11 +39,19 @@ const ForgotPassword = () => {
             setLoading(false);
             setEmailSent(true);
             toast("If your email exists in our system, you'll receive a reset code", "info");
+
+            // Store email in localStorage for the reset password page
+            localStorage.setItem('resetPasswordEmail', email);
         } catch (error) {
             setLoading(false);
             setError(error.response?.data?.error || "Something went wrong. Please try again.");
             toast("Error sending reset code. Please try again.", "error");
         }
+    };
+
+    // Handle navigation to reset password
+    const goToResetPassword = () => {
+        navigate("/reset-password", { state: { email } });
     };
 
     // Initial request form
@@ -83,7 +91,7 @@ const ForgotPassword = () => {
                 <div className="form-control mt-6">
                     <button
                         type="submit"
-                        className={`btn btn-primary w-full}`}
+                        className={`btn btn-primary w-full`}
                         disabled={loading}
                     >
                         {loading ? "Sending..." : "Send Reset Code"}
@@ -129,7 +137,7 @@ const ForgotPassword = () => {
             <div className="space-y-3">
                 <button
                     className="btn btn-primary w-full"
-                    onClick={() => navigate("/reset-password")}
+                    onClick={goToResetPassword}
                 >
                     Enter Reset Code
                 </button>

@@ -1,23 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import {
-    FiMail,
     FiLock,
     FiKey,
     FiAlertCircle,
     FiArrowLeft,
-    FiCheck
+    FiCheck,
+    FiShield
 } from "react-icons/fi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const ResetPassword = () => {
     const toast = useToast();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Get email from location state or local storage
+    const [email, setEmail] = useState(() => {
+        // Try to get email from location state first
+        if (location.state && location.state.email) {
+            // Save to localStorage as backup
+            localStorage.setItem('resetPasswordEmail', location.state.email);
+            return location.state.email;
+        }
+        // Fall back to localStorage if available
+        return localStorage.getItem('resetPasswordEmail') || '';
+    });
+
+    // Redirect to forgot password if no email is available
+    useEffect(() => {
+        if (!email) {
+            toast("Please enter your email first", "warning");
+            navigate("/forgot-password");
+        }
+    }, [email, navigate, toast]);
 
     // Form states
-    const [email, setEmail] = useState("");
     const [resetCode, setResetCode] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,15 +45,20 @@ const ResetPassword = () => {
     // UI states
     const [step, setStep] = useState(1); // 1: Verify code, 2: Set new password
     const [loading, setLoading] = useState(false);
+    const [verifying, setVerifying] = useState(false);
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    // Validate email
-    const validateEmail = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+    // Clean up when component unmounts
+    useEffect(() => {
+        return () => {
+            // Only remove if we're navigating to a non-password-related page
+            if (!window.location.pathname.includes('password')) {
+                localStorage.removeItem('resetPasswordEmail');
+            }
+        };
+    }, []);
 
     // Validate reset code
     const validateCode = (code) => {
@@ -41,18 +66,8 @@ const ResetPassword = () => {
     };
 
     // Handle reset code verification
-    const handleVerifyCode = (e) => {
+    const handleVerifyCode = async (e) => {
         e.preventDefault();
-
-        if (!email) {
-            setError("Please enter your email address");
-            return;
-        }
-
-        if (!validateEmail(email)) {
-            setError("Please enter a valid email address");
-            return;
-        }
 
         if (!resetCode) {
             setError("Please enter the reset code");
@@ -65,8 +80,29 @@ const ResetPassword = () => {
         }
 
         setError("");
-        // Move to password reset step
-        setStep(2);
+        setVerifying(true);
+
+        try {
+            // Make API call to verify the code without changing the password yet
+            const response = await axios.post("http://localhost:4000/admin/user/verify-code", {
+                email,
+                token: resetCode
+            });
+
+            setVerifying(false);
+
+            if (response.data.valid) {
+                // If code is valid, move to password reset step
+                setStep(2);
+                toast("Code verified successfully", "success");
+            } else {
+                setError("Invalid or expired reset code");
+            }
+        } catch (error) {
+            setVerifying(false);
+            setError(error.response?.data?.error || "Invalid or expired reset code");
+            toast("Invalid or expired reset code", "error");
+        }
     };
 
     // Handle password reset submission
@@ -100,11 +136,15 @@ const ResetPassword = () => {
 
             setLoading(false);
             toast("Password reset successful! You can now login with your new password.", "success");
+
+            // Clear stored email
+            localStorage.removeItem('resetPasswordEmail');
+
+            // Redirect to login
             navigate("/login");
         } catch (error) {
             setLoading(false);
             setError(error.response?.data?.error || "Failed to reset password. Please try again.");
-            toast("Failed to reset password. Please try to send code again.", "error");
         }
     };
 
@@ -119,8 +159,19 @@ const ResetPassword = () => {
                     <div className="mb-6">
                         <h2 className="text-2xl font-bold text-primary mb-2">Reset Your Password</h2>
                         <p className="text-base-content/70 text-sm">
-                            {step === 1 ? 'Verify your identity with the code sent to your email' : 'Create a new password for your account'}
+                            {step === 1 ? 'Enter the verification code sent to your email' : 'Create a new password for your account'}
                         </p>
+
+                        {/* Email display (not editable) */}
+                        <div className="mt-2 bg-base-200 p-2 rounded-lg text-sm flex items-center">
+                            <span className="font-medium mr-2">Email:</span> {email}
+                            <button
+                                className="ml-auto text-primary hover:underline text-xs"
+                                onClick={() => navigate("/forgot-password")}
+                            >
+                                Change
+                            </button>
+                        </div>
 
                         {/* Steps indicator */}
                         <div className="w-full flex mt-4">
@@ -147,41 +198,31 @@ const ResetPassword = () => {
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text font-medium flex items-center">
-                                        <FiMail className="mr-2 text-primary" /> Email Address
+                                        <FiKey className="mr-2 text-primary" /> Verification Code
                                     </span>
                                 </label>
-                                <input
-                                    type="email"
-                                    placeholder="your.email@example.com"
-                                    className="input input-bordered w-full"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text font-medium flex items-center">
-                                        <FiKey className="mr-2 text-primary" /> Reset Code
-                                    </span>
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Enter 6-digit code"
-                                    className="input input-bordered w-full text-center tracking-widest text-lg"
-                                    value={resetCode}
-                                    onChange={(e) => setResetCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
-                                    maxLength={6}
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter 6-digit code"
+                                        className={`input input-bordered w-full text-center tracking-widest text-lg ${error ? 'input-error' : ''}`}
+                                        value={resetCode}
+                                        onChange={(e) => setResetCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+                                        maxLength={6}
+                                    />
+                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                        <FiShield className={resetCode.length === 6 ? "text-success" : "text-base-content/30"} />
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="form-control mt-6">
                                 <button
                                     type="submit"
-                                    className="btn btn-primary w-full"
-                                    disabled={!email || !resetCode || !validateEmail(email) || !validateCode(resetCode)}
+                                    className={`btn btn-primary w-full`}
+                                    disabled={verifying || !validateCode(resetCode)}
                                 >
-                                    Continue
+                                    {verifying ? "Verifying..." : "Verify Code"}
                                 </button>
                             </div>
 
@@ -254,16 +295,6 @@ const ResetPassword = () => {
                                     disabled={loading || !newPassword || !confirmPassword || newPassword.length < 8 || newPassword !== confirmPassword}
                                 >
                                     {loading ? "Resetting..." : "Reset Password"}
-                                </button>
-                            </div>
-
-                            <div className="mt-4 text-center">
-                                <button
-                                    type="button"
-                                    className="btn btn-ghost btn-sm"
-                                    onClick={() => setStep(1)}
-                                >
-                                    <FiArrowLeft className="mr-2" /> Back
                                 </button>
                             </div>
                         </form>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 const FooterComponent = () => {
     return (
@@ -5,14 +6,13 @@ const FooterComponent = () => {
 
             <nav>
                 <h6 className="footer-title">Company</h6>
-                <a className="link link-hover">About us</a>
-                <a className="link link-hover">Contact</a>
+                <Link to="/about" className="link link-hover">About us</Link>
+                <Link to="/contacts" className="link link-hover">Contact</Link>
             </nav>
             <nav>
                 <h6 className="footer-title">Legal</h6>
-                <a className="link link-hover">Terms of Use</a>
-                <a className="link link-hover">Privacy Policy</a>
-                <a className="link link-hover">Cookie Policy</a>
+                <Link to="/terms-of-use" className="link link-hover">Terms of Use</Link>
+                <Link to="/privacy-policy" className="link link-hover">Privacy Policy</Link>
             </nav>
         </footer>
     )

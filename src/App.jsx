@@ -22,6 +22,8 @@ import Dashboard from './admin/pages/Dashboard'
 import { useAuthContext } from './hooks/useAuthContext'
 import ForgotPassword from './user/pages/ForgetPassword'
 import ResetPassword from './user/pages/ResetPassword'
+import TermsOfUse from './user/pages/TermsOfUse'
+import PrivacyPolicy from './user/pages/PrivacyPolicy'
 
 
 function App() {
@@ -64,6 +66,9 @@ function App() {
             <Route path='/admin/dashboard'
               exact
               element={user && user.role == 'admin' ? <Dashboard /> : <Navigate to='/login' />} />
+
+            <Route path="/terms-of-use" element={<TermsOfUse />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
 
             <Route
