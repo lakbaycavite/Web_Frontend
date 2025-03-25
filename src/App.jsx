@@ -20,6 +20,8 @@ import UserDisplay from './admin/pages/UserDisplay'
 import Hotlines from './admin/pages/Hotlines'
 import Dashboard from './admin/pages/Dashboard'
 import { useAuthContext } from './hooks/useAuthContext'
+import ForgotPassword from './user/pages/ForgetPassword'
+import ResetPassword from './user/pages/ResetPassword'
 
 
 function App() {
@@ -48,6 +50,12 @@ function App() {
             <Route
               path='/login'
               element={!user ? <Login /> : <Navigate to='/home' />} />
+            <Route
+              path="/forgot-password"
+              element={!user ? <ForgotPassword /> : <Navigate to='/home' />} />
+            <Route
+              path="/reset-password"
+              element={!user ? <ResetPassword /> : <Navigate to='/home' />} />
 
             <Route
               path='/register'

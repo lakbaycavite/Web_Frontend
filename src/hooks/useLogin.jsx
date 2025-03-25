@@ -44,10 +44,11 @@ const useLogin = () => {
 
         } catch (error) {
             setError(error.response?.data?.error || "An unexpected error occurred");
+            toast("Invalid email or password", "error")
         }
-        // } finally {
-        //     setIsLoading(false) 
-        // }
+        finally {
+            setIsLoading(false)
+        }
     }
 
     return { login, error, isLoading }
