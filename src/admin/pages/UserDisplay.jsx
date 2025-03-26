@@ -4,7 +4,6 @@ import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { Toaster, toast } from "sonner";
 import moment from "moment";
-
 // Components
 import AdminDrawer from "../components/AdminDrawer";
 import AdminNavbar from "../components/AdminNavbar";
@@ -35,8 +34,11 @@ import {
 import { BsFilePost, BsCalendarDate } from "react-icons/bs";
 import { MdDateRange } from "react-icons/md";
 import { SlLogin } from "react-icons/sl";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const UserDisplay = () => {
+
+    const { user } = useAuthContext()
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -250,7 +252,7 @@ const UserDisplay = () => {
                         <button
                             className={`btn btn-sm gap-1 ${isEditing ? 'btn-warning' : 'btn-info'} text-white`}
                             onClick={handleToggleEdit}
-                            disabled={loading}
+                            disabled={loading || user.id !== id}
                         >
                             {isEditing ? (
                                 <>
@@ -282,7 +284,7 @@ const UserDisplay = () => {
                         <button
                             className={`btn btn-sm gap-1 ${userData.isActive ? 'btn-error' : 'btn-success'} text-white`}
                             onClick={handleConfirmModal}
-                            disabled={loading}
+                            disabled={loading || user.id === id}
                         >
                             {loading ? (
                                 <span className="loading loading-spinner loading-sm"></span>
@@ -431,6 +433,7 @@ const UserDisplay = () => {
                                             name="username"
                                             className="input input-bordered bg-base-100"
                                             value={editedUserData.username || ''}
+                                            disabled
                                             onChange={handleInputChange}
                                         />
                                     ) : (
@@ -453,6 +456,7 @@ const UserDisplay = () => {
                                             name="email"
                                             className="input input-bordered bg-base-100"
                                             value={editedUserData.email || ''}
+                                            disabled
                                             onChange={handleInputChange}
                                         />
                                     ) : (
