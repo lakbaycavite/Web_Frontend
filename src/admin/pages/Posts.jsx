@@ -217,12 +217,12 @@ const Posts = () => {
 
                         {/* Action Buttons */}
                         <div className="flex gap-2">
-                            <button
+                            {/* <button
                                 onClick={() => setVisible(true)}
                                 className="btn btn-primary btn-sm font-normal gap-1 transform transition hover:scale-105"
                             >
                                 <HiPlus className="w-4 h-4" /> New Post
-                            </button>
+                            </button> */}
                             <button
                                 onClick={() => setRefreshKey(prev => prev + 1)}
                                 className="btn btn-info btn-sm text-white font-normal gap-1 transform transition hover:scale-105"
@@ -290,12 +290,12 @@ const Posts = () => {
                                         `We couldn't find any posts matching "${search}"` :
                                         "There are no posts available at the moment."}
                                 </p>
-                                <button
+                                {/* <button
                                     onClick={() => setVisible(true)}
                                     className="btn btn-primary gap-2"
                                 >
                                     <HiPlus className="w-5 h-5" /> Create New Post
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     )}
