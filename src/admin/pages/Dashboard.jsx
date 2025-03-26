@@ -88,7 +88,7 @@ const Dashboard = () => {
                             <div className="stat">
                                 <div className="stat-title text-xl">Total Events</div>
                                 <div className="stat-value text-6xl">{dashboardData.totalEvents}</div>
-                                <div className="stat-desc text-lg"><span className="text-secondary">{dashboardData.doneEvents}</span> Done | <span className="text-secondary">{dashboardData.ongoingEvents}</span> On-going | <span className="text-secondary font-bold">{dashboardData.upcommingEvents}</span> Upcomming</div>
+                                <div className="stat-desc text-lg"><span className="text-secondary">{dashboardData.doneEvents}</span> Done | <span className="text-secondary">{dashboardData.ongoingEvents}</span> On-going | <span className="text-secondary font-bold">{dashboardData.upcomingEvents}</span> Upcoming</div>
                                 <div className="stat-figure text-secondary">
                                     <MdOutlineEvent size={50} />
                                 </div>

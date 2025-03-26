@@ -24,6 +24,7 @@ import ForgotPassword from './user/pages/ForgetPassword'
 import ResetPassword from './user/pages/ResetPassword'
 import TermsOfUse from './user/pages/TermsOfUse'
 import PrivacyPolicy from './user/pages/PrivacyPolicy'
+import PageNotFound from './user/pages/NotFound'
 
 
 function App() {
@@ -95,6 +96,7 @@ function App() {
               exact
               element={user && user.role == 'admin' ? <UserDisplay /> : <Navigate to='/login' />} />
 
+            <Route path="*" element={<PageNotFound />} />
 
           </Routes>
         </BrowserRouter>
