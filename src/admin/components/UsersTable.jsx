@@ -123,7 +123,7 @@ const UsersTable = (props) => {
 
                         <button
                             className={`btn btn-sm gap-1 min-w-[80px] ${props.isActive ? 'btn-error' : 'btn-success'} text-white`}
-                            disabled={loading}
+                            disabled={loading || props._id === user.id || props.role === 'admin'}
                             onClick={() => handleConfirmModal(props._id)}
                         >
                             {loading ? (
