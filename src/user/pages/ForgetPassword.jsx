@@ -1,8 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import { FiMail, FiArrowLeft, FiAlertCircle, FiSend } from "react-icons/fi";
+import api from "../../lib/axios";
 
 const ForgotPassword = () => {
     const toast = useToast();
@@ -35,7 +35,7 @@ const ForgotPassword = () => {
         setLoading(true);
 
         try {
-            await axios.post("http://localhost:4000/admin/user/request-reset", { email });
+            await api.post("/admin/user/request-reset", { email });
             setLoading(false);
             setEmailSent(true);
             toast("If your email exists in our system, you'll receive a reset code", "info");

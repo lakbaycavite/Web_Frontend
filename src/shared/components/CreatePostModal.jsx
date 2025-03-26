@@ -1,6 +1,6 @@
 import { usePostsContext } from "../../hooks/usePostsContext";
 
-import axios from 'axios'
+import api from "../../lib/axios";
 import { useState, useEffect, useRef } from "react"
 import { useAuthContext } from "../../hooks/useAuthContext";
 
@@ -56,7 +56,7 @@ const CreatePostModal = ({ Pvisible, onClose, onSuccess, handleEventAdded }) => 
             imageURL,
         }
 
-        await axios.post("http://localhost:4000/admin/post", post, {
+        await api.post("/admin/post", post, {
             headers: {
                 "content-type": "multipart/form-data",
                 "Authorization": `Bearer ${user.token}`

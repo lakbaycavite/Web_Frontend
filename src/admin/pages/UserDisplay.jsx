@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { Toaster, toast } from "sonner";
 import moment from "moment";
@@ -35,6 +34,7 @@ import { BsFilePost, BsCalendarDate } from "react-icons/bs";
 import { MdDateRange } from "react-icons/md";
 import { SlLogin } from "react-icons/sl";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import api from "../../lib/axios";
 
 const UserDisplay = () => {
 
@@ -72,7 +72,7 @@ const UserDisplay = () => {
     const fetchUserData = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:4000/admin/user/${id}`);
+            const res = await api.get(`/admin/user/${id}`);
             const user = res.data.user;
 
             setUserData({
@@ -129,7 +129,7 @@ const UserDisplay = () => {
         formData.append('userId', id);
 
         try {
-            const response = await axios.post('http://localhost:4000/admin/user/upload-image', formData, {
+            const response = await api.post('/admin/user/upload-image', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -154,7 +154,7 @@ const UserDisplay = () => {
         setLoading(true);
 
         try {
-            await axios.put(`http://localhost:4000/admin/user/toggle-status/${id}`);
+            await api.put(`/admin/user/toggle-status/${id}`);
 
             fetchUserData();
             toast.success(`User ${userData.isActive ? 'deactivated' : 'activated'} successfully`);
@@ -201,7 +201,7 @@ const UserDisplay = () => {
         setLoading(true);
 
         try {
-            await axios.put(`http://localhost:4000/admin/user/update/${id}`, editedUserData);
+            await api.put(`/admin/user/update/${id}`, editedUserData);
 
             setUserData(prev => ({
                 ...prev,

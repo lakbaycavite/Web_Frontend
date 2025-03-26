@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import {
@@ -11,6 +10,7 @@ import {
     FiShield
 } from "react-icons/fi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import api from "../../lib/axios";
 
 const ResetPassword = () => {
     const toast = useToast();
@@ -84,7 +84,7 @@ const ResetPassword = () => {
 
         try {
             // Make API call to verify the code without changing the password yet
-            const response = await axios.post("http://localhost:4000/admin/user/verify-code", {
+            const response = await api.post("/admin/user/verify-code", {
                 email,
                 token: resetCode
             });
@@ -128,7 +128,7 @@ const ResetPassword = () => {
         setLoading(true);
 
         try {
-            await axios.post("http://localhost:4000/admin/user/reset", {
+            await api.post("/admin/user/reset", {
                 email,
                 token: resetCode,
                 newPassword

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useHotlineContext } from "../../hooks/useHotlineContext";
@@ -16,6 +15,7 @@ import {
 } from "react-icons/hi";
 import { FaFire, FaAmbulance, FaShieldAlt, FaExclamationTriangle, FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
+import api from "../../lib/axios";
 
 const HotlineItems = (props) => {
     const { user } = useAuthContext();
@@ -78,7 +78,7 @@ const HotlineItems = (props) => {
 
         setLoading(true);
         try {
-            await axios.put(`http://localhost:4000/admin/hotline/update/${id}`, formData, {
+            await api.put(`/admin/hotline/update/${id}`, formData, {
                 headers: {
                     "Authorization": `Bearer ${user.token}`
                 }
@@ -99,7 +99,7 @@ const HotlineItems = (props) => {
     const handleDelete = async (id) => {
         setLoading(true);
         try {
-            await axios.delete(`http://localhost:4000/admin/hotline/delete/${id}`, {
+            await api.delete(`/admin/hotline/delete/${id}`, {
                 headers: {
                     "Authorization": `Bearer ${user.token}`
                 }

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import { FiMail, FiUser, FiLock, FiCheckCircle, FiAlertCircle, FiArrowRight } from "react-icons/fi";
+import api from "../../lib/axios";
 
 
 const Register = () => {
@@ -191,7 +191,7 @@ const Register = () => {
 
 
         // Update this to call your verification initiation endpoint
-        axios.post("http://localhost:4000/admin/user/register", registerUser)
+        api.post("/admin/user/register", registerUser)
             .then((res) => {
                 setIsVerifying(false);
                 // If successful, move to verification step
@@ -227,7 +227,7 @@ const Register = () => {
         setIsVerifying(true);
 
         // Call the verification endpoint
-        axios.post("http://localhost:4000/admin/user/verify", {
+        api.post("/admin/user/verify", {
             email,
             verificationCode,
             username,
@@ -253,7 +253,7 @@ const Register = () => {
         setIsVerifying(true);
 
         // Call resend verification endpoint
-        axios.post("http://localhost:4000/admin/user/resend-verification", { email })
+        api.post("/admin/user/resend-verification", { email })
             .then((res) => {
                 setIsVerifying(false);
                 toast('Verification code resent to your email', 'info');
@@ -420,7 +420,7 @@ const Register = () => {
             <div className="w-full mb-4">
                 {/* Continue Button */}
                 <button
-                    className={`btn btn-primary btn-lg w-full ${isVerifying ? 'loading' : ''} ${!username || errorEmail || errorUsername || errorPass || errorConfirmPass || !password || !confirmPass ? 'btn-disabled' : ''}`}
+                    className={`btn btn-primary btn-lg w-full ${!username || errorEmail || errorUsername || errorPass || errorConfirmPass || !password || !confirmPass ? 'btn-disabled' : ''}`}
                     onClick={handleInitialRegister}
                     disabled={isVerifying || !username || errorEmail || errorUsername || errorPass || errorConfirmPass}
                 >
@@ -493,7 +493,7 @@ const Register = () => {
             {/* Action Buttons */}
             <div className="space-y-4">
                 <button
-                    className={`btn btn-primary btn-lg w-full ${isVerifying ? 'loading' : ''}`}
+                    className={`btn btn-primary btn-lg w-full`}
                     onClick={handleVerifyCode}
                     disabled={isVerifying || verificationCode.length !== 6}
                 >

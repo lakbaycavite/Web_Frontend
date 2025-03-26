@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import moment from 'moment'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -37,6 +36,7 @@ import {
     FaImage
 } from "react-icons/fa"
 import { MdDescription, MdTitle, MdEvent, MdEventAvailable } from "react-icons/md"
+import api from '../../lib/axios'
 
 const localizer = momentLocalizer(moment)
 
@@ -96,7 +96,7 @@ const Events = () => {
     const fetchEvents = () => {
         setLoading(true)
 
-        axios.get(`http://localhost:4000/admin/event`)
+        api.get(`/admin/event`)
             .then((response) => {
                 let filteredEvents = response.data
 
@@ -159,7 +159,7 @@ const Events = () => {
             formData.append(key, newEvent[key])
         })
 
-        axios.post("http://localhost:4000/admin/event/", formData, {
+        api.post("/admin/event/", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 "Authorization": `Bearer ${user.token}`
@@ -212,7 +212,7 @@ const Events = () => {
     const fetchOneEvent = async (id) => {
         setLoading(true)
         try {
-            const response = await axios.get(`http://localhost:4000/admin/event/${id}`)
+            const response = await api.get(`/admin/event/${id}`)
             const eventData = response.data
 
             setCurrentId(eventData._id)
@@ -264,7 +264,7 @@ const Events = () => {
                 formData.append(key, updatedEvent[key])
             })
 
-            await axios.put(`http://localhost:4000/admin/event/update/${id}`, formData, {
+            await api.put(`/admin/event/update/${id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
 
@@ -284,7 +284,7 @@ const Events = () => {
     const handleToggleVisibility = (id) => {
         setLoading(true)
 
-        axios.post(`http://localhost:4000/admin/event/toggle-status/${id}`)
+        api.post(`/admin/event/toggle-status/${id}`)
             .then(() => {
                 setRefreshKey(prev => prev + 1)
                 toast(`Event ${viewStatus ? 'hidden' : 'unhidden'} successfully`, "success")
@@ -309,7 +309,7 @@ const Events = () => {
         formData.append('image', imageToUpdate)
 
         try {
-            await axios.post(`http://localhost:4000/admin/event/upload/${id}`, formData, {
+            await api.post(`/admin/event/upload/${id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
 
@@ -329,7 +329,7 @@ const Events = () => {
         setLoading(true)
 
         try {
-            await axios.delete(`http://localhost:4000/admin/event/delete-image/${id}`)
+            await api.delete(`/admin/event/delete-image/${id}`)
 
             await fetchOneEvent(id)
             toast("Event image deleted successfully", "success")

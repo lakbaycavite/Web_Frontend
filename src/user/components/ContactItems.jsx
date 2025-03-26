@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { FiSearch, FiPhone, FiMapPin } from "react-icons/fi";
 import { useHotlineContext } from "../../hooks/useHotlineContext";
+import api from "../../lib/axios";
 
 const ContactItems = () => {
     const { hotlines, dispatch } = useHotlineContext();
@@ -13,13 +13,16 @@ const ContactItems = () => {
 
     useEffect(() => {
 
-        axios.get("http://localhost:4000/admin/hotline/")
+        api.get("/admin/hotline/")
             .then(response => {
                 dispatch({ type: "SET_HOTLINES", payload: response.data.hotlines || [] });
+                console.log(response.data)
             })
             .catch(err => {
                 setError(err.message);
                 setLoading(false);
+                console.log(error)
+
             });
 
         // Using setTimeout to simulate network request

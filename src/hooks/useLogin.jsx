@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from './useToast'
+import api from '../lib/axios'
 
 const useLogin = () => {
     const toast = useToast()
@@ -24,7 +24,7 @@ const useLogin = () => {
         console.log('Sending request...')
 
         try {
-            const response = await axios.post('http://localhost:4000/admin/user/login', loginUser)
+            const response = await api.post('/admin/user/login', loginUser)
             const userData = response.data
 
             localStorage.setItem('user', JSON.stringify(userData))

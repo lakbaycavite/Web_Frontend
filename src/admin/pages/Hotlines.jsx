@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useHotlineContext } from "../../hooks/useHotlineContext";
@@ -20,6 +19,7 @@ import {
     MdOutlineKeyboardDoubleArrowRight,
     MdLocationOn
 } from "react-icons/md";
+import api from "../../lib/axios";
 
 const Hotlines = () => {
     const navigate = useNavigate();
@@ -83,9 +83,9 @@ const Hotlines = () => {
             setLoading(true);
             try {
                 const categoryParam = categoryFilter ? `&category=${categoryFilter}` : '';
-                const requestUrl = `http://localhost:4000/admin/hotline?page=${currentPage}&limit=${limit}&search=${search}${categoryParam}`;
+                // const requestUrl = `http://localhost:4000/admin/hotline?page=${currentPage}&limit=${limit}&search=${search}${categoryParam}`;
 
-                const response = await axios.get(requestUrl, {
+                const response = await api.get(`/admin/hotline?page=${currentPage}&limit=${limit}&search=${search}${categoryParam}`, {
                     headers: {
                         "Authorization": `Bearer ${user.token}`
                     }
@@ -132,7 +132,7 @@ const Hotlines = () => {
         try {
             const data = { name, number, location, category };
 
-            const response = await axios.post("http://localhost:4000/admin/hotline", data, {
+            const response = await api.post("/admin/hotline", data, {
                 headers: {
                     "Authorization": `Bearer ${user.token}`
                 }

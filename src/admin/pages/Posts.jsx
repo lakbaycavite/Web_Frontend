@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import axios from 'axios'
 import { usePostsContext } from '../../hooks/usePostsContext'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useToast } from '../../hooks/useToast'
@@ -20,6 +19,7 @@ import AdminDrawer from "../components/AdminDrawer"
 import AdminNavbar from "../components/AdminNavbar"
 import CreatePostModal from "../../shared/components/CreatePostModal"
 import PostItem from "./PostItem"
+import api from '../../lib/axios'
 
 const Posts = () => {
     const toast = useToast()
@@ -47,7 +47,7 @@ const Posts = () => {
     // Fetch posts data
     useEffect(() => {
         setLoading(true)
-        axios.get(`http://localhost:4000/admin/post?page=${currentPage}&limit=${limit}&search=${search}`, {
+        api.get(`/admin/post?page=${currentPage}&limit=${limit}&search=${search}`, {
             headers: {
                 "Authorization": `Bearer ${user.token}`
             }

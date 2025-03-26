@@ -1,9 +1,9 @@
-import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 import { useToast } from '../../hooks/useToast';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import api from '../../lib/axios';
 
 // Icons
 import { HiOutlineExclamationCircle, HiOutlineEye, HiMiniEyeSlash, HiEye } from "react-icons/hi2";
@@ -25,8 +25,8 @@ const PostItem = (props) => {
     const handleToggleUpdate = async (id) => {
         setLoading(true);
         try {
-            const response = await axios.put(
-                `http://localhost:4000/admin/post/toggle-visibility/${id}`,
+            const response = await api.put(
+                `/admin/post/toggle-visibility/${id}`,
                 null,
                 {
                     headers: {
@@ -156,8 +156,16 @@ const PostItem = (props) => {
                             <Button
                                 color={is_hidden ? "success" : "failure"}
                                 onClick={() => handleToggleUpdate(props.pid)}
+                                disabled={loading}
                             >
-                                Yes, I'm sure
+
+                                {loading ? (
+                                    <span className="loading loading-spinner loading-xs"></span>
+                                ) : (
+                                    <>
+                                        Yes, I'm sure
+                                    </>
+                                )}
                             </Button>
                             <Button
                                 color="gray"

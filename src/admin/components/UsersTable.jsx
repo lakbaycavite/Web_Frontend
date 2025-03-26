@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
 import moment from "moment"
 import { Button, Modal } from "flowbite-react"
 import { useToast } from "../../hooks/useToast"
@@ -10,6 +9,7 @@ import { useUsersContext } from '../../hooks/useUsersContext'
 // Icons
 import { HiOutlineExclamationCircle, HiEye } from "react-icons/hi"
 import { FaUserCheck, FaUserTimes } from "react-icons/fa"
+import api from "../../lib/axios"
 
 const UsersTable = (props) => {
     const { user } = useAuthContext()
@@ -38,8 +38,8 @@ const UsersTable = (props) => {
         setOpenModal(false)
 
         try {
-            await axios.put(
-                `http://localhost:4000/admin/user/toggle-status/${id}`,
+            await api.put(
+                `/admin/user/toggle-status/${id}`,
                 null,
                 {
                     headers: {
@@ -80,7 +80,7 @@ const UsersTable = (props) => {
                         <div className="avatar">
                             <div className="mask mask-squircle h-12 w-12 border shadow-sm">
                                 <img
-                                    src={props.image}
+                                    src={props.image ? props.image : 'https://ui-avatars.com/api/?name=' + props.username}
                                     alt={`${props.username}'s avatar`}
                                     onError={(e) => {
                                         e.target.onerror = null;

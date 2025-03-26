@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { useUsersContext } from '../../hooks/useUsersContext'
 import { useAuthContext } from "../../hooks/useAuthContext"
 
@@ -19,6 +18,7 @@ import {
 } from "react-icons/md"
 import { HiMagnifyingGlass } from "react-icons/hi2"
 import { FaUserCheck, FaUserTimes } from "react-icons/fa"
+import api from "../../lib/axios"
 
 const Users = () => {
     const { user } = useAuthContext()
@@ -48,8 +48,8 @@ const Users = () => {
     const fetchUsers = async () => {
         setLoading(true)
         try {
-            const response = await axios.get(
-                `http://localhost:4000/admin/user?page=${currentPage}&limit=${limit}&search=${search}`,
+            const response = await api.get(
+                `/admin/user?page=${currentPage}&limit=${limit}&search=${search}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${user.token}`

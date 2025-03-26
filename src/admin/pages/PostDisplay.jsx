@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +7,7 @@ import { HiOutlineExclamationCircle, HiOutlineChatAlt, HiOutlineThumbUp } from "
 import { useAuthContext } from "../../hooks/useAuthContext";
 import moment from "moment";
 import { useToast } from "../../hooks/useToast";
+import api from '../../lib/axios';
 
 const CommentsModal = ({ postId, show, onClose }) => {
     const { user } = useAuthContext();
@@ -16,7 +16,7 @@ const CommentsModal = ({ postId, show, onClose }) => {
 
     useEffect(() => {
         if (show) {
-            axios.get(`http://localhost:4000/admin/post/${postId}/comments`, {
+            api.get(`/admin/post/${postId}/comments`, {
                 headers: { "Authorization": `Bearer ${user.token}` }
             })
                 .then((res) => {
@@ -178,7 +178,7 @@ const PostDisplay = ({ onSuccess }) => {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:4000/admin/post/' + id, {
+        api.get('/admin/post/' + id, {
             headers: {
                 "Authorization": `bearer ${user.token}`
             }
@@ -201,8 +201,9 @@ const PostDisplay = ({ onSuccess }) => {
     }, [])
 
     const handleDelete = (id) => {
+        setLoading(true)
         setOpenModal(false)
-        axios.put("http://localhost:4000/admin/post/toggle-visibility/" + id, null, {
+        api.put("/admin/post/toggle-visibility/" + id, null, {
             headers: {
                 "Authorization": `Bearer ${user.token}`
             }
@@ -213,6 +214,9 @@ const PostDisplay = ({ onSuccess }) => {
             })
             .catch((err) => {
                 console.log(err);
+            })
+            .finally(() => {
+                setLoading(false)
             })
     }
 

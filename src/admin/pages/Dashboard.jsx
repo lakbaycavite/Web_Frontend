@@ -11,8 +11,8 @@ import PieChartGender from "../components/PieChartGender";
 import BarchartAge from "../components/BarChartAge";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../lib/axios";
 
 
 const Dashboard = () => {
@@ -26,7 +26,7 @@ const Dashboard = () => {
     useEffect(() => {
         setLoading(true)
 
-        axios.get('http://localhost:4000/admin/dashboard')
+        api.get('/admin/dashboard')
             .then((res) => {
                 setDashboardData(res.data);
                 // Set gender data for pie chart
