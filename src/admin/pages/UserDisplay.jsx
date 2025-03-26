@@ -216,21 +216,6 @@ const UserDisplay = () => {
         }
     };
 
-    // Get profile image
-    const getProfileImage = () => {
-        if (userData.image) {
-            return userData.image;
-        }
-
-        if (userData.role === "admin") {
-            return `http://localhost:4000/uploads/admin.png`;
-        }
-
-        return userData.gender === "female"
-            ? `http://localhost:4000/uploads/female.png`
-            : `http://localhost:4000/uploads/male.png`;
-    };
-
     // Get gender icon
     const getGenderIcon = () => {
         if (userData.gender?.toLowerCase() === 'female') {
