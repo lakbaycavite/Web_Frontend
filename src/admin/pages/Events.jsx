@@ -727,7 +727,7 @@ const Events = () => {
                             <div className='w-full mb-5 overflow-hidden rounded-lg'>
                                 <div className="relative">
                                     <img
-                                        src={`http://localhost:4000/uploads/${viewImage}`}
+                                        src={viewImage}
                                         alt="Event"
                                         className="w-full h-48 object-cover rounded-lg"
                                     />

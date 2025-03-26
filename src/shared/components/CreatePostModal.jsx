@@ -6,6 +6,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 
 const CreatePostModal = ({ Pvisible, onClose, onSuccess, handleEventAdded }) => {
 
+    const [loading, setLoading] = useState(false)
     const { dispatch } = usePostsContext()
     const { user } = useAuthContext()
 
@@ -47,7 +48,7 @@ const CreatePostModal = ({ Pvisible, onClose, onSuccess, handleEventAdded }) => 
     }
 
     const handlePost = async (e) => {
-
+        setLoading(true)
         const post = {
             title,
             content,
@@ -75,6 +76,9 @@ const CreatePostModal = ({ Pvisible, onClose, onSuccess, handleEventAdded }) => 
             .catch((err) => {
                 console.log(post);
                 console.log(err)
+            })
+            .finally(() => {
+                setLoading(false)
             })
     }
 
@@ -155,13 +159,24 @@ const CreatePostModal = ({ Pvisible, onClose, onSuccess, handleEventAdded }) => 
                         <div className="w-full h-8 mt-5 rounded-md flex justify-end">
                             <div className="w-[16rem] h-full flex justify-between">
                                 <button onClick={handleClose} className="btn btn-sm w-28"> Cancel </button>
-                                <button className={`btn btn-sm btn-success text-white w-28 ${!title || !content || errorMessageTitle || errorMessageContent ? 'btn-disabled' : ''}`} onClick={handlePost}> Post </button>
+                                <button disabled={loading} className={`btn btn-sm btn-success text-white w-28 ${!title || !content || errorMessageTitle || errorMessageContent ? 'btn-disabled' : ''}`} onClick={handlePost}>
+
+                                    {loading ? (
+                                        <span className="loading loading-spinner loading-sm"></span>
+                                    ) : (
+                                        <>
+                                            Post
+                                        </>
+                                    )}
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <form method="dialog" className="modal-backdrop" onClick={handleClose}>
-                    <button>close</button>
+                    <button>
+                        Cancel
+                    </button>
                 </form>
             </dialog>
         </>

@@ -80,7 +80,7 @@ const UsersTable = (props) => {
                         <div className="avatar">
                             <div className="mask mask-squircle h-12 w-12 border shadow-sm">
                                 <img
-                                    src={`http://localhost:4000/uploads/${props.image}`}
+                                    src={props.image}
                                     alt={`${props.username}'s avatar`}
                                     onError={(e) => {
                                         e.target.onerror = null;
@@ -103,7 +103,7 @@ const UsersTable = (props) => {
                 <td>
                     <div className="font-medium">{`${props.firstName || ''} ${props.lastName || ''}`}</div>
                     {(props.role) && (
-                        <div className="badge badge-ghost badge-sm mt-1">{props.role}</div>
+                        <div className={`badge  badge-sm mt-1 ${props.role === 'admin' ? 'badge-warning' : 'badge-ghost'}`}>{props.role}</div>
                     )}
                 </td>
                 <td>

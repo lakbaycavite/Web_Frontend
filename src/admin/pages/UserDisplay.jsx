@@ -219,7 +219,7 @@ const UserDisplay = () => {
     // Get profile image
     const getProfileImage = () => {
         if (userData.image) {
-            return `http://localhost:4000/uploads/${userData.image}`;
+            return userData.image;
         }
 
         if (userData.role === "admin") {
@@ -244,7 +244,6 @@ const UserDisplay = () => {
 
     return (
         <AdminDrawer>
-            <Toaster richColors />
             <AdminNavbar />
 
             <div className="p-10 max-w-7xl mx-auto">
@@ -340,8 +339,9 @@ const UserDisplay = () => {
                                 <div className="avatar">
                                     <div className="w-40 h-40 rounded-full shadow-lg ring-2 ring-primary ring-offset-2">
                                         <img
-                                            src={getProfileImage()}
+                                            src={userData.image ? userData.image : 'https://ui-avatars.com/api/?name=' + userData.username}
                                             alt={`${userData.username}'s avatar`}
+
                                             className="object-cover"
                                         />
                                     </div>

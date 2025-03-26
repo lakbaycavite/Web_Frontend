@@ -71,7 +71,7 @@ const PostItem = (props) => {
                     {props.image && (
                         <div className="avatar">
                             <div className="w-10 h-10 rounded-md">
-                                <img src={props.image} alt="Post thumbnail" />
+                                <img src={props.image ? props.image : 'https://ui-avatars.com/api/?name=' + userData.username} alt="Post thumbnail" />
                             </div>
                         </div>
                     )}

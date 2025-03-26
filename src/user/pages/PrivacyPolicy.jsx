@@ -153,8 +153,8 @@ const PrivacyPolicy = () => {
                         If you have any questions about this Privacy Policy, please contact us:
                     </p>
                     <p className="font-medium mt-2">
-                        Email: privacy@lakbaycavite.com<br />
-                        Address: Lakbay Cavite Headquarters, Trece Martires City, Cavite, Philippines
+                        Email: cavitelakbay@gmail.com<br />
+                        {/* Address: Lakbay Cavite Headquarters, Trece Martires City, Cavite, Philippines */}
                     </p>
 
                     <div className="flex justify-center mt-12 mb-8">

@@ -155,7 +155,7 @@ const PostDisplay = ({ onSuccess }) => {
                     {/* avatar */}
                     <div className="flex items-center mb-6 ">
                         <div className="w-24 h-24 rounded-full overflow-hidden">
-                            <img src={`http://localhost:4000/uploads/${userImage}`} alt="User Avatar" className='w-full h-full object-cover' />
+                            <img src={userImage ? userImage : 'https://ui-avatars.com/api/?name=' + userPost} alt="User Avatar" className='w-full h-full object-cover' />
                         </div>
                         <div className="ml-6">
                             <p className="text-gray-500">User: <Link to={`/user/display/${userId}`} className="text-primary hover:underline">{userPost}</Link></p>
@@ -185,7 +185,7 @@ const PostDisplay = ({ onSuccess }) => {
                             <button onClick={handleImageClick} className="w-full h-auto">
                                 <img
                                     className="w-full h-52 object-cover rounded-lg"
-                                    src={`http://localhost:4000/uploads/${imageURL}`}
+                                    src={imageURL}
                                     alt="Post Attachment"
                                 />
                             </button>
@@ -194,7 +194,7 @@ const PostDisplay = ({ onSuccess }) => {
                                 <Modal.Body>
                                     <img
                                         className="w-full h-auto object-cover rounded-lg"
-                                        src={`http://localhost:4000/uploads/${imageURL}`}
+                                        src={imageURL}
                                         alt="Post Attachment"
                                     />
                                 </Modal.Body>

@@ -40,9 +40,9 @@ const TermsOfUse = () => {
                     </div>
 
                     <h2 className="text-xl font-bold mt-8 mb-4">1. Accounts</h2>
-                    <p>
+                    {/* <p>
                         When you create an account with us, you must provide information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.
-                    </p>
+                    </p> */}
                     <p>
                         You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password, whether your password is with our Service or a third-party service.
                     </p>
@@ -118,8 +118,8 @@ const TermsOfUse = () => {
                         If you have any questions about these Terms, please contact us at:
                     </p>
                     <p className="font-medium mt-2">
-                        Email: support@lakbaycavite.com<br />
-                        Address: Lakbay Cavite Headquarters, Trece Martires City, Cavite, Philippines
+                        Email: cavitelakbay@gmail.com<br />
+                        {/* Address: Lakbay Cavite Headquarters, Trece Martires City, Cavite, Philippines */}
                     </p>
 
                     <div className="flex justify-center mt-12 mb-8">
