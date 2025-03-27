@@ -887,6 +887,7 @@ const Events = () => {
                                                 .join(", ")}
                                         </span>
                                     </div>
+                                    
                                 ) : null
                             )}
                         </div>
