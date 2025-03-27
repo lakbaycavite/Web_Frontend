@@ -882,7 +882,7 @@ const Events = () => {
                                     <div className="flex items-start gap-1 text-gray-600 mt-2">
                                         <FaMapMarkerAlt className="text-error mt-1 flex-shrink-0" />
                                         <span>
-                                            {[viewPlace, viewBarangay, "Imus, Cavite"]
+                                            {[viewPlace, viewBarangay]
                                                 .filter(Boolean)
                                                 .join(", ")}
                                         </span>
