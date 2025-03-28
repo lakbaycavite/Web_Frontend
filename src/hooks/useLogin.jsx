@@ -12,7 +12,7 @@ const useLogin = () => {
     const [isLoading, setIsLoading] = useState(false)
     const { dispatch } = useAuthContext()
 
-    const login = async (identifier, password) => {
+    const login = async (identifier, password, showSuccessToast = true) => {
         setIsLoading(true)
         setError(null)
 
@@ -31,7 +31,9 @@ const useLogin = () => {
 
             dispatch({ type: 'LOGIN', payload: userData })
 
-            setIsLoading(false)
+            if (showSuccessToast) {
+                toast(`Login successful! Welcome back. ${userData.firstName ? userData.firstName : userData.username}`, "success")
+            }
 
             if (userData.role == 'admin') {
                 navigate('/admin/user')

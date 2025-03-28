@@ -242,8 +242,10 @@ const Register = () => {
             .then(async (res) => {
                 setIsVerifying(false);
                 toast('Account verified and created successfully', 'success');
-                await login(email, password);
-                navigate('/home');
+
+
+                login(email, password, false)
+                // navigate('/login');
 
             })
             .catch((err) => {

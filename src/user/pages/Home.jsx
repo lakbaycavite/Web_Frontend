@@ -4,10 +4,13 @@ import IMAGES from "../../images/images"
 import { MdMap, MdGroups2, MdCommute } from "react-icons/md";
 import { RxDownload } from "react-icons/rx";
 import { SlInfo } from "react-icons/sl";
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
+
+    const { user } = useAuthContext()
 
     const navigate = useNavigate()
     return (
@@ -34,7 +37,13 @@ const Home = () => {
                             <div className="w-24 h-1 bg-primary mt-2 rounded-full"></div>
                         </div>
 
-                        <h2 className="text-3xl font-bold text-primary">Lakbay Cavite</h2>
+                        {/* <h2 className="text-3xl font-bold text-primary">Lakbay Cavite</h2> */}
+
+                        {user ? (
+                            <h2 className="text-3xl"><span className='text-primary font-bold'>Hello, </span>{user.firstName ? user.firstName : user.username}!</h2>
+                        ) : (
+                            <h2 className="text-3xl font-bold text-primary">Lakbay Cavite</h2>
+                        )}
 
                         <p className="py-4 text-lg leading-relaxed">
                             Navigate Your Way with Ease – Access Public Transportation Routes and Real-Time Updates.
