@@ -1,4 +1,5 @@
 import { useReducer, useEffect, useState } from "react"
+import { jwtDecode } from 'jwt-decode'
 import AuthContext from "./createAuthContext"
 
 const authReducer = (state, action) => {
@@ -21,11 +22,31 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'))
-        if (user) {
-            dispatch({ type: 'LOGIN', payload: user })
+
+        if (user?.token) {
+            try {
+                const decodedToken = jwtDecode(user.token)
+                console.log('decodedToken: ', decodedToken)
+                if (decodedToken.exp * 1000 < Date.now()) {
+                    localStorage.removeItem('user')
+                    dispatch({ type: 'LOGOUT' })
+                }
+                else {
+                    dispatch({ type: 'LOGIN', payload: user })
+                }
+            } catch (error) {
+                console.error('Invalid token', error)
+                localStorage.removeItem('user')
+                dispatch({ type: 'LOGOUT' })
+            }
         }
 
+        // if (user) {
+        //     dispatch({ type: 'LOGIN', payload: user })
+        // }
+
         setIsLoading(false)
+
     }, [])
 
     console.log('AuthContext state: ', state)
