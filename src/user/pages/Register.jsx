@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import { FiMail, FiUser, FiLock, FiCheckCircle, FiAlertCircle, FiArrowRight } from "react-icons/fi";
 import api from "../../lib/axios";
+import useLogin from "../../hooks/useLogin";
 
 
 const Register = () => {
+    const { login } = useLogin();
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -35,6 +37,8 @@ const Register = () => {
     const [errorConfirmPass, setErrorConfirmPass] = useState('');
     const [isMismatch, setIsMismatch] = useState(false);
     const [takenMessage, setTakenMessage] = useState([]);
+
+    const [loadingButton, setLoadingButton] = useState(false);
 
     // validators
     const validateEmail = (value) => {
@@ -215,7 +219,7 @@ const Register = () => {
     };
 
     // Handle verification code submission
-    const handleVerifyCode = (e) => {
+    const handleVerifyCode = async (e) => {
         e.preventDefault();
         setVerificationError('');
 
@@ -227,7 +231,7 @@ const Register = () => {
         setIsVerifying(true);
 
         // Call the verification endpoint
-        api.post("/admin/user/verify", {
+        await api.post("/admin/user/verify", {
             email,
             verificationCode,
             username,
@@ -235,10 +239,12 @@ const Register = () => {
             firstName,
             lastName
         })
-            .then((res) => {
+            .then(async (res) => {
                 setIsVerifying(false);
                 toast('Account verified and created successfully', 'success');
+                await login(email, password);
                 navigate('/home');
+
             })
             .catch((err) => {
                 setIsVerifying(false);
@@ -247,13 +253,14 @@ const Register = () => {
     };
 
     // Handle resend verification code
-    const handleResendCode = () => {
+    const handleResendCode = async () => {
+        setVerificationError('')
         if (resendDisabled) return;
-
-        setIsVerifying(true);
+        setLoadingButton(true);
+        // setIsVerifying(true);
 
         // Call resend verification endpoint
-        api.post("/admin/user/resend-verification", { email })
+        await api.post("/admin/user/resend-verification", { email })
             .then((res) => {
                 setIsVerifying(false);
                 toast('Verification code resent to your email', 'info');
@@ -262,7 +269,8 @@ const Register = () => {
             .catch((err) => {
                 setIsVerifying(false);
                 setVerificationError(err.response?.data?.error || 'Failed to resend verification code');
-            });
+            })
+            .finally(() => setLoadingButton(false));
     };
 
     // Registration form (Step 1)
@@ -495,7 +503,7 @@ const Register = () => {
                 <button
                     className={`btn btn-primary btn-lg w-full`}
                     onClick={handleVerifyCode}
-                    disabled={isVerifying || verificationCode.length !== 6}
+                    disabled={isVerifying || verificationCode.length !== 6 || loadingButton}
                 >
                     {isVerifying ? 'Verifying...' : 'Verify and Create Account'}
                 </button>
@@ -503,14 +511,18 @@ const Register = () => {
                 <div className="flex justify-between items-center">
                     <button
                         className="btn btn-ghost btn-sm"
-                        onClick={() => setStep(1)}
+                        onClick={() => {
+                            setStep(1)
+                            setVerificationCode('')
+                            setVerificationError('')
+                        }}
                     >
                         Back to Form
                     </button>
                     <button
-                        className={`btn btn-outline btn-sm ${resendDisabled ? 'btn-disabled' : ''}`}
+                        className={`btn btn-outline btn-sm`}
                         onClick={handleResendCode}
-                        disabled={resendDisabled}
+                        disabled={resendDisabled || loadingButton}
                     >
                         {resendDisabled ? `Resend in ${countdown}s` : 'Resend Code'}
                     </button>

@@ -35,11 +35,9 @@ const useLogin = () => {
 
             if (userData.role == 'admin') {
                 navigate('/admin/user')
-                toast('Login successful', 'success')
             }
             else {
                 navigate('/home')
-                toast('Login successful', 'success')
             }
 
         } catch (error) {

@@ -252,7 +252,10 @@ const Login = () => {
 
     const loginToggle = async () => {
         console.log(identifier, password);
-        await login(identifier, password);
+
+        await login(identifier, password)
+
+
     };
 
     const handleUserChange = (e) => {
