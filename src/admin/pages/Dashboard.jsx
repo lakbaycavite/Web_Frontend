@@ -47,7 +47,6 @@ const Dashboard = () => {
                 }
                 // Set age groups data for bar chart
                 setAgeGroups(res.data.demographics?.ageGroups || {});
-                console.log(res.data);
             })
             .catch((err) => {
                 console.log(err);

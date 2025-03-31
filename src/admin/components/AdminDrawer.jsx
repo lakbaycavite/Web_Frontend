@@ -4,10 +4,6 @@ import { FaUserFriends } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { BsFillPostcardFill } from "react-icons/bs";
 import { MdEvent } from "react-icons/md";
-import { RiCommunityFill } from "react-icons/ri";
-import { IoHome } from "react-icons/io5";
-import { FaMap } from "react-icons/fa";
-import { GiMagnifyingGlass } from "react-icons/gi";
 import { RiContactsBook3Fill } from "react-icons/ri";
 
 
@@ -37,12 +33,7 @@ const AdminDrawer = ({ children }) => {
                     <li><a className="text-lg text-white hover:bg-secondary hover:text-white" onClick={() => navigate('/admin/hotline')}><RiContactsBook3Fill /> Hotlines</a></li>
 
                     <br />
-                    {/* <br />
-                    <label className="text-md text-gray-400">Pages</label>
-                    <li><a className="text-lg text-white hover:bg-secondary hover:text-black"><IoHome /> Home</a></li>
-                    <li><a className="text-lg text-white hover:bg-secondary hover:text-black"><GiMagnifyingGlass /> Placefinder</a></li>
-                    <li><a className="text-lg text-white hover:bg-secondary hover:text-black"><FaMap /> Maps</a></li>
-                    <li><a className="text-lg text-white hover:bg-secondary hover:text-black"><RiCommunityFill /> Community</a></li> */}
+
                 </ul>
             </div>
         </div>

@@ -1,13 +1,11 @@
 import { useLocation } from "react-router-dom"
 import { matchPath } from "react-router-dom"
 import useLogout from "../../hooks/useLogout"
-import { useToast } from "../../hooks/useToast"
 
 const AdminNavbar = () => {
 
     const location = useLocation()
     const { logout } = useLogout()
-    const toast = useToast()
 
     const getTitle = () => {
         if (location.pathname === '/admin/post') {
@@ -33,7 +31,6 @@ const AdminNavbar = () => {
 
     const handleLogout = async () => {
         logout()
-        // toast("Logged out successfully", "info")
     }
 
     return (

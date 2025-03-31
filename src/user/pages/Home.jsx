@@ -37,7 +37,6 @@ const Home = () => {
                             <div className="w-24 h-1 bg-primary mt-2 rounded-full"></div>
                         </div>
 
-                        {/* <h2 className="text-3xl font-bold text-primary">Lakbay Cavite</h2> */}
 
                         {user ? (
                             <h2 className="text-3xl"><span className='text-primary font-bold'>Hello, </span>{user.firstName ? user.firstName : user.username}!</h2>
@@ -110,7 +109,7 @@ const Home = () => {
                                     <MdMap size={30} />
                                 </div>
                                 <h3 className="card-title">Real-Time Maps</h3>
-                                <p>Explore Cavite with interactive maps showing real-time transportation updates.</p>
+                                <p>Explore Imus City, Cavite with interactive maps showing real-time transportation updates.</p>
                             </div>
                         </div>
 
@@ -142,7 +141,7 @@ const Home = () => {
             <div className="py-12 bg-secondary">
                 <div className="container mx-auto px-4 text-center text-white">
                     <div className="max-w-xl mx-auto mb-10">
-                        <h2 className="text-3xl font-bold mb-4">Ready to explore Cavite?</h2>
+                        <h2 className="text-3xl font-bold mb-4">Ready to explore Imus City, Cavite?</h2>
                         <p className="text-lg">Download Lakbay Cavite now and transform your travel experience!</p>
                     </div>
 

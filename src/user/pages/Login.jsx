@@ -251,11 +251,7 @@ const Login = () => {
     };
 
     const loginToggle = async () => {
-        console.log(identifier, password);
-
         await login(identifier, password)
-
-
     };
 
     const handleUserChange = (e) => {
@@ -398,7 +394,7 @@ const Login = () => {
                         <div>
                             <h2 className="text-2xl font-bold text-white mb-2">New here?</h2>
                             <p className="text-white/80 text-sm mb-6">
-                                Create an account to explore the beauty of Cavite with us!
+                                Create an account to explore the beauty of Imus City, Cavite with us!
                             </p>
                         </div>
 
@@ -406,7 +402,7 @@ const Login = () => {
                             onClick={() => navigate('/register')}
                             className="btn btn-outline border-white text-white hover:bg-white hover:text-primary w-full"
                         >
-                            Create Account
+                            Register
                         </button>
                     </div>
                 </div>

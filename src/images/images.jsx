@@ -8,6 +8,9 @@ const IMAGES = {
     registerBG3: new URL('./images/BG3.png', import.meta.url).href,
     PIC1: new URL('./images/2.png', import.meta.url).href,
     PIC2: new URL('./images/3.png', import.meta.url).href,
+    about1: new URL('./images/imusPlaza.jpg', import.meta.url).href,
+    about2: new URL('./images/alapanBattle.jpg', import.meta.url).href,
+    about3: new URL('./images/imusCathedral.jpg', import.meta.url).href,
 }
 
 export default IMAGES

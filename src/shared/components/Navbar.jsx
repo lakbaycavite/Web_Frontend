@@ -57,7 +57,7 @@ const Navbar = () => {
             </div>
             <div className="navbar-end">
                 {!user ? (
-                    <button onClick={() => navigate('/login')} className="btn text-primary">Sign in</button>
+                    <button onClick={() => navigate('/login')} className="btn text-primary">Login</button>
                 ) : (
                     <button className="btn text-primary" onClick={handleLogout}>Logout</button>
                 )}

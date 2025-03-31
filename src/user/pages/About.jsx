@@ -28,7 +28,7 @@ const About = () => {
         {
             icon: <FaMapMarkedAlt className="text-3xl text-primary" />,
             title: "Interactive Maps",
-            description: "Explore detailed maps of Cavite with real-time routes information."
+            description: "Explore detailed maps of Imus Cavite with real-time routes information."
         },
         {
             icon: <FaRoute className="text-3xl text-primary" />,
@@ -73,7 +73,7 @@ const About = () => {
                 <section className={`relative h-[70vh] w-full transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                     <div className="absolute inset-0 overflow-hidden">
                         <img
-                            src={IMAGES.PIC1}
+                            src={IMAGES.about1}
                             alt="Cavite Landscape"
                             className="w-full h-full object-cover"
                         />
@@ -82,9 +82,9 @@ const About = () => {
 
                     <div className="relative h-full container mx-auto px-4 md:px-6 flex flex-col justify-center">
                         <div className="max-w-2xl animate-fadeIn">
-                            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Discover Cavite with Lakbay Cavite</h1>
+                            <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">Discover Imus Cavite with Lakbay Cavite</h1>
                             <p className="text-xl text-white/90 mb-8 drop-shadow-md">
-                                Your ultimate companion for navigating the historical and beautiful province of Cavite.
+                                Your ultimate companion for navigating the historical and beautiful city of Imus.
                             </p>
                             <div className="flex flex-wrap gap-4">
                                 <button className="btn btn-success gap-2 text-white">
@@ -106,7 +106,7 @@ const About = () => {
                                 <div className="md:w-1/2 animate-slideInLeft">
                                     <div className="relative">
                                         <img
-                                            src={IMAGES.PIC1}
+                                            src={IMAGES.about2}
                                             alt="Cavite Navigation"
                                             className="rounded-lg shadow-xl"
                                         />
@@ -120,16 +120,15 @@ const About = () => {
                                     <div className="inline-block mb-4">
                                         <div className="badge badge-primary text-sm font-semibold py-3 px-4">About Lakbay Cavite</div>
                                     </div>
-                                    <h2 className="text-3xl font-bold mb-6 text-gray-800">Navigate Cavite with Confidence</h2>
+                                    <h2 className="text-3xl font-bold mb-6 text-gray-800">Navigate Imus Cavite with Confidence</h2>
                                     <p className="text-lg text-gray-600 mb-6">
                                         Lakbay Cavite is a comprehensive navigation app designed to help both locals and tourists
-                                        easily navigate through the province of Cavite. Our app provides detailed information about
+                                        easily navigate through the city of Imus in Cavite. Our app provides detailed information about
                                         public transportation routes, points of interest, and turn-by-turn directions.
                                     </p>
                                     <p className="text-lg text-gray-600 mb-8">
                                         Whether you're commuting via public transport or driving your own vehicle, Lakbay Cavite
-                                        offers the tools and information you need to reach your destination efficiently and
-                                        discover the rich cultural heritage of Cavite along the way.
+                                        offers the tools and information you need to reach your destination efficiently.
                                     </p>
 
                                     <div className="flex items-center gap-4">
@@ -159,7 +158,7 @@ const About = () => {
                                 <div className="badge badge-success mb-4 py-3 px-4 text-white">App Features</div>
                                 <h2 className="text-3xl font-bold text-gray-800">Discover What Makes Lakbay Cavite Special</h2>
                                 <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-                                    Our app is packed with features designed to make your journey through Cavite seamless and enjoyable.
+                                    Our app is packed with features designed to make your journey through Imus Cavite seamless and enjoyable.
                                 </p>
                             </div>
 
@@ -188,7 +187,7 @@ const About = () => {
                                     <FaLandmark size={60} className="mb-6 text-white/90" />
                                     <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
                                     <p className="text-lg text-white/90 mb-6">
-                                        At Lakbay Cavite, our mission is to make navigation through Cavite accessible to everyone.
+                                        At Lakbay Cavite, our mission is to make navigation through Imus Cavite accessible to everyone.
                                         We believe that easy access to transportation information can greatly improve the quality
                                         of life for residents and enhance the experience of visitors.
                                     </p>
@@ -201,7 +200,7 @@ const About = () => {
                                 <div className="md:w-1/2">
                                     <div className="rounded-lg overflow-hidden shadow-2xl">
                                         <img
-                                            src={IMAGES.PIC1}
+                                            src={IMAGES.about3}
                                             alt="Cavite Historical Site"
                                             className="w-full h-auto"
                                         />
@@ -263,9 +262,9 @@ const About = () => {
                     {/* Call to Action Section */}
                     <section className="py-16 bg-secondary text-white">
                         <div className="container mx-auto px-4 md:px-6 text-center">
-                            <h2 className="text-3xl font-bold mb-6">Ready to Explore Cavite?</h2>
+                            <h2 className="text-3xl font-bold mb-6">Ready to Explore Imus Cavite?</h2>
                             <p className="text-lg mb-8 max-w-3xl mx-auto">
-                                Download Lakbay Cavite today and start exploring the beautiful province of Cavite with ease and confidence.
+                                Download Lakbay Cavite today and start exploring the beautiful city of Imus Cavite with ease and confidence.
                             </p>
                             <div className="flex flex-wrap justify-center gap-4">
                                 <button className="btn bg-white text-secondary hover:bg-gray-200 gap-2">

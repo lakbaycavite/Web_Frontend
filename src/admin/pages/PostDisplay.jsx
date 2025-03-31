@@ -149,7 +149,6 @@ const PostDisplay = ({ onSuccess }) => {
     const toast = useToast()
     const { id } = useParams()
     const { user } = useAuthContext()
-    const [showAttachments, setShowAttachments] = useState(false)
 
     const navigate = useNavigate()
 
@@ -162,9 +161,7 @@ const PostDisplay = ({ onSuccess }) => {
     const [attachments, setAttachments] = useState([])
     const [likedBy, setLikedBy] = useState([])
 
-    const [success, setSuccess] = useState(false)
     const [openModal, setOpenModal] = useState(false)
-    const [deleted, setDeleted] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const handleBack = () => {
@@ -184,7 +181,6 @@ const PostDisplay = ({ onSuccess }) => {
             }
         })
             .then((res) => {
-                console.log(res.data)
                 setContent(res.data.content)
                 setUserImage(res.data.user.image)
                 setAttachments(res.data.attachments || [])
@@ -193,7 +189,6 @@ const PostDisplay = ({ onSuccess }) => {
                 setUserPost(res.data.user.username)
                 setUserId(res.data.user._id)
                 setLikedBy(res.data.likedBy || [])
-                console.log(res)
             })
             .catch((err) => {
                 console.log(err);
@@ -208,8 +203,7 @@ const PostDisplay = ({ onSuccess }) => {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-            .then((response) => {
-                console.log(response);
+            .then(() => {
                 handleDeletePopup()
             })
             .catch((err) => {
