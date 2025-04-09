@@ -43,7 +43,7 @@ const CommentsModal = ({ postId, show, onClose }) => {
                             comments.map((comment, index) => (
                                 <div key={index} className="p-3 border rounded-lg bg-gray-50">
                                     <Link to={`/user/display/${comment.user._id}`} className="text-sm text-gray-600">{comment.user.username}</Link>
-                                    <p className="text-gray-800">{comment.text}</p>
+                                    <p className="text-gray-800">{comment.comment}</p>
                                     <p className="text-xs text-gray-500">{moment(comment.createdAt).fromNow()}</p>
                                 </div>
                             ))
@@ -63,12 +63,14 @@ const CommentsModal = ({ postId, show, onClose }) => {
 // Component for displaying likes
 const LikesModal = ({ likedBy, show, onClose }) => {
     return (
+
         <Modal show={show} size="md" onClose={onClose} popup>
             <Modal.Header />
             <Modal.Body>
                 <h3 className="text-lg font-semibold text-gray-700 mb-4">Liked by</h3>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                     {likedBy && likedBy.length > 0 ? (
+
                         likedBy.map((user, index) => (
                             <div key={index} className="p-2 border rounded-lg bg-gray-50 flex items-center">
                                 <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
@@ -181,6 +183,7 @@ const PostDisplay = ({ onSuccess }) => {
             }
         })
             .then((res) => {
+
                 setContent(res.data.content)
                 setUserImage(res.data.user.image)
                 setAttachments(res.data.attachments || [])
@@ -189,11 +192,14 @@ const PostDisplay = ({ onSuccess }) => {
                 setUserPost(res.data.user.username)
                 setUserId(res.data.user._id)
                 setLikedBy(res.data.likedBy || [])
+                // console.log(res.data)
             })
             .catch((err) => {
                 console.log(err);
             })
     }, [])
+
+
 
     const handleDelete = (id) => {
         setLoading(true)

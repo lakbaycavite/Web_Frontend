@@ -66,8 +66,8 @@ const Dashboard = () => {
                         <div className="stats shadow">
                             <div className="stat">
                                 <div className="stat-title text-xl">Total Users</div>
-                                <div className="stat-value text-6xl">{dashboardData.totalUsers}</div>
-                                <div className="stat-desc text-lg"><span className="text-secondary">{dashboardData.totalActiveUsers}</span> Active | <span className="text-secondary">{dashboardData.totalInactiveUsers}</span> Inactive</div>
+                                <div className="stat-value text-4xl">{dashboardData.totalUsers}</div>
+                                <div className="stat-desc text-md"><span className="text-secondary">{dashboardData.totalActiveUsers}</span> Active | <span className="text-secondary">{dashboardData.totalInactiveUsers}</span> Inactive</div>
                                 <div className="stat-figure text-secondary">
                                     <FaUsers size={50} />
                                 </div>
@@ -76,8 +76,8 @@ const Dashboard = () => {
                         <div className="stats shadow">
                             <div className="stat">
                                 <div className="stat-title text-xl">Total Posts</div>
-                                <div className="stat-value text-6xl">{dashboardData.totalPosts}</div>
-                                <div className="stat-desc text-lg"><span className="text-secondary">{dashboardData.totalActivePosts}</span> visible | <span className="text-secondary">{dashboardData.totalInactivePosts}</span> Hidden</div>
+                                <div className="stat-value text-4xl">{dashboardData.totalPosts}</div>
+                                <div className="stat-desc text-md"><span className="text-secondary">{dashboardData.totalActivePosts}</span> visible | <span className="text-secondary">{dashboardData.totalInactivePosts}</span> Hidden</div>
                                 <div className="stat-figure text-secondary">
                                     <BsFillPostcardFill size={50} />
                                 </div>
@@ -86,8 +86,8 @@ const Dashboard = () => {
                         <div className="stats shadow">
                             <div className="stat">
                                 <div className="stat-title text-xl">Total Events</div>
-                                <div className="stat-value text-6xl">{dashboardData.totalEvents}</div>
-                                <div className="stat-desc text-lg"><span className="text-secondary">{dashboardData.doneEvents}</span> Done | <span className="text-secondary">{dashboardData.ongoingEvents}</span> On-going | <span className="text-secondary font-bold">{dashboardData.upcomingEvents}</span> Upcoming</div>
+                                <div className="stat-value text-4xl">{dashboardData.totalEvents}</div>
+                                <div className="stat-desc text-md"><span className="text-secondary">{dashboardData.doneEvents}</span> Done | <span className="text-secondary">{dashboardData.ongoingEvents}</span> On-going | <span className="text-secondary font-bold">{dashboardData.upcomingEvents}</span> Upcoming</div>
                                 <div className="stat-figure text-secondary">
                                     <MdOutlineEvent size={50} />
                                 </div>
@@ -96,7 +96,7 @@ const Dashboard = () => {
                         <div className="stats shadow">
                             <div className="stat">
                                 <div className="stat-title text-xl">Total Contacts</div>
-                                <div className="stat-value text-6xl">{dashboardData.totalHotlines}</div>
+                                <div className="stat-value text-4xl">{dashboardData.totalHotlines}</div>
                                 <div className="stat-figure text-secondary">
                                     <TiContacts size={50} />
                                 </div>

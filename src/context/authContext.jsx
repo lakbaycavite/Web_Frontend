@@ -26,7 +26,7 @@ export const AuthContextProvider = ({ children }) => {
         if (user?.token) {
             try {
                 const decodedToken = jwtDecode(user.token)
-                console.log('decodedToken: ', decodedToken)
+                // console.log('decodedToken: ', decodedToken)
                 if (decodedToken.exp * 1000 < Date.now()) {
                     localStorage.removeItem('user')
                     dispatch({ type: 'LOGOUT' })
@@ -49,7 +49,6 @@ export const AuthContextProvider = ({ children }) => {
 
     }, [])
 
-    console.log('AuthContext state: ', state)
 
 
     return (
