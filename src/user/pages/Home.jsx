@@ -64,7 +64,7 @@ const Home = () => {
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">
                             <div className="dropdown dropdown-hover">
-                                <button className="btn btn-primary">
+                                <button className="btn bg-primary text-white hover:bg-primary/80 border-none">
                                     <RxDownload size={20} />
 
                                     Download App

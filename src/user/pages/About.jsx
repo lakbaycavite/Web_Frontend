@@ -118,7 +118,7 @@ const About = () => {
 
                                 <div className="md:w-1/2 animate-slideInRight">
                                     <div className="inline-block mb-4">
-                                        <div className="badge badge-primary text-sm font-semibold py-3 px-4">About Lakbay Cavite</div>
+                                        <div className="badge bg-primary text-white text-sm font-semibold py-3 px-4">About Lakbay Cavite</div>
                                     </div>
                                     <h2 className="text-3xl font-bold mb-6 text-gray-800">Navigate Imus Cavite with Confidence</h2>
                                     <p className="text-lg text-gray-600 mb-6">

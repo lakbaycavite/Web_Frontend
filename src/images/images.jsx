@@ -11,6 +11,11 @@ const IMAGES = {
     about1: new URL('./images/imusPlaza.jpg', import.meta.url).href,
     about2: new URL('./images/alapanBattle.jpg', import.meta.url).href,
     about3: new URL('./images/imusCathedral.jpg', import.meta.url).href,
+    lakbayjeep: new URL('./images/lakbayjeep.png', import.meta.url).href,
+    lakbay: new URL('./images/lakbay.png', import.meta.url).href,
+    lakbay2: new URL('./images/lakbay2.png', import.meta.url).href,
+    lakbayjeep2: new URL('./images/lakbayjeep2.png', import.meta.url).href,
+
 }
 
 export default IMAGES

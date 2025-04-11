@@ -158,7 +158,7 @@ const Users = () => {
                     </select>
                 </div>
 
-                <div className="badge badge-primary badge-md ml-2">
+                <div className="badge bg-primary text-white badge-md ml-2">
                     Total: {total}
                 </div>
             </div>

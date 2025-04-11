@@ -236,7 +236,7 @@ const Hotlines = () => {
                     </select>
                 </div>
 
-                <div className="badge badge-primary badge-md ml-2">
+                <div className="badge bg-primary text-white badge-md ml-2">
                     Total: {total}
                 </div>
             </div>
@@ -326,7 +326,7 @@ const Hotlines = () => {
                         <div className="flex gap-2">
                             <button
                                 onClick={() => document.getElementById('my_modal_2').showModal()}
-                                className="btn btn-primary btn-sm font-normal gap-1 transform transition hover:scale-105"
+                                className="btn bg-primary text-white hover:bg-primary/80 btn-sm font-normal gap-1 transform transition hover:scale-105"
                                 disabled={loading}
                             >
                                 <HiPlus className="w-4 h-4" /> Add Contact

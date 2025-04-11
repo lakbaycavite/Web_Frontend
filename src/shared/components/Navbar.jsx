@@ -3,6 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext"
 import useLogout from "../../hooks/useLogout"
 
 import { useToast } from "../../hooks/useToast"
+import IMAGES from "../../images/images"
 
 
 
@@ -44,7 +45,8 @@ const Navbar = () => {
                         {user && user.role === 'admin' && <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>}
                     </ul>
                 </div>
-                <Link to='/home' className="btn btn-ghost text-2xl font-bold text-white">Lakbay Cavite</Link>
+                {/* <Link to='/home' className="btn btn-ghost text-2xl font-bold text-white">Lakbay Cavite</Link> */}
+                <img src={IMAGES.lakbayjeep2} className="avatar rounded-lg h-14 object-cover" />
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 text-white">

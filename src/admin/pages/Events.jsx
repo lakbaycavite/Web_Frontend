@@ -407,7 +407,7 @@ const Events = () => {
                         {/* Filter Buttons */}
                         <div className="flex flex-wrap gap-2">
                             <button
-                                className={`btn btn-sm ${filterStatus === 'all' ? 'btn-primary' : 'btn-outline'}`}
+                                className={`btn btn-sm ${filterStatus === 'all' ? 'bg-primary text-white hover:bg-primary/80' : 'btn-outline'}`}
                                 onClick={() => setFilterStatus('all')}
                             >
                                 <FaCalendarAlt className="mr-1" /> All Events
@@ -430,7 +430,7 @@ const Events = () => {
                         <div className="flex gap-2">
                             <button
                                 onClick={() => document.getElementById('create_event_modal').showModal()}
-                                className="btn btn-primary btn-sm font-normal gap-1 transform transition hover:scale-105"
+                                className="btn bg-secondary text-white hover:bg-secondary/80 btn-sm font-normal gap-1 transform transition hover:scale-105"
                             >
                                 <FaCalendarPlus className="w-4 h-4" /> Create Event
                             </button>
@@ -887,7 +887,7 @@ const Events = () => {
                                                 .join(", ")}
                                         </span>
                                     </div>
-                                    
+
                                 ) : null
                             )}
                         </div>

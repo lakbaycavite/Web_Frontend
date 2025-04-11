@@ -92,7 +92,7 @@ const ContactItems = () => {
 
             {/* Hotlines Display */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="bg-blue-600 text-white py-3 px-4">
+                <div className="bg-primary text-white py-3 px-4">
                     <h2 className="text-xl font-semibold flex items-center">
                         <FiPhone className="mr-2 h-5 w-5" />
                         Contact Hotlines
