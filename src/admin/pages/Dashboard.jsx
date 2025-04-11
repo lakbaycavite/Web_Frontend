@@ -9,6 +9,8 @@ import PostDTable from "../components/PostDTable";
 import EventDTable from "../components/EventDTable";
 import PieChartGender from "../components/PieChartGender";
 import BarchartAge from "../components/BarChartAge";
+import DashboardPDFDownloadButton from "../components/DashboardPDF";
+import MonthlyDashboardPDFButton from "../components/MonthlyDashboardPDF";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -102,6 +104,25 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div className="w-full mt-10">
+                    <div className="flex items-center justify-end space-x-3">
+                        {!loading && (
+                            <>
+                                <DashboardPDFDownloadButton
+                                    dashboardData={dashboardData}
+                                    chartData={chartData}
+                                    ageGroups={ageGroups}
+                                />
+                                <MonthlyDashboardPDFButton
+                                    dashboardData={dashboardData}
+                                    chartData={chartData}
+                                    ageGroups={ageGroups}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
 
