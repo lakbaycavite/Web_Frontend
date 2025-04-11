@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowLeft, FiExternalLink, FiShield, FiLock, FiMail, FiMap } from 'react-icons/fi';
 
@@ -22,7 +21,7 @@ const PrivacyPolicy = () => {
                 <div className="prose max-w-4xl mx-auto">
                     <h1 className="text-3xl font-bold text-center mb-8">Privacy Policy</h1>
                     <p className="text-sm text-base-content/70 text-center mb-8">
-                        Last Updated: March 25, 2025
+                        Effective/Updated Date: October 01, 2024
                     </p>
 
                     <div className="card bg-base-100 shadow-xl mb-8">
@@ -31,8 +30,7 @@ const PrivacyPolicy = () => {
                                 <FiShield className="text-primary w-16 h-16" />
                             </div>
                             <p className="text-sm text-center">
-                                At Lakbay Cavite, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, store, and protect the information you provide to us when using our website and mobile application.
-                            </p>
+                                Lakbay Cavite ("we," "our," or "us") respects your privacy and is committed to protecting your data. This Privacy Policy explains how we collect, use, and disclose information when you use the Lakbay Cavite web and mobile application ("App").                            </p>
                             <p className="text-sm text-center font-bold mt-4">
                                 By using our Service, you agree to the collection and use of information in accordance with this policy.
                             </p>
@@ -80,24 +78,12 @@ const PrivacyPolicy = () => {
                         <li>To gather analysis or valuable information so that we can improve our Service</li>
                         <li>To monitor the usage of our Service</li>
                         <li>To detect, prevent and address technical issues</li>
-                        <li>To provide you with news, special offers, and general information about other goods, services, and events which we offer that are similar to those that you have already purchased or enquired about, unless you have opted not to receive such information</li>
                     </ul>
 
-                    <h2 className="text-xl font-bold mt-8 mb-4">3. Data Storage and Security</h2>
-                    <p>
-                        The security of your data is important to us, but remember that no method of transmission over the Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Information, we cannot guarantee its absolute security.
-                    </p>
-                    <p>
-                        Your information, including Personal Information, may be transferred to — and maintained on — computers located outside of your state, province, country, or other governmental jurisdiction where the data protection laws may differ from those of your jurisdiction.
-                    </p>
-                    <p>
-                        If you are located outside the Philippines and choose to provide information to us, please note that we transfer the data, including Personal Information, to the Philippines and process it there.
-                    </p>
-                    <p>
-                        Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.
-                    </p>
+                    <h2 className="text-xl font-bold mt-8 mb-4">3. Data Security</h2>
+                    We take reasonable measures to protect your information from unauthorized access, use, or disclosure. However, no security measures are entirely foolproof, and we cannot guarantee the absolute security of your data.
 
-                    <h2 className="text-xl font-bold mt-8 mb-4">4. Cookies</h2>
+                    {/* <h2 className="text-xl font-bold mt-8 mb-4">4. Cookies</h2>
                     <p>
                         Cookies are files with a small amount of data which may include an anonymous unique identifier. Cookies are sent to your browser from a website and stored on your device.
                     </p>
@@ -109,6 +95,16 @@ const PrivacyPolicy = () => {
                         <li><strong>Session Cookies.</strong> We use Session Cookies to operate our Service.</li>
                         <li><strong>Preference Cookies.</strong> We use Preference Cookies to remember your preferences and various settings.</li>
                         <li><strong>Security Cookies.</strong> We use Security Cookies for security purposes.</li>
+                    </ul> */}
+
+                    <h2 className="text-xl font-bold mt-8 mb-4">4. Your choices</h2>
+                    <p>
+                        You have control over your information and can exercise the following rights:
+                    </p>
+                    <ul className="list-disc pl-5 mb-4">
+                        <li>Account Settings: You can update your personal information or delete your account through the settings menu.</li>
+                        <li>Location Sharing: You can enable or disable location services at any time in your device's settings.</li>
+                        <li>Deleting Data: You may request the deletion of your data by contacting us at lakbaycavite@gmail.com.</li>
                     </ul>
 
                     <h2 className="text-xl font-bold mt-8 mb-4">5. Service Providers</h2>
@@ -121,14 +117,12 @@ const PrivacyPolicy = () => {
 
                     <h2 className="text-xl font-bold mt-8 mb-4">6. Children's Privacy</h2>
                     <p>
-                        Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from anyone under the age of 13. If you are a parent or guardian and you are aware that your child has provided us with Personal Information, please contact us. If we become aware that we have collected Personal Information from children without verification of parental consent, we take steps to remove that information from our servers.
-                    </p>
+                        Lakbay Cavite is not intended for children under the age of 16. We do not knowingly collect personal information from children. If we become aware that we have inadvertently collected data from a child, we will take steps to delete such information.                    </p>
 
-                    <h2 className="text-xl font-bold mt-8 mb-4">7. Your Data Protection Rights</h2>
+                    <h2 className="text-xl font-bold mt-8 mb-4">7. Data Retention</h2>
                     <p>
-                        Under certain circumstances, you have rights under data protection laws in relation to your personal data:
-                    </p>
-                    <ul className="list-disc pl-5 mb-4">
+                        We will retain your data for as long as your account is active or as necessary to provide you with services. We may also retain data to comply with legal obligations, resolve disputes, or enforce agreements.                    </p>
+                    {/* <ul className="list-disc pl-5 mb-4">
                         <li><strong>The right to access</strong> – You have the right to request copies of your personal data.</li>
                         <li><strong>The right to rectification</strong> – You have the right to request that we correct any information you believe is inaccurate or complete information you believe is incomplete.</li>
                         <li><strong>The right to erasure</strong> – You have the right to request that we erase your personal data, under certain conditions.</li>
@@ -138,7 +132,7 @@ const PrivacyPolicy = () => {
                     </ul>
                     <p>
                         If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us.
-                    </p>
+                    </p> */}
 
                     <h2 className="text-xl font-bold mt-8 mb-4">8. Changes to This Privacy Policy</h2>
                     <p>
