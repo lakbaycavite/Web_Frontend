@@ -42,7 +42,7 @@ const CommentsModal = ({ postId, show, onClose }) => {
                         {comments.length > 0 ? (
                             comments.map((comment, index) => (
                                 <div key={index} className="p-3 border rounded-lg bg-gray-50">
-                                    <Link to={`/user/display/${comment.user._id}`} className="text-sm text-gray-600">{comment.user.username}</Link>
+                                    <Link to={`/user/display/${comment._id}`} className="text-sm text-gray-600">{comment.username}</Link>
                                     <p className="text-gray-800">{comment.comment}</p>
                                     <p className="text-xs text-gray-500">{moment(comment.createdAt).fromNow()}</p>
                                 </div>
