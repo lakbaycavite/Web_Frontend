@@ -10,11 +10,13 @@ const useLogin = () => {
 
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [deactivationInfo, setDeactivationInfo] = useState(null)
     const { dispatch } = useAuthContext()
 
     const login = async (identifier, password, showSuccessToast = true) => {
         setIsLoading(true)
         setError(null)
+        setDeactivationInfo(null)
 
         const loginUser = {
             identifier,
@@ -35,23 +37,40 @@ const useLogin = () => {
                 toast(`Login successful! Welcome back. ${userData.firstName ? userData.firstName : userData.username}`, "success")
             }
 
-            if (userData.role == 'admin') {
+            if (userData.role === 'admin') {
                 navigate('/admin/user')
             }
             else {
                 navigate('/home')
             }
 
+            return { success: true }
+
         } catch (error) {
             setError(error.response?.data?.error || "An unexpected error occurred");
-            toast("Invalid email or password", "error")
+
+            // Check if this is a deactivation error
+            if (error.response?.status === 403 && error.response?.data?.error?.includes('deactivated')) {
+                setDeactivationInfo({
+                    reason: error.response?.data?.deactivationReason || null,
+                    deactivatedAt: error.response?.data?.deactivatedAt || null,
+                    message: error.response?.data?.error
+                });
+
+                // Don't show the generic toast for deactivation
+                return { success: false, isDeactivated: true, deactivationInfo: deactivationInfo };
+            } else {
+                toast("Invalid email or password", "error");
+            }
+
+            return { success: false, isDeactivated: false };
         }
         finally {
             setIsLoading(false)
         }
     }
 
-    return { login, error, isLoading }
+    return { login, error, isLoading, deactivationInfo }
 }
 
 export default useLogin

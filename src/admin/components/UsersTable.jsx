@@ -1,12 +1,11 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
-import { Button, Modal } from "flowbite-react"
+import { Button, Modal, Textarea, Label } from "flowbite-react"
 import { useToast } from "../../hooks/useToast"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { useUsersContext } from '../../hooks/useUsersContext'
 
-// Icons
 import { HiOutlineExclamationCircle, HiEye } from "react-icons/hi"
 import { FaUserCheck, FaUserTimes } from "react-icons/fa"
 import api from "../../lib/axios"
@@ -17,30 +16,47 @@ const UsersTable = (props) => {
     const navigate = useNavigate()
     const toast = useToast()
 
-    // States
     const [openModal, setOpenModal] = useState(false)
     const [tempId, setTempId] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [deactivationReason, setDeactivationReason] = useState("")
+    const [reasonError, setReasonError] = useState("")
 
-    // Format dates
     const formattedDate = moment(props.createdAt).format('MMMM Do, YYYY')
     const timeAgo = moment(props.createdAt).fromNow()
 
-    // Open confirmation modal
     const handleConfirmModal = (id) => {
         setTempId(id)
+        setDeactivationReason("")
+        setReasonError("")
         setOpenModal(true)
     }
 
-    // Toggle user active/inactive status
+    const validateReason = () => {
+        if (props.isActive && !deactivationReason.trim()) {
+            setReasonError("Please provide a reason for deactivation")
+            return false
+        }
+        setReasonError("")
+        return true
+    }
+
     const handleToggleStatus = async (id) => {
+        if (props.isActive && !validateReason()) {
+            return
+        }
+
         setLoading(true)
         setOpenModal(false)
 
         try {
+            const payload = props.isActive
+                ? { deactivationReason: deactivationReason.trim() }
+                : {}
+
             await api.put(
                 `/admin/user/toggle-status/${id}`,
-                null,
+                payload,
                 {
                     headers: {
                         "Authorization": `Bearer ${user.token}`
@@ -64,7 +80,6 @@ const UsersTable = (props) => {
         }
     }
 
-    // Navigate to user details
     const handleView = (id) => {
         navigate('/user/display/' + id)
     }
@@ -146,7 +161,6 @@ const UsersTable = (props) => {
                 </td>
             </tr>
 
-            {/* Confirmation Modal */}
             <Modal
                 show={openModal}
                 size="md"
@@ -160,6 +174,25 @@ const UsersTable = (props) => {
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                             Are you sure you want to {props.isActive ? "deactivate" : 'activate'} this user?
                         </h3>
+
+                        {props.isActive && (
+                            <div className="mb-5 text-left">
+                                <div className="mb-2 block">
+                                    <Label htmlFor="deactivationReason" value="Reason for deactivation" />
+                                </div>
+                                <Textarea
+                                    id="deactivationReason"
+                                    placeholder="Please provide a reason for deactivation..."
+                                    required={true}
+                                    rows={3}
+                                    value={deactivationReason}
+                                    onChange={(e) => setDeactivationReason(e.target.value)}
+                                    color={reasonError ? "failure" : undefined}
+                                    helperText={reasonError}
+                                />
+                            </div>
+                        )}
+
                         <div className="flex justify-center gap-4">
                             <Button
                                 color={props.isActive ? "failure" : "success"}
