@@ -214,6 +214,18 @@ const Users = () => {
                             />
                         </div>
 
+                        {/* Legend */}
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                                <span className="w-4 h-4 bg-green-500 rounded-full"></span>
+                                <span className="text-sm text-gray-600">Activated</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="w-4 h-4 bg-red-500 rounded-full"></span>
+                                <span className="text-sm text-gray-600">Deactivated</span>
+                            </div>
+                        </div>
+
                         {/* Stats Badges - For smaller screens, replicated for responsive design */}
                         <div className="flex md:hidden gap-2">
                             <div className="badge badge-lg badge-secondary gap-1">

@@ -78,6 +78,9 @@ const Events = () => {
     const [inactiveEvents, setInactiveEvents] = useState(0)
     const [filterStatus, setFilterStatus] = useState('all') // 'all', 'active', 'inactive'
 
+    const [createError, setCreateError] = useState(null)
+    const [updateError, setUpdateError] = useState(null)
+
     useEffect(() => {
         fetchEvents()
     }, [refreshKey, filterStatus])
@@ -179,10 +182,12 @@ const Events = () => {
                 setPlace('')
                 setBarangay('')
 
+                setCreateError(null)
                 document.getElementById('create_event_modal').close()
             })
             .catch((err) => {
                 console.error("Error creating event:", err)
+                setCreateError(err.response?.data?.error || "An unexpected error occurred")
                 toast("Failed to create event", "error")
             })
             .finally(() => {
@@ -271,10 +276,12 @@ const Events = () => {
             toast("Event updated successfully", "success")
             setRefreshKey(prev => prev + 1)
             document.getElementById('view_event_modal').close()
+            setCreateError(null)
             setIsEditable(false)
         } catch (error) {
             console.error("Error updating event:", error)
             toast("Failed to update event", "error")
+            setUpdateError(error.response?.data?.error || "An unexpected error occurred")
         } finally {
             setLoading(false)
         }
@@ -288,7 +295,9 @@ const Events = () => {
             .then(() => {
                 setRefreshKey(prev => prev + 1)
                 toast(`Event ${viewStatus ? 'hidden' : 'unhidden'} successfully`, "success")
+                setCreateError(null)
                 document.getElementById('view_event_modal').close()
+
             })
             .catch((err) => {
                 console.error("Error toggling event status:", err)
@@ -426,6 +435,13 @@ const Events = () => {
                             </button>
                         </div>
 
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                                <span className="w-4 h-4 bg-gray-400 rounded-full"></span>
+                                <span className="text-sm text-gray-600">Done/ Inactive</span>
+                            </div>
+                        </div>
+
                         {/* Action Buttons */}
                         <div className="flex gap-2">
                             <button
@@ -512,11 +528,17 @@ const Events = () => {
                                 <input
                                     type="text"
                                     placeholder="Enter event title"
-                                    className="input input-bordered w-full"
+                                    className={`input input-bordered w-full ${createError ? 'input-error' : ''}`}
                                     value={title || ""}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
                             </div>
+
+                            {createError && (
+                                <p className="text-red-500 text-sm mb-2">
+                                    {createError}
+                                </p>
+                            )}
 
                             {/* Description */}
                             <div className="form-control">
@@ -668,7 +690,10 @@ const Events = () => {
                         <div className="modal-action mt-6">
                             <button
                                 className="btn btn-ghost gap-1"
-                                onClick={() => document.getElementById('create_event_modal').close()}
+                                onClick={() => {
+                                    document.getElementById('create_event_modal').close()
+                                    setCreateError(null)
+                                }}
                             >
                                 <HiX className="w-4 h-4" /> Cancel
                             </button>
@@ -698,7 +723,7 @@ const Events = () => {
                     </div>
 
                     <form method="dialog" className="modal-backdrop">
-                        <button>close</button>
+                        <button onClick={() => setCreateError(null)}>close</button>
                     </form>
                 </dialog>
 
@@ -788,11 +813,23 @@ const Events = () => {
                                 </label>
                                 <input
                                     type="text"
-                                    className="input input-bordered w-full"
+                                    className={`input input-bordered w-full ${updateError ? 'input-error' : ''}`}
                                     value={viewTitle}
                                     onChange={(e) => setViewTitle(e.target.value)}
                                 />
+
+                                {updateError && (
+                                    <p className='text-red-500 text-sm mt-2'>
+                                        {updateError}
+                                    </p>
+                                )}
                             </div>
+                        )}
+
+                        {createError && (
+                            <p className='text-red-500 text-sm mb-2'>
+                                {createError}
+                            </p>
                         )}
 
                         {/* Event Description */}
@@ -951,7 +988,10 @@ const Events = () => {
                                 <>
                                     <button
                                         className="btn btn-ghost gap-1"
-                                        onClick={() => document.getElementById('view_event_modal').close()}
+                                        onClick={() => {
+                                            document.getElementById('view_event_modal').close()
+                                            setCreateError(null)
+                                        }}
                                     >
                                         Close
                                     </button>
@@ -1018,7 +1058,10 @@ const Events = () => {
                     </div>
 
                     <form method="dialog" className="modal-backdrop">
-                        <button onClick={() => setIsEditable(false)}>close</button>
+                        <button onClick={() => {
+                            setIsEditable(false)
+                            setUpdateError(null)
+                        }}>close</button>
                     </form>
                 </dialog>
             </div>

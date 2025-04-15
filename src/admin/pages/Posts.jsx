@@ -215,6 +215,17 @@ const Posts = () => {
                             />
                         </div>
 
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                                <span className="w-4 h-4 bg-green-500 rounded-full"></span>
+                                <span className="text-sm text-gray-600">Activated</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="w-4 h-4 bg-red-500 rounded-full"></span>
+                                <span className="text-sm text-gray-600">Deactivated</span>
+                            </div>
+                        </div>
+
                         {/* Action Buttons */}
                         <div className="flex gap-2">
                             {/* <button
