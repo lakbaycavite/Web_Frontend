@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         padding: 30,
         backgroundColor: '#FFFFFF',
         fontFamily: 'Roboto',
-    },
+    },  
     header: {
         fontSize: 24,
         marginBottom: 20,

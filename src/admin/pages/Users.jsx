@@ -6,6 +6,7 @@ import { useAuthContext } from "../../hooks/useAuthContext"
 import AdminDrawer from "../components/AdminDrawer"
 import AdminNavbar from "../components/AdminNavbar"
 import UsersTable from "../components/UsersTable"
+import UserPDFGenerator from "../components/UserPDFGenerator"
 
 // Icons
 import {
@@ -237,19 +238,29 @@ const Users = () => {
                         </div>
 
                         {/* Refresh Button */}
-                        <button
-                            onClick={() => setRefreshKey(prev => prev + 1)}
-                            className="btn btn-info btn-sm text-white font-normal gap-1 transform transition hover:scale-105"
-                            disabled={loading}
-                        >
-                            {loading ? (
-                                <span className="loading loading-spinner loading-sm"></span>
-                            ) : (
-                                <>
-                                    <MdRefresh className="w-5 h-5" /> Refresh
-                                </>
-                            )}
-                        </button>
+                        <div className="flex gap-2">
+                            {/* PDF Export Button */}
+                            <UserPDFGenerator
+                                currentUsers={users}
+                                totalActiveUsers={totalActiveUsers}
+                                totalInactiveUsers={totalInactiveUsers}
+                            />
+
+                            {/* Refresh Button */}
+                            <button
+                                onClick={() => setRefreshKey(prev => prev + 1)}
+                                className="btn btn-info btn-sm text-white font-normal gap-1 transform transition hover:scale-105"
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <span className="loading loading-spinner loading-sm"></span>
+                                ) : (
+                                    <>
+                                        <MdRefresh className="w-5 h-5" /> Refresh
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </div>
                 </div>
 
