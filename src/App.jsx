@@ -25,6 +25,7 @@ import ResetPassword from './user/pages/ResetPassword'
 import TermsOfUse from './user/pages/TermsOfUse'
 import PrivacyPolicy from './user/pages/PrivacyPolicy'
 import PageNotFound from './user/pages/NotFound'
+import Feedbacks from './admin/pages/Feedbacks'
 
 
 function App() {
@@ -94,6 +95,10 @@ function App() {
             <Route path='/user/display/:id'
               exact
               element={user && user.role == 'admin' ? <UserDisplay /> : <Navigate to='/login' />} />
+            <Route path='/admin/feedback'
+              exact
+              element={user && user.role == 'admin' ? <Feedbacks /> : <Navigate to='/login' />} />
+
 
             <Route path="*" element={<PageNotFound />} />
 

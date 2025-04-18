@@ -16,6 +16,7 @@ const NavbarModifier = ({ children }) => {
             location.pathname === '/admin/dashboard' ||
             location.pathname === '/terms-of-use' ||
             location.pathname === '/privacy-policy' ||
+            location.pathname === '/admin/feedback' ||
             matchPath('/post/display/:id', location.pathname) ||
             matchPath('/event/display/:id', location.pathname) ||
             matchPath('/user/display/:id', location.pathname)

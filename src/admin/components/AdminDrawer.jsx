@@ -5,6 +5,8 @@ import { MdDashboard } from "react-icons/md";
 import { BsFillPostcardFill } from "react-icons/bs";
 import { MdEvent } from "react-icons/md";
 import { RiContactsBook3Fill } from "react-icons/ri";
+import { MdFeedback } from "react-icons/md";
+
 
 
 const AdminDrawer = ({ children }) => {
@@ -31,6 +33,7 @@ const AdminDrawer = ({ children }) => {
                     <li><a className="text-lg text-white hover:bg-secondary hover:text-white" onClick={() => navigate('/admin/post')}><BsFillPostcardFill /> Posts</a></li>
                     <li><a className="text-lg text-white hover:bg-secondary hover:text-white" onClick={() => navigate('/admin/event')}><MdEvent /> Events</a></li>
                     <li><a className="text-lg text-white hover:bg-secondary hover:text-white" onClick={() => navigate('/admin/hotline')}><RiContactsBook3Fill /> Hotlines</a></li>
+                    <li><a className="text-lg text-white hover:bg-secondary hover:text-white" onClick={() => navigate('/admin/feedback')}><MdFeedback /> Feedbacks</a></li>
 
                     <br />
 

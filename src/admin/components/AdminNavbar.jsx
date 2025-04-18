@@ -10,9 +10,11 @@ const AdminNavbar = () => {
     const getTitle = () => {
         if (location.pathname === '/admin/post') {
             return 'Posts';
-        } else if (location.pathname === '/admin/event') {
+        }
+        else if (location.pathname === '/admin/event') {
             return 'Events & Announcements';
-        } else if (location.pathname === '/admin/hotline') {
+        }
+        else if (location.pathname === '/admin/hotline') {
             return 'Hotlines';
         }
         else if (location.pathname === '/admin/dashboard') {
@@ -20,11 +22,15 @@ const AdminNavbar = () => {
         }
         else if (location.pathname === '/admin/user') {
             return 'Users';
-        } else if (matchPath('/user/display/:id', location.pathname)) {
+        }
+        else if (location.pathname === '/admin/feedback') {
+            return 'Feedbacks';
+        }
+        else if (matchPath('/user/display/:id', location.pathname)) {
             return 'Users';
         }
         else {
-            return 'Default Title'; // Fallback title
+            return 'Default Title';
         }
 
     }
