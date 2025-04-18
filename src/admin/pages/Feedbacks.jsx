@@ -501,11 +501,11 @@ const Feedbacks = () => {
                                             <td>
                                                 <div className="max-w-xs">
                                                     <div className="font-medium line-clamp-2">{feedback.comment}</div>
-                                                    {feedback.adminResponse && (
+                                                    {/* {feedback.adminResponse && (
                                                         <div className="text-xs bg-blue-50 p-2 mt-1 rounded">
                                                             <span className="font-semibold">Your response:</span> {feedback.adminResponse}
                                                         </div>
-                                                    )}
+                                                    )} */}
                                                 </div>
                                             </td>
                                             <td>
