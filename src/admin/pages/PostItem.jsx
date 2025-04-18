@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
 import moment from 'moment';
 import { useToast } from '../../hooks/useToast';
 import { useAuthContext } from '../../hooks/useAuthContext';
@@ -13,9 +12,8 @@ const PostItem = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
-    const navigate = useNavigate();
     const { user } = useAuthContext();
-    const { handleEventDelete, is_hidden } = props;
+    const { handleEventDelete, is_hidden, onViewClick } = props;
 
     // Format the MongoDB date using moment
     const formattedDate = moment(props.created).format('MMMM Do, YYYY');
@@ -49,11 +47,6 @@ const PostItem = (props) => {
         }
     };
 
-    // Navigate to post detail view
-    const handleView = (id) => {
-        navigate('/post/display/' + id);
-    };
-
     // Truncate content to specified length
     const truncateContent = (content, maxLength = 100) => {
         if (content.length <= maxLength) return content;
@@ -71,7 +64,7 @@ const PostItem = (props) => {
                     {props.image && (
                         <div className="avatar">
                             <div className="w-10 h-10 rounded-md">
-                                <img src={props.image ? props.image : 'https://ui-avatars.com/api/?name=' + userData.username} alt="Post thumbnail" />
+                                <img src={props.image ? props.image : 'https://ui-avatars.com/api/?name=' + props.profileName} alt="Post thumbnail" />
                             </div>
                         </div>
                     )}
@@ -109,7 +102,7 @@ const PostItem = (props) => {
                 <div className="flex justify-center gap-2">
                     <button
                         className="btn btn-sm btn-info text-white gap-1 min-w-[80px]"
-                        onClick={() => handleView(props.pid)}
+                        onClick={onViewClick} // Use the new prop
                     >
                         <HiEye className="w-4 h-4" /> View
                     </button>

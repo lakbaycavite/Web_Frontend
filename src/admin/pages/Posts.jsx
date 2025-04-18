@@ -19,6 +19,7 @@ import AdminDrawer from "../components/AdminDrawer"
 import AdminNavbar from "../components/AdminNavbar"
 import CreatePostModal from "../../shared/components/CreatePostModal"
 import PostItem from "./PostItem"
+import PostDisplayModal from "../components/PostDisplayModal" // Import the PostDisplayModal
 import api from '../../lib/axios'
 
 const Posts = () => {
@@ -30,6 +31,10 @@ const Posts = () => {
     const [visible, setVisible] = useState(false)
     const [deleted, setDeleted] = useState(false)
     const [loading, setLoading] = useState(false)
+
+    // Post display modal states
+    const [selectedPostId, setSelectedPostId] = useState(null)
+    const [showPostModal, setShowPostModal] = useState(false)
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1)
@@ -89,6 +94,12 @@ const Posts = () => {
         toast('Post created successfully.', "success")
         setVisible(false)
     }
+
+    // Handler for opening the post display modal
+    const handleViewPost = (postId) => {
+        setSelectedPostId(postId);
+        setShowPostModal(true);
+    };
 
     // Debounce search
     useEffect(() => {
@@ -285,6 +296,7 @@ const Posts = () => {
                                                 created={item.createdAt}
                                                 is_hidden={item.is_hidden}
                                                 handleEventDelete={handleEventDelete}
+                                                onViewClick={() => handleViewPost(item._id)} // Add this prop
                                             />
                                         </tr>
                                     ))}
@@ -325,6 +337,14 @@ const Posts = () => {
                     onClose={onClose}
                     onSuccess={onSuccess}
                     handleEventAdded={handleEventAdded}
+                />
+
+                {/* Post Display Modal */}
+                <PostDisplayModal
+                    postId={selectedPostId}
+                    show={showPostModal}
+                    onClose={() => setShowPostModal(false)}
+                    onPostUpdate={handleEventDelete}
                 />
             </div>
         </AdminDrawer>
