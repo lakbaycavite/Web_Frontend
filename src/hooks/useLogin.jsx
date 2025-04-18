@@ -38,7 +38,7 @@ const useLogin = () => {
             }
 
             if (userData.role === 'admin') {
-                navigate('/admin/user')
+                navigate('/admin/dashboard')
             }
             else {
                 navigate('/home')
