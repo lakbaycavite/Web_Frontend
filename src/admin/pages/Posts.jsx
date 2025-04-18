@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { usePostsContext } from '../../hooks/usePostsContext'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useToast } from '../../hooks/useToast'
+import PostPDFGenerator from '../components/PostPDFGenerator'
 
 // Icons
 import { HiMagnifyingGlass, HiPlus, HiArrowPath } from "react-icons/hi2"
@@ -61,6 +62,7 @@ const Posts = () => {
                 dispatch({ type: 'SET_POSTS', payload: response.data.posts || [] })
                 setTotalPages(response.data.pages)
                 setTotal(response.data.total)
+                console.log(response.data.posts)
             })
             .catch((error) => {
                 console.log(error)
@@ -245,6 +247,7 @@ const Posts = () => {
                             >
                                 <HiPlus className="w-4 h-4" /> New Post
                             </button> */}
+                            <PostPDFGenerator currentPosts={posts} />
                             <button
                                 onClick={() => setRefreshKey(prev => prev + 1)}
                                 className="btn btn-info btn-sm text-white font-normal gap-1 transform transition hover:scale-105"
