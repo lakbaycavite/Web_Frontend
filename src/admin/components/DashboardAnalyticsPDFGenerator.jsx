@@ -420,13 +420,13 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
     return (
         <>
             <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn bg-primary text-white hover:bg-primary/80 btn-sm gap-1 transform transition hover:scale-105">
+                <label tabIndex={0} className={`btn bg-primary text-white hover:bg-primary/80 btn-sm gap-1 transform transition hover:scale-105 ${isLoading ? "btn-disabled" : ""}`}>
                     {isLoading ? (
                         <span className="loading loading-spinner loading-xs"></span>
                     ) : (
-                        <HiChartBar className="h-5 w-5" />
+                        <HiDocumentText className="h-5 w-5" />
                     )}
-                    Analytics PDF
+                    Export PDF
                 </label>
                 <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                     <li>

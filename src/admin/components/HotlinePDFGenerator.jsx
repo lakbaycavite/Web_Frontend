@@ -155,7 +155,7 @@ const HotlinePDFGenerator = ({ currentHotlines, categoryCounts }) => {
     return (
         <>
             <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-primary btn-sm gap-1 transform transition hover:scale-105">
+                <label tabIndex={0} className={`btn bg-primary text-white hover:bg-primary/80 btn-sm gap-1 transform transition hover:scale-105 ${isLoading ? "btn-disabled" : ""}`}>
                     {isLoading ? (
                         <span className="loading loading-spinner loading-xs"></span>
                     ) : (
