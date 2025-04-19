@@ -93,14 +93,14 @@ const Users = () => {
                 <button
                     className="join-item btn btn-sm bg-base-200 hover:bg-base-300 border-0 text-primary"
                     onClick={() => handlePageChange(1)}
-                    disabled={currentPage === 1}
+                    disabled={currentPage === 1 || loading}
                 >
                     <MdOutlineKeyboardDoubleArrowLeft className="text-lg" />
                 </button>
                 <button
                     className="join-item btn btn-sm bg-base-200 hover:bg-base-300 border-0 text-primary"
                     onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
+                    disabled={currentPage === 1 || loading}
                 >
                     <MdOutlineKeyboardArrowLeft className="text-lg" />
                 </button>
@@ -110,14 +110,14 @@ const Users = () => {
                 <button
                     className="join-item btn btn-sm bg-base-200 hover:bg-base-300 border-0 text-primary"
                     onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage === totalPages || loading}
                 >
                     <MdOutlineKeyboardArrowRight className="text-lg" />
                 </button>
                 <button
                     className="join-item btn btn-sm bg-base-200 hover:bg-base-300 border-0 text-primary"
                     onClick={() => handlePageChange(totalPages)}
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage === totalPages || loading}
                 >
                     <MdOutlineKeyboardDoubleArrowRight className="text-lg" />
                 </button>
