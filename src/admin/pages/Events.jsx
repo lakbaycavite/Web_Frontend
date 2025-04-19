@@ -26,16 +26,26 @@ import {
     HiUpload,
     HiTrash,
     HiLocationMarker,
-    HiClock
+    HiClock,
+    HiViewList,
+    HiChevronLeft,
+    HiChevronRight,
+    HiFilter,
+    HiSortAscending,
+    HiSortDescending,
+    HiAdjustments
 } from "react-icons/hi"
 import {
     FaCalendarAlt,
     FaCalendarPlus,
     FaCalendarCheck,
     FaMapMarkerAlt,
-    FaImage
+    FaImage,
+    FaTable,
+    FaCalendarWeek,
+    FaArrowRight
 } from "react-icons/fa"
-import { MdDescription, MdTitle, MdEvent, MdEventAvailable } from "react-icons/md"
+import { MdDescription, MdTitle, MdEvent, MdEventAvailable, MdDateRange } from "react-icons/md"
 import api from '../../lib/axios'
 
 const localizer = momentLocalizer(moment)
@@ -77,6 +87,19 @@ const Events = () => {
     const [activeEvents, setActiveEvents] = useState(0)
     const [inactiveEvents, setInactiveEvents] = useState(0)
     const [filterStatus, setFilterStatus] = useState('all') // 'all', 'active', 'inactive'
+
+    // New states for tabular view
+    const [viewMode, setViewMode] = useState('calendar') // 'calendar' or 'table'
+    const [startMonth, setStartMonth] = useState(moment().startOf('month'))
+    const [endMonth, setEndMonth] = useState(moment().endOf('month'))
+    const [sortField, setSortField] = useState('start') // 'title', 'start', 'end'
+    const [sortDirection, setSortDirection] = useState('asc') // 'asc' or 'desc'
+
+    // New states for custom range selection
+    const [isCustomRange, setIsCustomRange] = useState(false)
+    const [startMonthInput, setStartMonthInput] = useState(moment().format('YYYY-MM'))
+    const [endMonthInput, setEndMonthInput] = useState(moment().format('YYYY-MM'))
+    const [showRangeSelector, setShowRangeSelector] = useState(false)
 
     const [createError, setCreateError] = useState(null)
     const [updateError, setUpdateError] = useState(null)
@@ -353,6 +376,117 @@ const Events = () => {
         }
     }
 
+    // New functions for tabular view
+    const handleViewModeToggle = () => {
+        setViewMode(viewMode === 'calendar' ? 'table' : 'calendar')
+
+        // Reset custom range when toggling back to calendar
+        if (viewMode === 'table') {
+            setIsCustomRange(false)
+        }
+    }
+
+    const handlePreviousMonth = () => {
+        setStartMonth(moment(startMonth).subtract(1, 'month'))
+        setEndMonth(moment(endMonth).subtract(1, 'month'))
+        setIsCustomRange(false)
+    }
+
+    const handleNextMonth = () => {
+        setStartMonth(moment(startMonth).add(1, 'month'))
+        setEndMonth(moment(endMonth).add(1, 'month'))
+        setIsCustomRange(false)
+    }
+
+    // Apply custom date range
+    const applyCustomRange = () => {
+        // Format inputs to moment objects
+        const newStartMonth = moment(startMonthInput + '-01')
+        const newEndMonth = moment(endMonthInput + '-01').endOf('month')
+
+        // Validate range
+        if (newEndMonth.isBefore(newStartMonth)) {
+            toast("End month cannot be before start month", "error")
+            return
+        }
+
+        setStartMonth(newStartMonth)
+        setEndMonth(newEndMonth)
+        setIsCustomRange(true)
+        setShowRangeSelector(false)
+
+        toast(`Date range set: ${newStartMonth.format('MMM YYYY')} - ${newEndMonth.format('MMM YYYY')}`, "success")
+    }
+
+    const resetToCurrentMonth = () => {
+        setStartMonth(moment().startOf('month'))
+        setEndMonth(moment().endOf('month'))
+        setStartMonthInput(moment().format('YYYY-MM'))
+        setEndMonthInput(moment().format('YYYY-MM'))
+        setIsCustomRange(false)
+        setShowRangeSelector(false)
+    }
+
+    const handleSort = (field) => {
+        if (sortField === field) {
+            // Toggle sort direction if clicking on the same field
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+        } else {
+            // Set new sort field and default to ascending
+            setSortField(field)
+            setSortDirection('asc')
+        }
+    }
+
+    // Filter events by date range for tabular view
+    const getFilteredEvents = () => {
+        if (!events) return []
+
+        let filteredEvents = [...events]
+
+        // Filter by date range
+        if (viewMode === 'table') {
+            const start = startMonth.startOf('day').toDate()
+            const end = endMonth.endOf('day').toDate()
+
+            filteredEvents = filteredEvents.filter(event => {
+                const eventStart = new Date(event.start)
+                return eventStart >= start && eventStart <= end
+            })
+        }
+
+        // Sort events
+        filteredEvents.sort((a, b) => {
+            let valueA, valueB
+
+            switch (sortField) {
+                case 'title':
+                    valueA = a.title.toLowerCase()
+                    valueB = b.title.toLowerCase()
+                    break
+                case 'start':
+                    valueA = new Date(a.start).getTime()
+                    valueB = new Date(b.start).getTime()
+                    break
+                case 'end':
+                    valueA = new Date(a.end).getTime()
+                    valueB = new Date(b.end).getTime()
+                    break
+                default:
+                    valueA = new Date(a.start).getTime()
+                    valueB = new Date(b.start).getTime()
+            }
+
+            if (sortDirection === 'asc') {
+                return valueA > valueB ? 1 : -1
+            } else {
+                return valueA < valueB ? 1 : -1
+            }
+        })
+
+        return filteredEvents
+    }
+
     // Available barangays
     const barangays = [
         'Alapan I-A', 'Alapan I-B', 'Alapan I-C', 'Alapan II-A', 'Alapan II-B',
@@ -443,6 +577,22 @@ const Events = () => {
                                 <span className="w-4 h-4 bg-gray-400 rounded-full"></span>
                                 <span className="text-sm text-gray-600">Done/ Inactive</span>
                             </div>
+
+                            {/* View Toggle Button */}
+                            <button
+                                className={`btn btn-sm ${viewMode === 'table' ? 'bg-info text-white' : 'btn-outline btn-info'}`}
+                                onClick={handleViewModeToggle}
+                            >
+                                {viewMode === 'calendar' ? (
+                                    <>
+                                        <FaTable className="mr-1" /> Table View
+                                    </>
+                                ) : (
+                                    <>
+                                        <HiCalendar className="mr-1" /> Calendar View
+                                    </>
+                                )}
+                            </button>
                         </div>
 
                         {/* Action Buttons */}
@@ -470,6 +620,116 @@ const Events = () => {
                     </div>
                 </div>
 
+                {/* Month Range Selector - ENHANCED */}
+                {viewMode === 'table' && (
+                    <div className="bg-base-100 p-4 rounded-lg shadow-md mb-6">
+                        <div className="flex flex-wrap items-center justify-between">
+                            <div className="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                                <MdDateRange className="text-primary" />
+                                {isCustomRange ? (
+                                    <span>
+                                        Events for: {startMonth.format('MMMM YYYY')} - {endMonth.format('MMMM YYYY')}
+                                    </span>
+                                ) : (
+                                    <span>
+                                        Events for: {startMonth.format('MMMM YYYY')}
+                                    </span>
+                                )}
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-2 mt-2 md:mt-0">
+                                {!showRangeSelector ? (
+                                    <>
+                                        <button
+                                            className="btn btn-sm btn-outline"
+                                            disabled={isCustomRange}
+                                            onClick={handlePreviousMonth}
+                                        >
+                                            <HiChevronLeft /> Previous Month
+                                        </button>
+
+                                        <button
+                                            className="btn btn-sm btn-outline"
+                                            onClick={() => resetToCurrentMonth()}
+                                        >
+                                            Current Month
+                                        </button>
+
+                                        <button
+                                            className="btn btn-sm btn-outline"
+                                            onClick={handleNextMonth}
+                                            disabled={isCustomRange}
+                                        >
+                                            Next Month <HiChevronRight />
+                                        </button>
+
+
+                                        {!isCustomRange ? (
+                                            <button
+                                                className="btn btn-sm bg-primary hover:bg-primary/80 text-white"
+                                                onClick={() => setShowRangeSelector(true)}
+                                            >
+                                                <FaCalendarWeek className="mr-1" /> Custom Range
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className="btn btn-sm btn-outline bg-primary hover:bg-primary/80 text-white"
+                                                onClick={() => resetToCurrentMonth()}
+                                            >
+                                                <FaCalendarWeek className="mr-1" /> Cancel
+                                            </button>
+                                        )}
+                                    </>
+                                ) : (
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <div className="join">
+                                            <div className="flex flex-col sm:flex-row items-center gap-2">
+                                                <div className="flex items-center">
+                                                    <span className="text-sm font-medium mr-2">From:</span>
+                                                    <input
+                                                        type="month"
+                                                        className="input input-bordered input-sm"
+                                                        value={startMonthInput}
+                                                        onChange={(e) => setStartMonthInput(e.target.value)}
+                                                    />
+                                                </div>
+
+                                                <FaArrowRight className="hidden sm:block text-gray-400" />
+
+                                                <div className="flex items-center">
+                                                    <span className="text-sm font-medium mr-2">To:</span>
+                                                    <input
+                                                        type="month"
+                                                        className="input input-bordered input-sm"
+                                                        value={endMonthInput}
+                                                        onChange={(e) => setEndMonthInput(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-2">
+                                            <button
+                                                className="btn btn-sm btn-success text-white"
+                                                onClick={applyCustomRange}
+                                            >
+                                                <HiCheck className="w-4 h-4" /> Apply
+                                            </button>
+
+                                            <button
+                                                className="btn btn-sm btn-ghost"
+                                                onClick={() => setShowRangeSelector(false)}
+                                            >
+                                                <HiX className="w-4 h-4" /> Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Calendar Container */}
                 <div className="bg-base-100 rounded-lg shadow-md overflow-hidden">
                     {loading && !events?.length ? (
@@ -479,7 +739,7 @@ const Events = () => {
                                 <p className="mt-4 text-gray-600">Loading events calendar...</p>
                             </div>
                         </div>
-                    ) : (
+                    ) : viewMode === 'calendar' ? (
                         <div className="p-4">
                             <Calendar
                                 localizer={localizer}
@@ -505,6 +765,127 @@ const Events = () => {
                                     week: 'Week'
                                 }}
                             />
+                        </div>
+                    ) : (
+                        <div className="p-4">
+                            {/* Tabular View */}
+                            <div className="overflow-x-auto">
+                                <table className="table table-zebra w-full">
+                                    <thead>
+                                        <tr>
+                                            <th className="w-10">#</th>
+                                            <th className="cursor-pointer" onClick={() => handleSort('title')}>
+                                                <div className="flex items-center gap-1">
+                                                    Title
+                                                    {sortField === 'title' && (
+                                                        sortDirection === 'asc' ?
+                                                            <HiSortAscending className="text-primary" /> :
+                                                            <HiSortDescending className="text-primary" />
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th>Location</th>
+                                            <th className="cursor-pointer" onClick={() => handleSort('start')}>
+                                                <div className="flex items-center gap-1">
+                                                    Start Date
+                                                    {sortField === 'start' && (
+                                                        sortDirection === 'asc' ?
+                                                            <HiSortAscending className="text-primary" /> :
+                                                            <HiSortDescending className="text-primary" />
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th className="cursor-pointer" onClick={() => handleSort('end')}>
+                                                <div className="flex items-center gap-1">
+                                                    End Date
+                                                    {sortField === 'end' && (
+                                                        sortDirection === 'asc' ?
+                                                            <HiSortAscending className="text-primary" /> :
+                                                            <HiSortDescending className="text-primary" />
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {getFilteredEvents().map((event, index) => (
+                                            <tr key={event._id} className={!event.isActive ? 'opacity-60' : ''}>
+                                                <td>{index + 1}</td>
+                                                <td>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: event.color || '#333' }}></div>
+                                                        <div>
+                                                            <div className="font-bold">{event.title}</div>
+                                                            <div className="text-sm opacity-50">
+                                                                {event.description?.length > 50 ?
+                                                                    `${event.description.substring(0, 50)}...` :
+                                                                    event.description}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {event.place || event.barangay ? (
+                                                        <div className="text-sm">
+                                                            {[event.place, event.barangay].filter(Boolean).join(", ")}
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-xs opacity-50">No location</span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <div className="text-sm">
+                                                        {moment(event.start).format('MMM D, YYYY')}
+                                                    </div>
+                                                    <div className="text-xs opacity-50">
+                                                        {moment(event.start).format('h:mm A')}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className="text-sm">
+                                                        {moment(event.end).format('MMM D, YYYY')}
+                                                    </div>
+                                                    <div className="text-xs opacity-50">
+                                                        {moment(event.end).format('h:mm A')}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {event.isActive ? (
+                                                        <div className="badge badge-success badge-sm gap-1">
+                                                            <MdEventAvailable className="w-3 h-3" /> Active
+                                                        </div>
+                                                    ) : (
+                                                        <div className="badge badge-error badge-sm gap-1">
+                                                            <HiEyeOff className="w-3 h-3" /> Hidden
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-ghost btn-xs"
+                                                        onClick={() => handleClick(event._id)}
+                                                    >
+                                                        details
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+
+                                        {getFilteredEvents().length === 0 && (
+                                            <tr>
+                                                <td colSpan="7" className="text-center py-8">
+                                                    <div className="flex flex-col items-center justify-center">
+                                                        <HiCalendar className="text-3xl text-gray-400 mb-2" />
+                                                        <p className="text-gray-500">No events found in this date range</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     )}
                 </div>
