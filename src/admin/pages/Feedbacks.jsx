@@ -5,6 +5,7 @@ import AdminNavbar from "../components/AdminNavbar";
 import { FaStar, FaEye, FaEyeSlash, FaReply, FaFilter, FaComment, FaComments } from "react-icons/fa";
 import { HiMagnifyingGlass, HiArrowPath } from "react-icons/hi2";
 import { MdOutlineFeedback } from "react-icons/md";
+import FeedbackPDFGenerator from "../components/FeedbackPDFGenerator";
 
 import { MdClose, MdOutlineKeyboardArrowLeft, MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardArrowRight, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { useToast } from "../../hooks/useToast";
@@ -419,6 +420,7 @@ const Feedbacks = () => {
                             >
                                 <FaFilter className="mr-1" /> Clear Filters
                             </button>
+
                             <button
                                 onClick={() => setRefreshTrigger(prev => prev + 1)}
                                 className="btn btn-info text-white font-normal gap-1"
@@ -433,7 +435,18 @@ const Feedbacks = () => {
                                 )}
                             </button>
                         </div>
+                        <div className="flex-grow flex justify-end">
+                            <FeedbackPDFGenerator
+                                currentFeedbacks={feedbacks || []}
+                                ratingCounts={ratingCounts}
+                                categoryCounts={categoryCounts}
+                            />
+
+                        </div>
+
+
                     </div>
+
                 </div>
 
                 {/* Table Container */}
