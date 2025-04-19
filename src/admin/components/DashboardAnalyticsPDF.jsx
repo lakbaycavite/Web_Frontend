@@ -1,53 +1,62 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import moment from 'moment';
-import { PDFBarChart, PDFPieChartLegend, PDFComparisonChart } from './PDFChartComponent';
+import {
+    PDFBarChart,
+    PDFPieChartLegend,
+    PDFComparisonChart,
+    PDFRatingChart,
+    PDFCategoryChart,
+    PDFRatingByCategoryChart,
+    PDFLineChart
+} from './PDFChartComponent';
 
 // Create styles
 const styles = StyleSheet.create({
     page: {
         padding: 30,
         fontFamily: 'Helvetica',
+        fontSize: 12,
     },
     header: {
         backgroundColor: '#035594',
-        padding: 20,
-        marginBottom: 20,
+        padding: 15,
+        marginBottom: 15,
         marginHorizontal: -30,
         marginTop: -30,
         textAlign: 'center',
         color: 'white',
     },
     title: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
     },
     subtitle: {
-        fontSize: 14,
-        marginBottom: 10,
+        fontSize: 12,
+        marginBottom: 5,
     },
     date: {
-        fontSize: 10,
+        fontSize: 9,
         marginTop: 5,
     },
     dateRange: {
-        fontSize: 11,
-        marginTop: 8,
+        fontSize: 10,
+        marginTop: 6,
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
         padding: 4,
         borderRadius: 4,
     },
     section: {
-        marginBottom: 20,
+        marginBottom: 15,
     },
     sectionTitle: {
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#035594',
-        paddingBottom: 5,
+        paddingBottom: 2,
         color: '#035594',
     },
     row: {
@@ -64,30 +73,30 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: '#F8FAFC',
-        borderRadius: 5,
-        padding: 10,
+        borderRadius: 4,
+        padding: 8,
         marginBottom: 10,
-        borderLeftWidth: 4,
+        borderLeftWidth: 3,
         borderLeftColor: '#035594',
     },
     cardTitle: {
-        fontSize: 12,
+        fontSize: 10,
         fontWeight: 'medium',
-        marginBottom: 5,
+        marginBottom: 3,
         color: '#374151',
     },
     cardValue: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: 'bold',
         color: '#1F2937',
     },
     cardSubtitle: {
-        fontSize: 9,
+        fontSize: 8,
         color: '#6B7280',
         marginTop: 2,
     },
     highlight: {
-        color: '#32cc32',
+        color: '#10B981',
         fontWeight: 'bold',
     },
     warning: {
@@ -95,7 +104,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     danger: {
-        color: '#DC2626',
+        color: '#EF4444',
         fontWeight: 'bold',
     },
     tableHeader: {
@@ -103,11 +112,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomWidth: 1,
         borderBottomColor: '#D1D5DB',
-        paddingVertical: 8,
-        paddingHorizontal: 5,
+        paddingVertical: 6,
+        paddingHorizontal: 4,
     },
     tableHeaderCell: {
-        fontSize: 10,
+        fontSize: 8,
         fontWeight: 'bold',
         color: '#374151',
     },
@@ -115,11 +124,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomWidth: 1,
         borderBottomColor: '#E5E7EB',
-        paddingVertical: 6,
-        paddingHorizontal: 5,
+        paddingVertical: 4,
+        paddingHorizontal: 4,
     },
     tableCell: {
-        fontSize: 9,
+        fontSize: 7,
         color: '#4B5563',
     },
     col10: { width: '10%' },
@@ -143,26 +152,42 @@ const styles = StyleSheet.create({
     },
     summaryBox: {
         backgroundColor: '#F0F9FF',
-        padding: 10,
-        borderRadius: 5,
-        marginBottom: 10,
+        padding: 8,
+        borderRadius: 4,
+        marginBottom: 8,
     },
     summaryTitle: {
-        fontSize: 11,
+        fontSize: 10,
         fontWeight: 'bold',
         color: '#035594',
-        marginBottom: 5,
+        marginBottom: 4,
     },
     summaryText: {
-        fontSize: 9,
+        fontSize: 8,
         color: '#4B5563',
-        lineHeight: 1.5,
+        lineHeight: 1.4,
     },
     noData: {
         fontSize: 9,
         color: '#6B7280',
         textAlign: 'center',
-        padding: 20,
+        padding: 15,
+    },
+    ratingBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 5,
+    },
+    ratingValue: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginRight: 5,
+        color: '#22C55E',
+    },
+    starIcon: {
+        color: '#F59E0B',
+        fontSize: 16,
     }
 });
 
@@ -190,6 +215,12 @@ const DashboardAnalyticsPDF = ({
     const truncateText = (text, maxLength = 50) => {
         if (!text) return 'N/A';
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    };
+
+    // Format date
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        return moment(dateString).format('MM/DD/YY');
     };
 
     return (
@@ -220,6 +251,17 @@ const DashboardAnalyticsPDF = ({
                             {analysis.summary && `\n\n${analysis.summary}`}
                         </Text>
                     </View>
+
+                    {/* Feedback Summary */}
+                    {dashboardData.feedbackAnalytics && (
+                        <View style={styles.summaryBox}>
+                            <Text style={styles.summaryTitle}>Feedback Analysis</Text>
+                            <Text style={styles.summaryText}>
+                                The platform has received {dashboardData.totalFeedbacks || 0} feedback submissions with an average rating of {dashboardData.feedbackAnalytics.averageRating?.toFixed(1) || 'N/A'} stars.
+                                {analysis.feedback && `\n\n${analysis.feedback}`}
+                            </Text>
+                        </View>
+                    )}
 
                     {/* User Demographics Summary */}
                     {chartData && chartData.labels && (
@@ -277,14 +319,19 @@ const DashboardAnalyticsPDF = ({
 
                         <View style={styles.lastColumn}>
                             <View style={styles.card}>
-                                <Text style={styles.cardTitle}>Total Contacts</Text>
-                                <Text style={styles.cardValue}>{dashboardData.totalHotlines || 0}</Text>
+                                <Text style={styles.cardTitle}>Total Feedbacks</Text>
+                                <Text style={styles.cardValue}>{dashboardData.totalFeedbacks || 0}</Text>
+                                <View style={styles.ratingBox}>
+                                    <Text style={styles.cardSubtitle}>
+                                        Avg. Rating: <Text style={styles.highlight}>{dashboardData.feedbackAnalytics?.averageRating?.toFixed(1) || 'N/A'}</Text>
+                                    </Text>
+                                </View>
                             </View>
                         </View>
                     </View>
 
                     {/* Status Comparison Charts */}
-                    <View style={{ marginVertical: 10 }}>
+                    <View style={{ marginVertical: 8 }}>
                         <Text style={styles.cardTitle}>Content Status Analysis</Text>
                         <PDFComparisonChart
                             title="User Status"
@@ -308,7 +355,7 @@ const DashboardAnalyticsPDF = ({
                                 active: dashboardData.upcomingEvents || 0,
                                 inactive: dashboardData.doneEvents || 0
                             }}
-                            activeColor="#32cc32"
+                            activeColor="#10B981"
                             inactiveColor="#6B7280"
                         />
                     </View>
@@ -341,6 +388,107 @@ const DashboardAnalyticsPDF = ({
                     </View>
                 </View>
 
+                {/* Feedback Analysis */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Feedback Analysis</Text>
+
+                    <View style={styles.row}>
+                        {/* Rating Distribution */}
+                        <View style={styles.column}>
+                            <Text style={styles.cardTitle}>Rating Distribution</Text>
+                            {dashboardData.feedbackAnalytics && dashboardData.feedbackAnalytics.ratingDistribution ? (
+                                <PDFRatingChart ratingDistribution={dashboardData.feedbackAnalytics.ratingDistribution} />
+                            ) : (
+                                <Text style={styles.noData}>No rating distribution available</Text>
+                            )}
+                        </View>
+
+                        {/* Category Distribution */}
+                        <View style={styles.lastColumn}>
+                            <Text style={styles.cardTitle}>Feedback by Category</Text>
+                            {dashboardData.feedbackAnalytics && dashboardData.feedbackAnalytics.categoryDistribution ? (
+                                <PDFCategoryChart categoryDistribution={dashboardData.feedbackAnalytics.categoryDistribution} />
+                            ) : (
+                                <Text style={styles.noData}>No category distribution available</Text>
+                            )}
+                        </View>
+                    </View>
+
+                    <View style={styles.row}>
+                        {/* Rating Over Time */}
+                        <View style={styles.column}>
+                            <Text style={styles.cardTitle}>Rating Trend Over Time</Text>
+                            {dashboardData.feedbackAnalytics && dashboardData.feedbackAnalytics.ratingOverTime
+                                && dashboardData.feedbackAnalytics.ratingOverTime.length > 0 ? (
+                                <PDFLineChart data={dashboardData.feedbackAnalytics.ratingOverTime} />
+                            ) : (
+                                <Text style={styles.noData}>No rating trend data available</Text>
+                            )}
+                        </View>
+
+                        {/* Rating By Category */}
+                        <View style={styles.lastColumn}>
+                            <Text style={styles.cardTitle}>Rating by Category</Text>
+                            {dashboardData.feedbackAnalytics && dashboardData.feedbackAnalytics.ratingByCategory ? (
+                                <PDFRatingByCategoryChart ratingByCategory={dashboardData.feedbackAnalytics.ratingByCategory} />
+                            ) : (
+                                <Text style={styles.noData}>No category rating data available</Text>
+                            )}
+                        </View>
+                    </View>
+                </View>
+
+                {/* Recent Feedbacks */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Recent Feedbacks</Text>
+
+                    {dashboardData.tenRecentFeedbacks && dashboardData.tenRecentFeedbacks.length > 0 ? (
+                        <>
+                            <View style={styles.tableHeader}>
+                                <View style={styles.col10}><Text style={styles.tableHeaderCell}>#</Text></View>
+                                <View style={styles.col20}><Text style={styles.tableHeaderCell}>User</Text></View>
+                                <View style={styles.col10}><Text style={styles.tableHeaderCell}>Rating</Text></View>
+                                <View style={styles.col15}><Text style={styles.tableHeaderCell}>Category</Text></View>
+                                <View style={styles.col30}><Text style={styles.tableHeaderCell}>Comment</Text></View>
+                                <View style={styles.col15}><Text style={styles.tableHeaderCell}>Date</Text></View>
+                            </View>
+
+                            {dashboardData.tenRecentFeedbacks.slice(0, 5).map((feedback, index) => (
+                                <View key={`feedback-${index}`} style={styles.tableRow}>
+                                    <View style={styles.col10}><Text style={styles.tableCell}>{index + 1}</Text></View>
+                                    <View style={styles.col20}>
+                                        <Text style={styles.tableCell}>
+                                            {formatUserName(feedback.user)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.col10}>
+                                        <Text style={styles.tableCell}>
+                                            {feedback.rating || 'N/A'} {feedback.rating ? '★' : ''}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.col15}>
+                                        <Text style={styles.tableCell}>
+                                            {feedback.category || 'N/A'}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.col30}>
+                                        <Text style={styles.tableCell}>
+                                            {truncateText(feedback.comment, 40)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.col15}>
+                                        <Text style={styles.tableCell}>
+                                            {formatDate(feedback.createdAt)}
+                                        </Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </>
+                    ) : (
+                        <Text style={styles.noData}>No recent feedbacks available</Text>
+                    )}
+                </View>
+
                 {/* Recent Users */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Recent Users</Text>
@@ -371,7 +519,7 @@ const DashboardAnalyticsPDF = ({
                                     </View>
                                     <View style={styles.col15}>
                                         <Text style={styles.tableCell}>
-                                            {user.createdAt ? moment(user.createdAt).format('MM/DD/YY') : 'N/A'}
+                                            {formatDate(user.createdAt)}
                                         </Text>
                                     </View>
                                 </View>

@@ -19,7 +19,11 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
     const generateInsights = (data) => {
         const insights = {
             summary: "",
-            demographics: ""
+            demographics: "",
+            feedback: "",
+            hotlines: "",
+            posts: "",
+            events: ""
         };
 
         // Generate summary insights
@@ -40,17 +44,91 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
         // Generate demographic insights
         if (data.demographics?.gender) {
             const genders = data.demographics.gender;
-            const primaryGender = Object.entries(genders).reduce((a, b) => a[1] > b[1] ? a : b)[0];
-            const primaryPercent = Math.round((genders[primaryGender] / data.totalUsers) * 100);
+            const primaryGender = Object.entries(genders).reduce((a, b) => a[1] > b[1] ? a : b, ['Unknown', 0])[0];
 
-            insights.demographics = `The platform shows a ${primaryGender.toLowerCase()} majority (${primaryPercent}%). `;
+            if (data.totalUsers > 0 && primaryGender !== 'Unknown') {
+                const primaryPercent = Math.round((genders[primaryGender] / data.totalUsers) * 100);
+                insights.demographics = `The platform shows a ${primaryGender.toLowerCase()} majority (${primaryPercent}%). `;
+            }
 
             if (data.demographics.ageGroups) {
                 const ages = data.demographics.ageGroups;
-                const primaryAge = Object.entries(ages).reduce((a, b) => a[1] > b[1] ? a : b)[0];
-                const agePercent = Math.round((ages[primaryAge] / data.totalUsers) * 100);
+                const primaryAge = Object.entries(ages).reduce((a, b) => a[1] > b[1] ? a : b, ['Unknown', 0])[0];
 
-                insights.demographics += `The primary age group is ${primaryAge} (${agePercent}%), suggesting the platform appeals most to this demographic.`;
+                if (data.totalUsers > 0 && primaryAge !== 'Unknown') {
+                    const agePercent = Math.round((ages[primaryAge] / data.totalUsers) * 100);
+                    insights.demographics += `The primary age group is ${primaryAge} (${agePercent}%), suggesting the platform appeals most to this demographic.`;
+                }
+            }
+        }
+
+        // Add feedback insights
+        if (data.totalFeedbacks > 0 && data.feedbackAnalytics) {
+            const avgRating = data.feedbackAnalytics.averageRating || 0;
+            insights.feedback = `The platform has an overall satisfaction rating of ${avgRating.toFixed(1)} stars. `;
+
+            if (data.feedbackAnalytics.ratingDistribution) {
+                const fiveStarCount = data.feedbackAnalytics.ratingDistribution[5] || 0;
+                const totalRatings = Object.values(data.feedbackAnalytics.ratingDistribution).reduce((sum, count) => sum + count, 0);
+
+                if (totalRatings > 0) {
+                    const fiveStarPercentage = Math.round((fiveStarCount / totalRatings) * 100);
+                    insights.feedback += `${fiveStarPercentage}% of users gave a 5-star rating. `;
+                }
+
+                // Add trending insight if available
+                if (data.feedbackAnalytics.ratingOverTime && data.feedbackAnalytics.ratingOverTime.length >= 2) {
+                    const latest = data.feedbackAnalytics.ratingOverTime[data.feedbackAnalytics.ratingOverTime.length - 1];
+                    const previous = data.feedbackAnalytics.ratingOverTime[data.feedbackAnalytics.ratingOverTime.length - 2];
+
+                    if (latest && previous) {
+                        const trend = latest.average > previous.average ? "improving" :
+                            latest.average < previous.average ? "declining" : "stable";
+                        insights.feedback += `User satisfaction is ${trend} over time.`;
+                    }
+                }
+            }
+
+            // Add category insight if available
+            if (data.feedbackAnalytics.ratingByCategory) {
+                const categories = Object.entries(data.feedbackAnalytics.ratingByCategory);
+                if (categories.length > 0) {
+                    const highestRated = categories.reduce((a, b) => a[1] > b[1] ? a : b);
+                    const lowestRated = categories.reduce((a, b) => a[1] < b[1] ? a : b);
+
+                    if (highestRated[0] !== lowestRated[0]) {
+                        insights.feedback += ` The "${highestRated[0]}" category receives the highest ratings (${highestRated[1].toFixed(1)}), while "${lowestRated[0]}" receives the lowest (${lowestRated[1].toFixed(1)}).`;
+                    }
+                }
+            }
+        }
+
+        // Add hotlines insights
+        if (data.totalHotlines > 0) {
+            insights.hotlines = `The emergency contact system includes ${data.totalHotlines} hotline numbers, providing essential emergency services to users.`;
+        }
+
+        // Add post insights
+        if (data.totalPosts > 0) {
+            const visiblePercent = Math.round((data.totalActivePosts / data.totalPosts) * 100);
+            insights.posts = `${visiblePercent}% of all posts are currently visible to users. `;
+
+            if (data.recentPosts && data.recentPosts.length > 0) {
+                insights.posts += `The platform continues to see regular content creation with ${data.recentPosts.length} new posts recently added.`;
+            }
+        }
+
+        // Add event insights
+        if (data.totalEvents > 0) {
+            const upcomingPercent = data.totalEvents > 0 ? Math.round((data.upcomingEvents / data.totalEvents) * 100) : 0;
+            insights.events = `${upcomingPercent}% of all events are upcoming. `;
+
+            if (data.ongoingEvents > 0) {
+                insights.events += `There are currently ${data.ongoingEvents} ongoing events. `;
+            }
+
+            if (data.upcomingFiveEvents && data.upcomingFiveEvents.length > 0) {
+                insights.events += `The next event is scheduled to start soon.`;
             }
         }
 
@@ -61,6 +139,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
     const generateCurrentDashboardPDF = async () => {
         setIsLoading(true);
         try {
+            // Generate insights based on current dashboard data
             const insights = generateInsights(dashboardData);
 
             // Generate the PDF blob
@@ -135,7 +214,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             // Get age groups data
             const monthlyAgeGroups = monthlyData.demographics?.ageGroups || {};
 
-            // Generate insights
+            // Generate insights based on monthly data
             const insights = generateInsights(monthlyData);
 
             // Generate the PDF blob
@@ -214,7 +293,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             // Get age groups data
             const quarterlyAgeGroups = quarterlyData.demographics?.ageGroups || {};
 
-            // Generate insights
+            // Generate insights based on quarterly data
             const insights = generateInsights(quarterlyData);
 
             // Generate the PDF blob
@@ -307,7 +386,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             // Get age groups data
             const rangeAgeGroups = rangeData.demographics?.ageGroups || {};
 
-            // Generate insights
+            // Generate insights based on range data
             const insights = generateInsights(rangeData);
 
             // Generate the PDF blob
@@ -362,9 +441,10 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
                             Quarterly Report
                         </a>
                     </li>
+                    <li className="divider"></li>
                     <li>
                         <a onClick={() => setShowDateModal(true)} className={isLoading ? "opacity-50 cursor-wait" : ""}>
-                            <HiCalendar className="h-4 w-4" /> Date Range
+                            <HiCalendar className="h-4 w-4" /> Custom Date Range
                         </a>
                     </li>
                 </ul>
