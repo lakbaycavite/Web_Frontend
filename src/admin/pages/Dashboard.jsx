@@ -115,7 +115,9 @@ const Dashboard = () => {
                             <div className="stat">
                                 <div className="stat-title text-xl">Feedbacks</div>
                                 <div className="stat-value text-3xl">{dashboardData.totalFeedbacks}</div>
-                                <div className="stat-desc text-md">Average Rating: <span className="text-secondary">{dashboardData.averageRating}</span></div>
+                                <div className="stat-desc text-md">Average Rating: <span className="text-secondary">  {dashboardData?.feedbackAnalytics?.averageRating ?? 'N/A'}
+                                </span></div>
+                                {/* {console.log(dashboardData.feedbackAnalytics.averageRating)} */}
                                 <div className="stat-figure text-secondary">
                                     <TiContacts size={40} />
                                 </div>
