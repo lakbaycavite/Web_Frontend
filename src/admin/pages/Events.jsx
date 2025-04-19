@@ -278,12 +278,15 @@ const Events = () => {
             document.getElementById('view_event_modal').close()
             setCreateError(null)
             setIsEditable(false)
+            setCreateError(null)
+            setUpdateError(null)
         } catch (error) {
             console.error("Error updating event:", error)
             toast("Failed to update event", "error")
             setUpdateError(error.response?.data?.error || "An unexpected error occurred")
         } finally {
             setLoading(false)
+
         }
     }
 
