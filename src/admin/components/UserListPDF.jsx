@@ -2,7 +2,7 @@ import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import moment from 'moment';
 
-// Create styles (using default fonts to avoid loading issues)
+// Create styles
 const styles = StyleSheet.create({
     page: {
         padding: 30,
@@ -29,6 +29,13 @@ const styles = StyleSheet.create({
     date: {
         fontSize: 10,
         marginTop: 5,
+    },
+    dateRange: {
+        fontSize: 11,
+        marginTop: 8,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        padding: 4,
+        borderRadius: 4,
     },
     section: {
         marginBottom: 15,
@@ -62,21 +69,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
     },
-    table: {
-        display: 'table',
-        width: 'auto',
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderColor: '#DDDDDD',
-        marginBottom: 10,
-    },
-    tableRow: {
-        flexDirection: 'row',
-        borderBottomWidth: 1,
-        borderBottomColor: '#DDDDDD',
-        minHeight: 30,
-        alignItems: 'center',
-    },
     tableHeaderRow: {
         flexDirection: 'row',
         borderBottomWidth: 1,
@@ -86,6 +78,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: 'white',
         fontWeight: 'bold',
+    },
+    tableRow: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#DDDDDD',
+        minHeight: 30,
+        alignItems: 'center',
     },
     tableCol1: {
         width: '8%',
@@ -151,10 +150,18 @@ const styles = StyleSheet.create({
         borderTopColor: '#DDDDDD',
         paddingTop: 5,
     },
+    noUsers: {
+        textAlign: 'center',
+        fontSize: 12,
+        color: '#555555',
+        marginTop: 40,
+        marginBottom: 40,
+        fontStyle: 'italic',
+    },
 });
 
 // Create Document Component
-const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers }) => {
+const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers, reportTitle = "User Management Report", dateRange = null }) => {
     const currentDate = moment().format('MMMM Do, YYYY [at] h:mm A');
 
     return (
@@ -163,8 +170,14 @@ const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers }) => {
                 {/* Header */}
                 <View style={styles.header}>
                     <Text style={styles.title}>Lakbay Cavite</Text>
-                    <Text style={styles.subtitle}>User Management Report</Text>
+                    <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
+
+                    {dateRange && (
+                        <Text style={styles.dateRange}>
+                            Registration Date Range: {dateRange.start} to {dateRange.end}
+                        </Text>
+                    )}
                 </View>
 
                 {/* Statistics */}
@@ -190,37 +203,45 @@ const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers }) => {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>User List</Text>
 
-                    {/* Table Header */}
-                    <View style={styles.tableHeaderRow}>
-                        <View style={styles.tableCol1}><Text style={styles.headerCell}>No.</Text></View>
-                        <View style={styles.tableCol2}><Text style={styles.headerCell}>Username</Text></View>
-                        <View style={styles.tableCol3}><Text style={styles.headerCell}>Full Name</Text></View>
-                        <View style={styles.tableCol4}><Text style={styles.headerCell}>Email</Text></View>
-                        <View style={styles.tableCol5}><Text style={styles.headerCell}>Status</Text></View>
-                        <View style={styles.tableCol6}><Text style={styles.headerCell}>Joined</Text></View>
-                    </View>
+                    {users.length > 0 ? (
+                        <>
+                            {/* Table Header */}
+                            <View style={styles.tableHeaderRow}>
+                                <View style={styles.tableCol1}><Text style={styles.headerCell}>No.</Text></View>
+                                <View style={styles.tableCol2}><Text style={styles.headerCell}>Username</Text></View>
+                                <View style={styles.tableCol3}><Text style={styles.headerCell}>Full Name</Text></View>
+                                <View style={styles.tableCol4}><Text style={styles.headerCell}>Email</Text></View>
+                                <View style={styles.tableCol5}><Text style={styles.headerCell}>Status</Text></View>
+                                <View style={styles.tableCol6}><Text style={styles.headerCell}>Joined</Text></View>
+                            </View>
 
-                    {/* Table Rows */}
-                    {users.map((user, index) => (
-                        <View key={index} style={[styles.tableRow, index % 2 === 1 ? styles.alternateRow : {}]}>
-                            <View style={styles.tableCol1}><Text style={styles.cell}>{index + 1}</Text></View>
-                            <View style={styles.tableCol2}><Text style={styles.cell}>{user.username || "N/A"}</Text></View>
-                            <View style={styles.tableCol3}>
-                                <Text style={styles.cell}>
-                                    {`${user.firstName || ''} ${user.lastName || ''}`.trim() || 'N/A'}
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol4}><Text style={styles.cell}>{user.email || "N/A"}</Text></View>
-                            <View style={styles.tableCol5}>
-                                <Text style={user.isActive ? styles.activeStatus : styles.inactiveStatus}>
-                                    {user.isActive ? "Active" : "Inactive"}
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol6}>
-                                <Text style={styles.cell}>{moment(user.createdAt).format("MM/DD/YY")}</Text>
-                            </View>
+                            {/* Table Rows */}
+                            {users.map((user, index) => (
+                                <View key={index} style={[styles.tableRow, index % 2 === 1 ? styles.alternateRow : {}]}>
+                                    <View style={styles.tableCol1}><Text style={styles.cell}>{index + 1}</Text></View>
+                                    <View style={styles.tableCol2}><Text style={styles.cell}>{user.username || "N/A"}</Text></View>
+                                    <View style={styles.tableCol3}>
+                                        <Text style={styles.cell}>
+                                            {`${user.first_name || ''} ${user.last_name || ''}`.trim() || 'N/A'}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.tableCol4}><Text style={styles.cell}>{user.email || "N/A"}</Text></View>
+                                    <View style={styles.tableCol5}>
+                                        <Text style={user.is_active ? styles.activeStatus : styles.inactiveStatus}>
+                                            {user.is_active ? "Active" : "Inactive"}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.tableCol6}>
+                                        <Text style={styles.cell}>{moment(user.createdAt).format("MM/DD/YY")}</Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </>
+                    ) : (
+                        <View>
+                            <Text style={styles.noUsers}>No users found for the selected criteria</Text>
                         </View>
-                    ))}
+                    )}
                 </View>
 
                 {/* Footer */}
