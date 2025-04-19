@@ -67,40 +67,50 @@ const Dashboard = () => {
                     <div className="w-full flex justify-evenly items-center gap-4 flex-wrap">
                         <div className="stats shadow">
                             <div className="stat">
-                                <div className="stat-title text-xl">Total Users</div>
-                                <div className="stat-value text-4xl">{dashboardData.totalUsers}</div>
+                                <div className="stat-title text-xl">Users</div>
+                                <div className="stat-value text-3xl">{dashboardData.totalUsers}</div>
                                 <div className="stat-desc text-md"><span className="text-secondary">{dashboardData.totalActiveUsers}</span> Active | <span className="text-secondary">{dashboardData.totalInactiveUsers}</span> Inactive</div>
                                 <div className="stat-figure text-secondary">
-                                    <FaUsers size={50} />
+                                    <FaUsers size={40} />
                                 </div>
                             </div>
                         </div>
                         <div className="stats shadow">
                             <div className="stat">
-                                <div className="stat-title text-xl">Total Posts</div>
-                                <div className="stat-value text-4xl">{dashboardData.totalPosts}</div>
+                                <div className="stat-title text-xl">Posts</div>
+                                <div className="stat-value text-3xl">{dashboardData.totalPosts}</div>
                                 <div className="stat-desc text-md"><span className="text-secondary">{dashboardData.totalActivePosts}</span> visible | <span className="text-secondary">{dashboardData.totalInactivePosts}</span> Hidden</div>
                                 <div className="stat-figure text-secondary">
-                                    <BsFillPostcardFill size={50} />
+                                    <BsFillPostcardFill size={40} />
                                 </div>
                             </div>
                         </div>
                         <div className="stats shadow">
                             <div className="stat">
-                                <div className="stat-title text-xl">Total Events</div>
-                                <div className="stat-value text-4xl">{dashboardData.totalEvents}</div>
+                                <div className="stat-title text-xl">Events</div>
+                                <div className="stat-value text-3xl">{dashboardData.totalEvents}</div>
                                 <div className="stat-desc text-md"><span className="text-secondary">{dashboardData.doneEvents}</span> Done | <span className="text-secondary">{dashboardData.ongoingEvents}</span> On-going | <span className="text-secondary font-bold">{dashboardData.upcomingEvents}</span> Upcoming</div>
                                 <div className="stat-figure text-secondary">
-                                    <MdOutlineEvent size={50} />
+                                    <MdOutlineEvent size={40} />
                                 </div>
                             </div>
                         </div>
                         <div className="stats shadow">
                             <div className="stat">
-                                <div className="stat-title text-xl">Total Contacts</div>
-                                <div className="stat-value text-4xl">{dashboardData.totalHotlines}</div>
+                                <div className="stat-title text-xl">Hotlines</div>
+                                <div className="stat-value text-3xl">{dashboardData.totalHotlines}</div>
                                 <div className="stat-figure text-secondary">
-                                    <TiContacts size={50} />
+                                    <TiContacts size={40} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="stats shadow">
+                            <div className="stat">
+                                <div className="stat-title text-xl">Feedbacks</div>
+                                <div className="stat-value text-3xl">{dashboardData.totalFeedbacks}</div>
+                                <div className="stat-desc text-md">Average Rating: <span className="text-secondary">{dashboardData.averageRating}</span></div>
+                                <div className="stat-figure text-secondary">
+                                    <TiContacts size={40} />
                                 </div>
                             </div>
                         </div>
