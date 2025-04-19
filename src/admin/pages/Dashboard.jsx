@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../lib/axios";
 import FeedbackDTable from "../components/FeedbackDTable";
+import FeedbackAnalyticsChart from "../components/FeedbackAnalyticsChart";
 
 
 const Dashboard = () => {
@@ -23,6 +24,8 @@ const Dashboard = () => {
     const [chartData, setChartData] = useState(null);
     const [ageGroups, setAgeGroups] = useState({});
     const [dashboardData, setDashboardData] = useState([]);
+    const [feedbackAnalytics, setFeedbackAnalytics] = useState(null);
+
 
     const navigate = useNavigate()
 
@@ -50,6 +53,9 @@ const Dashboard = () => {
                 }
                 // Set age groups data for bar chart
                 setAgeGroups(res.data.demographics?.ageGroups || {});
+
+                // Set feedback analytics data
+                setFeedbackAnalytics(res.data.feedbackAnalytics);
             })
             .catch((err) => {
                 console.log(err);
@@ -177,6 +183,31 @@ const Dashboard = () => {
                     </div>
                 </div>
 
+                <div className="w-full mt-10">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-xl font-medium text-gray-700">Feedback Analytics</h2>
+                        </div>
+
+                        {/* This is where the Component is placed */}
+                        <FeedbackAnalyticsChart feedbackAnalytics={feedbackAnalytics} />
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-md mt-10">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-medium text-gray-700">Recent Feedbacks</h2>
+                        <button
+                            className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm transition duration-300 ease-in-out"
+                            onClick={() => navigate('/admin/feedback')}
+                        >
+                            View All Feedbacks
+                        </button>
+                    </div>
+
+                    <FeedbackDTable posts={dashboardData.tenRecentFeedbacks} loading={loading} characterLimit={80} />
+                </div>
+
                 {/* New Users Table */}
                 <div className="w-full mt-10">
                     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -209,19 +240,7 @@ const Dashboard = () => {
                     <PostDTable posts={dashboardData.recentPosts} loading={loading} characterLimit={80} />
                 </div>
 
-                <div className="bg-white p-6 rounded-lg shadow-md mt-10">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-medium text-gray-700">Recent Feedbacks</h2>
-                        <button
-                            className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm transition duration-300 ease-in-out"
-                            onClick={() => navigate('/admin/feedback')}
-                        >
-                            View All Feedbacks
-                        </button>
-                    </div>
 
-                    <FeedbackDTable posts={dashboardData.tenRecentFeedbacks} loading={loading} characterLimit={80} />
-                </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-md mt-10">
                     <div className="flex justify-between items-center mb-6">
