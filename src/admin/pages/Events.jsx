@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEventsContext } from '../../hooks/useEventsContext'
 import { useToast } from '../../hooks/useToast'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import EventPDFGenerator from '../components/EventPDFGenerator'
 
 // Components
 import AdminDrawer from "../components/AdminDrawer"
@@ -597,6 +598,13 @@ const Events = () => {
 
                         {/* Action Buttons */}
                         <div className="flex gap-2">
+                            <EventPDFGenerator
+                                currentEvents={events || []}
+                                activeEvents={activeEvents}
+                                inactiveEvents={inactiveEvents}
+                            />
+
+
                             <button
                                 onClick={() => document.getElementById('create_event_modal').showModal()}
                                 className="btn bg-secondary text-white hover:bg-secondary/80 btn-sm font-normal gap-1 transform transition hover:scale-105"
