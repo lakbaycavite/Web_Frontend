@@ -28,7 +28,7 @@ const PostDTable = ({ posts, loading = false, characterLimit = 50 }) => {
                             <th className="py-3 px-6 text-left">Content</th>
                             <th className="py-3 px-6 text-left">User</th>
                             <th className="py-3 px-6 text-left">Created At</th>
-                            <th className="py-3 px-6 text-center">Actions</th>
+                            {/* <th className="py-3 px-6 text-center">Actions</th> */}
                         </tr>
                     </thead>
                     <tbody className="text-gray-600 text-sm">
@@ -47,9 +47,9 @@ const PostDTable = ({ posts, loading = false, characterLimit = 50 }) => {
                                 <td className="py-3 px-6 text-left">
                                     <div className="h-4 bg-gray-200 rounded w-32"></div>
                                 </td>
-                                <td className="py-3 px-6 text-center">
+                                {/* <td className="py-3 px-6 text-center">
                                     <div className="h-8 bg-gray-200 rounded w-20 mx-auto"></div>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>
@@ -66,7 +66,7 @@ const PostDTable = ({ posts, loading = false, characterLimit = 50 }) => {
                         <th className="py-3 px-6 text-left">Content</th>
                         <th className="py-3 px-6 text-left">User</th>
                         <th className="py-3 px-6 text-left">Created At</th>
-                        <th className="py-3 px-6 text-center">Actions</th>
+                        {/* <th className="py-3 px-6 text-center">Actions</th> */}
                     </tr>
                 </thead>
                 <tbody className="text-gray-600 text-sm">
@@ -103,7 +103,7 @@ const PostDTable = ({ posts, loading = false, characterLimit = 50 }) => {
                                         <span> {moment(post.createdAt).format('h:mm a, MMMM Do, YYYY')}</span>
                                     </div>
                                 </td>
-                                <td className="py-3 px-6 text-center">
+                                {/* <td className="py-3 px-6 text-center">
                                     <button
                                         onClick={() => navigate('/post/display/' + post._id)}
                                         className="bg-secondary hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm transition duration-300 ease-in-out flex items-center justify-center mx-auto"
@@ -111,7 +111,7 @@ const PostDTable = ({ posts, loading = false, characterLimit = 50 }) => {
                                         <FaEye className="mr-1" />
                                         View
                                     </button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))
                     ) : (

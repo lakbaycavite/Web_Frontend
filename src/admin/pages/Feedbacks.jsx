@@ -481,7 +481,7 @@ const Feedbacks = () => {
                                         <th className="w-1/12">Rating</th>
                                         <th className="w-1/12">Date</th>
                                         <th className="w-1/12">Status</th>
-                                        <th className="w-1/6 text-center">Actions</th>
+                                        {/* <th className="w-1/6 text-center">Actions</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -539,26 +539,7 @@ const Feedbacks = () => {
                                                     {feedback.isPublic ? 'Public' : 'Hidden'}
                                                 </span>
                                             </td>
-                                            <td>
-                                                <div className="flex justify-center space-x-2">
-                                                    <button
-                                                        className="btn btn-sm btn-outline tooltip"
-                                                        data-tip={feedback.isPublic ? "Hide Feedback" : "Show Feedback"}
-                                                        onClick={() => handleToggleStatus(feedback._id)}
-                                                    >
-                                                        {feedback.isPublic ? <FaEyeSlash /> : <FaEye />}
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-sm btn-info tooltip"
-                                                        // data-tip="Respond to Feedback"
-                                                        data-tip="View Feedback"
-                                                        onClick={() => handleOpenResponseModal(feedback)}
-                                                    >
-                                                        {/* <FaReply /> */}
-                                                        <MdOutlineFeedback className="w-4 h-4" />
-                                                    </button>
-                                                </div>
-                                            </td>
+
                                         </tr>
                                     ))}
                                 </tbody>

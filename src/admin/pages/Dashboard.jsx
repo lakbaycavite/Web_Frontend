@@ -15,6 +15,7 @@ import DashboardAnalyticsPDFGenerator from "../components/DashboardAnalyticsPDFG
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../lib/axios";
+import FeedbackDTable from "../components/FeedbackDTable";
 
 
 const Dashboard = () => {
@@ -206,6 +207,20 @@ const Dashboard = () => {
                     </div>
 
                     <PostDTable posts={dashboardData.recentPosts} loading={loading} characterLimit={80} />
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-md mt-10">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-medium text-gray-700">Recent Feedbacks</h2>
+                        <button
+                            className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm transition duration-300 ease-in-out"
+                            onClick={() => navigate('/admin/feedback')}
+                        >
+                            View All Feedbacks
+                        </button>
+                    </div>
+
+                    <FeedbackDTable posts={dashboardData.tenRecentFeedbacks} loading={loading} characterLimit={80} />
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-md mt-10">
