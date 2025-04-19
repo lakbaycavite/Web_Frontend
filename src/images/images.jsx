@@ -15,6 +15,8 @@ const IMAGES = {
     lakbay: new URL('./images/lakbay.png', import.meta.url).href,
     lakbay2: new URL('./images/lakbay2.png', import.meta.url).href,
     lakbayjeep2: new URL('./images/lakbayjeep2.png', import.meta.url).href,
+    jeep: new URL('./images/jeep.png', import.meta.url).href,
+
 
 }
 

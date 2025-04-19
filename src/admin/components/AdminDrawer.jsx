@@ -7,6 +7,7 @@ import { MdDashboard, MdEvent, MdFeedback, MdWavingHand } from "react-icons/md";
 import { BsFillPostcardFill, BsStars } from "react-icons/bs";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import { IoLogoOctocat } from "react-icons/io5";
+import IMAGES from "../../images/images";
 
 const AdminDrawer = ({ children }) => {
     const navigate = useNavigate();
@@ -76,9 +77,10 @@ const AdminDrawer = ({ children }) => {
                     <div className="px-6 pt-6 pb-8">
                         <Link
                             to='/home'
-                            className="flex items-center gap-2 group"
+                            className="flex items-center gap-2 group space-x-2"
                         >
-                            <IoLogoOctocat className="text-white text-3xl group-hover:rotate-12 transition-transform duration-300" />
+                            {/* <IoLogoOctocat className="text-white text-3xl group-hover:rotate-12 transition-transform duration-300" /> */}
+                            <img src={IMAGES.jeep} alt="Logo" className="h-12 w-12 rounded-full" />
                             <span className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200 group-hover:from-blue-200 group-hover:to-white transition-all duration-300">
                                 Lakbay Cavite
                             </span>
