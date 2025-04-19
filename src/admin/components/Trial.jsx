@@ -15,7 +15,6 @@ import {
 const styles = StyleSheet.create({
     page: {
         padding: 30,
-        paddingBottom: 60, // Increased bottom padding to prevent overlap with footer
         fontFamily: 'Helvetica',
         fontSize: 12,
     },
@@ -150,7 +149,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: '#E5E7EB',
         paddingTop: 5,
-        backgroundColor: 'white', // Add background to prevent content showing through
     },
     summaryBox: {
         backgroundColor: '#F0F9FF',
@@ -227,9 +225,9 @@ const DashboardAnalyticsPDF = ({
 
     return (
         <Document>
-            <Page size="A4" style={styles.page} wrap>
+            <Page size="A4" style={styles.page}>
                 {/* Header */}
-                <View style={styles.header} fixed>
+                <View style={styles.header}>
                     <Text style={styles.title}>Lakbay Cavite</Text>
                     <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
@@ -242,7 +240,7 @@ const DashboardAnalyticsPDF = ({
                 </View>
 
                 {/* Executive Summary */}
-                <View style={styles.section} break={false}>
+                <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Executive Summary</Text>
 
                     <View style={styles.summaryBox}>
@@ -264,10 +262,22 @@ const DashboardAnalyticsPDF = ({
                             </Text>
                         </View>
                     )}
+
+                    {/* User Demographics Summary */}
+                    {chartData && chartData.labels && (
+                        <View style={styles.summaryBox}>
+                            <Text style={styles.summaryTitle}>User Demographics Insights</Text>
+                            <Text style={styles.summaryText}>
+                                The platform's user base consists primarily of {chartData.labels[0]} users ({chartData.datasets[0].data[0]}),
+                                followed by {chartData.labels[1]} users ({chartData.datasets[0].data[1]}).
+                                {analysis.demographics && `\n\n${analysis.demographics}`}
+                            </Text>
+                        </View>
+                    )}
                 </View>
 
                 {/* Summary Statistics */}
-                <View style={styles.section} break={false}>
+                <View style={styles.section}>
                     <Text style={styles.sectionTitle}>System Statistics</Text>
 
                     <View style={styles.row}>
@@ -351,8 +361,8 @@ const DashboardAnalyticsPDF = ({
                     </View>
                 </View>
 
-                {/* User Demographics - This will break to a new page if needed */}
-                <View style={styles.section} break>
+                {/* User Demographics */}
+                <View style={styles.section}>
                     <Text style={styles.sectionTitle}>User Demographics</Text>
 
                     <View style={styles.row}>
@@ -379,7 +389,7 @@ const DashboardAnalyticsPDF = ({
                 </View>
 
                 {/* Feedback Analysis */}
-                <View style={styles.section} break={false}>
+                <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Feedback Analysis</Text>
 
                     <View style={styles.row}>
@@ -404,7 +414,6 @@ const DashboardAnalyticsPDF = ({
                         </View>
                     </View>
 
-                    {/* RESTORED SECTION: Rating Over Time and Rating By Category */}
                     <View style={styles.row}>
                         {/* Rating Over Time */}
                         <View style={styles.column}>
@@ -429,8 +438,8 @@ const DashboardAnalyticsPDF = ({
                     </View>
                 </View>
 
-                {/* RESTORED SECTION: Recent Feedbacks */}
-                <View style={styles.section} break={false}>
+                {/* Recent Feedbacks */}
+                <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Recent Feedbacks</Text>
 
                     {dashboardData.tenRecentFeedbacks && dashboardData.tenRecentFeedbacks.length > 0 ? (
@@ -481,7 +490,7 @@ const DashboardAnalyticsPDF = ({
                 </View>
 
                 {/* Recent Users */}
-                <View style={styles.section} break={false}>
+                <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Recent Users</Text>
 
                     {dashboardData.recentUsers && dashboardData.recentUsers.length > 0 ? (

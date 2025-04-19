@@ -6,8 +6,10 @@ import DashboardAnalyticsPDF from './DashboardAnalyticsPDF';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import api from '../../lib/axios';
 import moment from 'moment';
+import { useToast } from '../../hooks/useToast';
 
 const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups }) => {
+    const toast = useToast();
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const [showDateModal, setShowDateModal] = useState(false);
@@ -157,7 +159,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             saveAs(blob, `Lakbay_Cavite_Dashboard_${new Date().toISOString().split('T')[0]}.pdf`);
         } catch (error) {
             console.error("Error generating PDF:", error);
-            alert("Failed to generate PDF. Please try again.");
+            toast("Failed to generate PDF. Please try again.", "error");
         } finally {
             setIsLoading(false);
         }
@@ -188,7 +190,8 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             const monthlyData = response.data;
 
             if (!monthlyData) {
-                alert("No data found for the current month.");
+                // alert("No data found for the current month.");
+                toast("No data found for the current month.", "error");
                 setIsLoading(false);
                 return;
             }
@@ -236,7 +239,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             saveAs(blob, `Lakbay_Cavite_Dashboard_${moment().format('MMMM_YYYY')}.pdf`);
         } catch (error) {
             console.error("Error generating PDF:", error);
-            alert("Failed to generate PDF. Please try again.");
+            toast("Failed to generate PDF. Please try again.", "error");
         } finally {
             setIsLoading(false);
         }
@@ -267,7 +270,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             const quarterlyData = response.data;
 
             if (!quarterlyData) {
-                alert("No data found for the current quarter.");
+                toast("No data found for the current quarter.", "error");
                 setIsLoading(false);
                 return;
             }
@@ -316,7 +319,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             saveAs(blob, `Lakbay_Cavite_Dashboard_Q${currentQuarter}_${moment().format('YYYY')}.pdf`);
         } catch (error) {
             console.error("Error generating PDF:", error);
-            alert("Failed to generate PDF. Please try again.");
+            toast("Failed to generate PDF. Please try again.", "error");
         } finally {
             setIsLoading(false);
         }
@@ -360,7 +363,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             const rangeData = response.data;
 
             if (!rangeData) {
-                alert("No data found for the selected date range.");
+                toast("No data found for the selected date range.", "error");
                 setIsLoading(false);
                 return;
             }
@@ -408,7 +411,7 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
             saveAs(blob, `Lakbay_Cavite_Dashboard_${moment(start).format('YYYYMMDD')}_to_${moment(end).format('YYYYMMDD')}.pdf`);
         } catch (error) {
             console.error("Error generating PDF:", error);
-            alert("Failed to generate PDF. Please try again.");
+            toast("Failed to generate PDF. Please try again.", "error");
         } finally {
             setIsLoading(false);
         }
@@ -441,10 +444,9 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
                             Quarterly Report
                         </a>
                     </li>
-                    <li className="divider"></li>
                     <li>
                         <a onClick={() => setShowDateModal(true)} className={isLoading ? "opacity-50 cursor-wait" : ""}>
-                            <HiCalendar className="h-4 w-4" /> Custom Date Range
+                            <HiCalendar className="h-4 w-4" /> Date Range
                         </a>
                     </li>
                 </ul>
@@ -488,7 +490,11 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
                                     min={startDate || undefined}
+                                    disabled={startDate && endDate && new Date(endDate) < new Date(startDate)}
                                 />
+                                {startDate && endDate && new Date(endDate) < new Date(startDate) && (
+                                    <span className="text-error text-xs mt-1">End date cannot be before start date</span>
+                                )}
                             </div>
 
                             {dateError && (
@@ -500,13 +506,18 @@ const DashboardAnalyticsPDFGenerator = ({ dashboardData, chartData, ageGroups })
                             <div className="flex justify-end gap-2 mt-4">
                                 <button
                                     className="btn btn-ghost"
-                                    onClick={() => setShowDateModal(false)}
+                                    onClick={() => {
+                                        setShowDateModal(false)
+                                        setDateError('');
+
+                                    }}
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     className="btn btn-primary"
                                     onClick={generateDateRangePDF}
+                                    disabled={!startDate || !endDate || new Date(startDate) > new Date(endDate)}
                                 >
                                     Generate PDF
                                 </button>
