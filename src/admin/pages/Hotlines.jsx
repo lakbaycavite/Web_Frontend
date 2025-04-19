@@ -8,6 +8,7 @@ import { useToast } from "../../hooks/useToast";
 import AdminDrawer from "../components/AdminDrawer";
 import AdminNavbar from "../components/AdminNavbar";
 import HotlineItems from "../components/HotlineItems";
+import HotlinePDFGenerator from "../components/HotlinePDFGenerator";
 
 // Icons
 import { HiMagnifyingGlass, HiPlus, HiPhone, HiArrowPath } from "react-icons/hi2";
@@ -324,6 +325,10 @@ const Hotlines = () => {
 
                         {/* Action Buttons */}
                         <div className="flex gap-2">
+                            <HotlinePDFGenerator
+                                currentHotlines={hotlines || []}
+                                categoryCounts={categoryCounts}
+                            />
                             <button
                                 onClick={() => document.getElementById('my_modal_2').showModal()}
                                 className="btn bg-primary text-white hover:bg-primary/80 btn-sm font-normal gap-1 transform transition hover:scale-105"
