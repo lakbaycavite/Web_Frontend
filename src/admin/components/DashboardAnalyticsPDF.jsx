@@ -264,6 +264,17 @@ const DashboardAnalyticsPDF = ({
                             </Text>
                         </View>
                     )}
+
+                    {chartData && chartData.labels && (
+                        <View style={styles.summaryBox}>
+                            <Text style={styles.summaryTitle}>User Demographics Insights</Text>
+                            <Text style={styles.summaryText}>
+                                The platform's user base consists primarily of {chartData.labels[0]} users ({chartData.datasets[0].data[0]}),
+                                followed by {chartData.labels[1]} users ({chartData.datasets[0].data[1]}).
+                                {analysis.demographics && `\n\n${analysis.demographics}`}
+                            </Text>
+                        </View>
+                    )}
                 </View>
 
                 {/* Summary Statistics */}
