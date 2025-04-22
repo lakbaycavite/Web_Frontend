@@ -63,6 +63,7 @@ const Users = () => {
             setTotal(response.data.total)
             setTotalActiveUsers(response.data.totalActiveUsers)
             setTotalInactiveUsers(response.data.totalInactiveUsers)
+            console.log("Users fetched successfully:", response.data.users)
         } catch (error) {
             console.error("Error fetching users:", error)
         } finally {

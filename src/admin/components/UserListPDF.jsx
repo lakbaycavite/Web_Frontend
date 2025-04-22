@@ -222,13 +222,13 @@ const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers, reportTitle 
                                     <View style={styles.tableCol2}><Text style={styles.cell}>{user.username || "N/A"}</Text></View>
                                     <View style={styles.tableCol3}>
                                         <Text style={styles.cell}>
-                                            {`${user.first_name || ''} ${user.last_name || ''}`.trim() || 'N/A'}
+                                            {`${user.firstName || ''} ${user.lastName || ''}`.trim() || 'N/A'}
                                         </Text>
                                     </View>
                                     <View style={styles.tableCol4}><Text style={styles.cell}>{user.email || "N/A"}</Text></View>
                                     <View style={styles.tableCol5}>
-                                        <Text style={user.is_active ? styles.activeStatus : styles.inactiveStatus}>
-                                            {user.is_active ? "Active" : "Inactive"}
+                                        <Text style={user.isActive ? styles.activeStatus : styles.inactiveStatus}>
+                                            {user.isActive ? "Active" : "Inactive"}
                                         </Text>
                                     </View>
                                     <View style={styles.tableCol6}>
