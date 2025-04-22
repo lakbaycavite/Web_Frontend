@@ -7,7 +7,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import api from '../../lib/axios';
 import moment from 'moment';
 
-const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers }) => {
+const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers, currentActiveUsers, currentInactiveUsers }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const [showDateModal, setShowDateModal] = useState(false);
@@ -23,8 +23,8 @@ const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers }
             const blob = await pdf(
                 <UserListPDF
                     users={currentUsers}
-                    totalActiveUsers={totalActiveUsers}
-                    totalInactiveUsers={totalInactiveUsers}
+                    totalActiveUsers={currentActiveUsers}
+                    totalInactiveUsers={currentInactiveUsers}
                     reportTitle="Current Page Users"
                 />
             ).toBlob();

@@ -40,6 +40,8 @@ const Users = () => {
     // User statistics
     const [totalActiveUsers, setTotalActiveUsers] = useState(0)
     const [totalInactiveUsers, setTotalInactiveUsers] = useState(0)
+    const [currentActiveUsers, setCurrentActiveUsers] = useState(0)
+    const [currentInactiveUsers, setCurrentInactiveUsers] = useState(0)
 
     // Fetch users data with search and pagination
     useEffect(() => {
@@ -63,6 +65,9 @@ const Users = () => {
             setTotal(response.data.total)
             setTotalActiveUsers(response.data.totalActiveUsers)
             setTotalInactiveUsers(response.data.totalInactiveUsers)
+            setCurrentActiveUsers(response.data.currentPageActiveUsers)
+            setCurrentInactiveUsers(response.data.currentPageInactiveUsers)
+
             console.log("Users fetched successfully:", response.data.users)
         } catch (error) {
             console.error("Error fetching users:", error)
@@ -245,6 +250,8 @@ const Users = () => {
                                 currentUsers={users}
                                 totalActiveUsers={totalActiveUsers}
                                 totalInactiveUsers={totalInactiveUsers}
+                                currentActiveUsers={currentActiveUsers}
+                                currentInactiveUsers={currentInactiveUsers}
                             />
 
                             {/* Refresh Button */}
