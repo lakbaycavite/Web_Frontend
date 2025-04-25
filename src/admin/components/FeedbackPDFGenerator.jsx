@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { HiDocumentText, HiFilter, HiX } from 'react-icons/hi';
-import { FaStar, FaFilter } from 'react-icons/fa';
+import { FaStar, FaFilter, FaCalendarAlt } from 'react-icons/fa';
 import FeedbackListPDF from './FeedbackListPDF';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import api from '../../lib/axios';
@@ -16,6 +16,8 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [selectedRating, setSelectedRating] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     // Categories from the Feedbacks component
     const categories = ['UI/UX', 'Performance', 'Features', 'Bug', 'Content', 'All/Other'];
@@ -40,7 +42,6 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
         } catch (error) {
             console.error("Error generating PDF:", error);
             toast("Failed to generate PDF. Please try again.", "error");
-            // alert("Failed to generate PDF. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -98,7 +99,6 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
                     categoryCounts={allCategoryCounts}
                     reportTitle="All User Feedback"
                     adminUser={adminUser}
-
                 />
             ).toBlob();
 
@@ -107,7 +107,6 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
         } catch (error) {
             console.error("Error generating PDF:", error);
             toast("Failed to generate PDF. Please try again.", "error");
-            // alert("Failed to generate PDF. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -115,7 +114,7 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
 
     // Function to generate PDF with filters
     const generateFilteredFeedbacksPDF = async () => {
-        if (!selectedRating && !selectedCategory) {
+        if (!selectedRating && !selectedCategory && !startDate && !endDate) {
             generateAllFeedbacksPDF();
             return;
         }
@@ -128,6 +127,8 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
             let query = 'limit=1000';
             if (selectedRating) query += `&rating=${selectedRating}`;
             if (selectedCategory && selectedCategory !== 'All/Other') query += `&category=${selectedCategory}`;
+            if (startDate) query += `&startDate=${startDate}`;
+            if (endDate) query += `&endDate=${endDate}`;
 
             // Fetch filtered feedbacks
             const response = await api.get(
@@ -148,7 +149,6 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
 
             if (filteredFeedbacks.length === 0) {
                 toast("No feedback found with the selected filters.", "error");
-                // alert("No feedback found with the selected filters.");
                 setIsLoading(false);
                 return;
             }
@@ -181,13 +181,26 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
 
             // Create report title based on filters
             let reportTitle = "Filtered Feedback Report";
-            if (selectedRating && selectedCategory) {
-                reportTitle = `${selectedRating}-Star ${selectedCategory} Feedback`;
-            } else if (selectedRating) {
-                reportTitle = `${selectedRating}-Star Feedback`;
-            } else if (selectedCategory) {
-                reportTitle = `${selectedCategory} Feedback`;
+            let filterParts = [];
+
+            if (selectedRating) filterParts.push(`${selectedRating}-Star`);
+            if (selectedCategory) filterParts.push(selectedCategory);
+
+            if (filterParts.length > 0) {
+                reportTitle = filterParts.join(' ') + ' Feedback';
             }
+
+            // Add date range to title if present
+            let dateRangeText = '';
+            if (startDate && endDate) {
+                dateRangeText = ` (${moment(startDate).format('MMM D, YYYY')} - ${moment(endDate).format('MMM D, YYYY')})`;
+            } else if (startDate) {
+                dateRangeText = ` (From ${moment(startDate).format('MMM D, YYYY')})`;
+            } else if (endDate) {
+                dateRangeText = ` (Until ${moment(endDate).format('MMM D, YYYY')})`;
+            }
+
+            reportTitle += dateRangeText;
 
             // Generate the PDF blob
             const blob = await pdf(
@@ -198,7 +211,9 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
                     reportTitle={reportTitle}
                     filters={{
                         rating: selectedRating,
-                        category: selectedCategory
+                        category: selectedCategory,
+                        startDate: startDate ? moment(startDate).format('MMM D, YYYY') : null,
+                        endDate: endDate ? moment(endDate).format('MMM D, YYYY') : null
                     }}
                     adminUser={adminUser}
                 />
@@ -208,6 +223,10 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
             let filename = `Lakbay_Cavite_Feedback_`;
             if (selectedRating) filename += `${selectedRating}Star_`;
             if (selectedCategory) filename += `${selectedCategory.replace('/', '_')}_`;
+            if (startDate || endDate) {
+                if (startDate) filename += `From_${startDate.replace(/-/g, '')}_`;
+                if (endDate) filename += `To_${endDate.replace(/-/g, '')}_`;
+            }
             filename += `${new Date().toISOString().split('T')[0]}.pdf`;
 
             // Save the blob as a file
@@ -215,7 +234,6 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
         } catch (error) {
             console.error("Error generating PDF:", error);
             toast("Failed to generate PDF. Please try again.", "error");
-            // alert("Failed to generate PDF. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -266,6 +284,7 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
                         </div>
 
                         <div className="space-y-4">
+                            {/* Rating Filter */}
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text flex items-center gap-1">
@@ -286,6 +305,7 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
                                 </select>
                             </div>
 
+                            {/* Category Filter */}
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text flex items-center gap-1">
@@ -304,12 +324,48 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, 
                                 </select>
                             </div>
 
+                            {/* Date Range Filter - NEW */}
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text flex items-center gap-1">
+                                        <FaCalendarAlt className="text-blue-500" /> Date Range
+                                    </span>
+                                </label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label className="label">
+                                            <span className="label-text text-xs">Start Date</span>
+                                        </label>
+                                        <input
+                                            type="date"
+                                            className="input input-bordered w-full text-sm"
+                                            value={startDate}
+                                            onChange={(e) => setStartDate(e.target.value)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="label">
+                                            <span className="label-text text-xs">End Date</span>
+                                        </label>
+                                        <input
+                                            type="date"
+                                            className="input input-bordered w-full text-sm"
+                                            value={endDate}
+                                            onChange={(e) => setEndDate(e.target.value)}
+                                            min={startDate} // Prevent selecting end date before start date
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="flex justify-end gap-2 mt-4">
                                 <button
                                     className="btn btn-ghost"
                                     onClick={() => {
                                         setSelectedRating('');
                                         setSelectedCategory('');
+                                        setStartDate('');
+                                        setEndDate('');
                                     }}
                                 >
                                     Clear Filters

@@ -309,6 +309,8 @@ const Feedbacks = () => {
         </div>
     );
 
+    console.log("Feedbacks:", feedbacks);
+
     return (
         <AdminDrawer>
             <AdminNavbar />

@@ -37,6 +37,13 @@ const styles = StyleSheet.create({
         padding: 4,
         borderRadius: 4,
     },
+    dateRangeInfo: {
+        fontSize: 11,
+        marginTop: 4,
+        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+        padding: 4,
+        borderRadius: 4,
+    },
     section: {
         marginBottom: 15,
     },
@@ -214,6 +221,10 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         alignSelf: 'flex-start',
     },
+    preparedBy: {
+        fontSize: 10,
+        marginTop: 5,
+    },
 });
 
 // Create Document Component
@@ -223,7 +234,7 @@ const FeedbackListPDF = ({
     categoryCounts,
     reportTitle = "User Feedback Report",
     filters = {},
-    adminUser = { adminUser }
+    adminUser = {}
 }) => {
     const currentDate = moment().format('MMMM Do, YYYY [at] h:mm A');
 
@@ -262,18 +273,49 @@ const FeedbackListPDF = ({
     };
 
     // Render stars for rating
+    // Updated renderStars function that will work reliably in PDFs
     const renderStars = (rating) => {
-        let stars = [];
+        const ratingValue = Number(rating) || 0;
+        const stars = [];
 
         for (let i = 0; i < 5; i++) {
-            if (i < rating) {
-                stars.push(<Text key={i} style={styles.starSymbol}>★</Text>);
-            } else {
-                stars.push(<Text key={i} style={styles.starEmpty}>★</Text>);
-            }
+            const isFilled = i < ratingValue;
+            stars.push(
+                <View key={i} style={{ width: 10, height: 10, marginRight: 2, position: 'relative' }}>
+                    {/* Diamond shape */}
+                    <View style={{
+                        width: 7,
+                        height: 7,
+                        transform: [{ rotate: '45deg' }],
+                        backgroundColor: isFilled ? '#F59E0B' : '#E5E7EB',
+                        position: 'absolute',
+                        top: 1.5,
+                        left: 1.5
+                    }} />
+                    {/* Small circle on top */}
+                    <View style={{
+                        width: 3,
+                        height: 3,
+                        borderRadius: 1.5,
+                        backgroundColor: isFilled ? '#FBBF24' : '#F3F4F6',
+                        position: 'absolute',
+                        top: 0,
+                        left: 3.5
+                    }} />
+                </View>
+            );
         }
 
-        return <View style={styles.starRating}>{stars}</View>;
+        return (
+            <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#4B5563', marginBottom: 2 }}>
+                    {ratingValue.toFixed(1)}
+                </Text>
+                <View style={{ flexDirection: 'row' }}>
+                    {stars}
+                </View>
+            </View>
+        );
     };
 
     // Total feedback count
@@ -287,6 +329,16 @@ const FeedbackListPDF = ({
         (totalRatingScore / totalFeedbacks).toFixed(1) :
         "N/A";
 
+    // Format filters for display
+    const formatFilters = () => {
+        const filterParts = [];
+
+        if (filters.rating) filterParts.push(`Rating: ${filters.rating} Stars`);
+        if (filters.category) filterParts.push(`Category: ${filters.category}`);
+
+        return filterParts.length > 0 ? filterParts.join(', ') : '';
+    };
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -295,21 +347,23 @@ const FeedbackListPDF = ({
                     <Text style={styles.title}>Lakbay Cavite</Text>
                     <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
-                    {adminUser.firstName || adminUser.lastName ? (
-                        <Text style={styles.date}>Prepared By: {adminUser?.firstName} {adminUser?.lastName} (Admin)</Text>
-                    ) : (
-                        <>
-                            <Text style={styles.date}>Prepared By: Admin</Text>
-                        </>
+                    <Text style={styles.preparedBy}>
+                        Prepared By: {adminUser?.firstName || ''} {adminUser?.lastName || ''} {(adminUser?.firstName || adminUser?.lastName) ? '(Admin)' : 'Admin'}
+                    </Text>
+
+                    {/* Filter information */}
+                    {formatFilters() && (
+                        <Text style={styles.filterInfo}>{formatFilters()}</Text>
                     )}
 
-                    {(filters.rating || filters.category) && (
-                        <Text style={styles.filterInfo}>
-                            {filters.rating && filters.category ?
-                                `Filters: ${filters.rating} Stars, Category: ${filters.category}` :
-                                filters.rating ?
-                                    `Filter: ${filters.rating} Stars` :
-                                    `Filter: Category: ${filters.category}`
+                    {/* Date Range information */}
+                    {(filters.startDate || filters.endDate) && (
+                        <Text style={styles.dateRangeInfo}>
+                            {filters.startDate && filters.endDate
+                                ? `Date Range: ${filters.startDate} to ${filters.endDate}`
+                                : filters.startDate
+                                    ? `From: ${filters.startDate}`
+                                    : `Until: ${filters.endDate}`
                             }
                         </Text>
                     )}
