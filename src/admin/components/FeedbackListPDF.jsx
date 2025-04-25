@@ -222,7 +222,8 @@ const FeedbackListPDF = ({
     ratingCounts,
     categoryCounts,
     reportTitle = "User Feedback Report",
-    filters = {}
+    filters = {},
+    adminUser = { adminUser }
 }) => {
     const currentDate = moment().format('MMMM Do, YYYY [at] h:mm A');
 
@@ -294,6 +295,13 @@ const FeedbackListPDF = ({
                     <Text style={styles.title}>Lakbay Cavite</Text>
                     <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
+                    {adminUser.firstName || adminUser.lastName ? (
+                        <Text style={styles.date}>Prepared By: {adminUser?.firstName} {adminUser?.lastName} (Admin)</Text>
+                    ) : (
+                        <>
+                            <Text style={styles.date}>Prepared By: Admin</Text>
+                        </>
+                    )}
 
                     {(filters.rating || filters.category) && (
                         <Text style={styles.filterInfo}>

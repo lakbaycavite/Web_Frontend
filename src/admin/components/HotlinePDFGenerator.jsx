@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
-import { HiDocumentText, HiPhone, HiX } from 'react-icons/hi';
+import { HiDocumentText, HiPhone, HiX, HiCalendar } from 'react-icons/hi';
 import HotlineListPDF from './HotlineListPDF';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import api from '../../lib/axios';
 import moment from 'moment';
 
-const HotlinePDFGenerator = ({ currentHotlines, categoryCounts }) => {
+const HotlinePDFGenerator = ({ currentHotlines, categoryCounts, adminUser }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -24,6 +24,7 @@ const HotlinePDFGenerator = ({ currentHotlines, categoryCounts }) => {
                     hotlines={currentHotlines}
                     categoryCounts={categoryCounts}
                     reportTitle="Current Emergency Hotlines"
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -73,6 +74,7 @@ const HotlinePDFGenerator = ({ currentHotlines, categoryCounts }) => {
                     hotlines={allHotlines}
                     categoryCounts={counts}
                     reportTitle="All Emergency Hotlines"
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -139,6 +141,7 @@ const HotlinePDFGenerator = ({ currentHotlines, categoryCounts }) => {
                     categoryCounts={counts}
                     reportTitle={`${selectedCategory} Emergency Hotlines`}
                     categoryFilter={selectedCategory}
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -176,7 +179,7 @@ const HotlinePDFGenerator = ({ currentHotlines, categoryCounts }) => {
                     </li>
                     <li>
                         <a onClick={() => setShowCategoryModal(true)} className={isLoading ? "opacity-50 cursor-wait" : ""}>
-                            <HiPhone className="h-4 w-4" /> Filter by Category
+                            <HiCalendar className="h-4 w-4" /> Filter by Category
                         </a>
                     </li>
                 </ul>

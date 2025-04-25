@@ -7,7 +7,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import api from '../../lib/axios';
 import moment from 'moment';
 
-const EventPDFGenerator = ({ currentEvents, activeEvents, inactiveEvents }) => {
+const EventPDFGenerator = ({ currentEvents, activeEvents, inactiveEvents, adminUser }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const [showDateModal, setShowDateModal] = useState(false);
@@ -27,6 +27,7 @@ const EventPDFGenerator = ({ currentEvents, activeEvents, inactiveEvents }) => {
                     activeEvents={activeEvents}
                     inactiveEvents={inactiveEvents}
                     reportTitle="Current Events Report"
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -51,7 +52,7 @@ const EventPDFGenerator = ({ currentEvents, activeEvents, inactiveEvents }) => {
                 }
             });
 
-            const allEvents = response.data || [];
+            const allEvents = response.data.events || [];
             const active = allEvents.filter(event => event.isActive).length;
             const inactive = allEvents.filter(event => !event.isActive).length;
 
@@ -62,6 +63,7 @@ const EventPDFGenerator = ({ currentEvents, activeEvents, inactiveEvents }) => {
                     activeEvents={active}
                     inactiveEvents={inactive}
                     reportTitle="All Events Report"
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -110,7 +112,7 @@ const EventPDFGenerator = ({ currentEvents, activeEvents, inactiveEvents }) => {
                 }
             );
 
-            const filteredEvents = response.data || [];
+            const filteredEvents = response.data.events || [];
 
             if (filteredEvents.length === 0) {
                 alert("No events found in the selected date range.");
@@ -132,6 +134,7 @@ const EventPDFGenerator = ({ currentEvents, activeEvents, inactiveEvents }) => {
                         start: moment(start).format('YYYY-MM-DD'),
                         end: moment(end).format('YYYY-MM-DD')
                     }}
+                    adminUser={adminUser}
                 />
             ).toBlob();
 

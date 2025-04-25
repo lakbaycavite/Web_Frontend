@@ -105,6 +105,8 @@ const Events = () => {
     const [createError, setCreateError] = useState(null)
     const [updateError, setUpdateError] = useState(null)
 
+    const [adminUser, setAdminUser] = useState(null)
+
     useEffect(() => {
         fetchEvents()
     }, [refreshKey, filterStatus])
@@ -125,7 +127,7 @@ const Events = () => {
 
         api.get(`/admin/event`)
             .then((response) => {
-                let filteredEvents = response.data
+                let filteredEvents = response.data.events
 
                 // Apply filter if needed
                 if (filterStatus === 'active') {
@@ -135,6 +137,7 @@ const Events = () => {
                 }
 
                 dispatch({ type: 'SET_EVENTS', payload: filteredEvents })
+                setAdminUser(response.data.adminUser)
             })
             .catch((error) => {
                 console.error("Error fetching events:", error)
@@ -602,6 +605,7 @@ const Events = () => {
                                 currentEvents={events || []}
                                 activeEvents={activeEvents}
                                 inactiveEvents={inactiveEvents}
+                                adminUser={adminUser}
                             />
 
 

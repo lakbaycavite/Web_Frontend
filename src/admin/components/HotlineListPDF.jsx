@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const HotlineListPDF = ({ hotlines, categoryCounts, reportTitle = "Emergency Hotlines Report", categoryFilter = null }) => {
+const HotlineListPDF = ({ hotlines, categoryCounts, reportTitle = "Emergency Hotlines Report", categoryFilter = null, adminUser }) => {
     const currentDate = moment().format('MMMM Do, YYYY [at] h:mm A');
 
     // Function to get color style based on category
@@ -189,6 +189,13 @@ const HotlineListPDF = ({ hotlines, categoryCounts, reportTitle = "Emergency Hot
                     <Text style={styles.title}>Lakbay Cavite</Text>
                     <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
+                    {adminUser.firstName || adminUser.lastName ? (
+                        <Text style={styles.date}>Prepared By: {adminUser?.firstName} {adminUser?.lastName} (Admin)</Text>
+                    ) : (
+                        <>
+                            <Text style={styles.date}>Prepared By: Admin</Text>
+                        </>
+                    )}
 
                     {categoryFilter && (
                         <Text style={styles.dateRange}>

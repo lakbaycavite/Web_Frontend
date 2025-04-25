@@ -51,6 +51,8 @@ const Hotlines = () => {
     const [category, setCategory] = useState("");
     const [error, setError] = useState("");
 
+    const [adminUser, setAdminUser] = useState(null);
+
     // Categories
     const categories = ['Fire', 'Police', 'Ambulance/ Medical', 'Disaster Response', 'Others'];
 
@@ -95,6 +97,7 @@ const Hotlines = () => {
                 dispatch({ type: "SET_HOTLINES", payload: response.data.hotlines || [] });
                 setTotal(response.data.total);
                 setTotalPages(response.data.pages);
+                setAdminUser(response.data.adminUser || null); // Set admin user if available
             } catch (error) {
                 console.error("Error fetching hotlines:", error);
                 toast("Failed to load hotlines", "error");
@@ -328,6 +331,7 @@ const Hotlines = () => {
                             <HotlinePDFGenerator
                                 currentHotlines={hotlines || []}
                                 categoryCounts={categoryCounts}
+                                adminUser={adminUser}
                             />
                             <button
                                 onClick={() => document.getElementById('my_modal_2').showModal()}

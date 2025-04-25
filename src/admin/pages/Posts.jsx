@@ -44,11 +44,14 @@ const Posts = () => {
     const [total, setTotal] = useState(0)
     const [inputPage, setInputPage] = useState('')
 
+
     // Filter and refresh states
     const [addRefresh, setAddRefresh] = useState(false)
     const [deleteRefresh, setDeleteRefresh] = useState(false)
     const [search, setSearch] = useState('')
     const [refreshKey, setRefreshKey] = useState(0)
+
+    const [adminUser, setAdminUser] = useState(null)
 
     // Fetch posts data
     useEffect(() => {
@@ -62,6 +65,8 @@ const Posts = () => {
                 dispatch({ type: 'SET_POSTS', payload: response.data.posts || [] })
                 setTotalPages(response.data.pages)
                 setTotal(response.data.total)
+                setAdminUser(response.data.adminUser)
+
                 console.log(response.data.posts)
             })
             .catch((error) => {
@@ -247,7 +252,7 @@ const Posts = () => {
                             >
                                 <HiPlus className="w-4 h-4" /> New Post
                             </button> */}
-                            <PostPDFGenerator currentPosts={posts} />
+                            <PostPDFGenerator currentPosts={posts} adminUser={adminUser} />
                             <button
                                 onClick={() => setRefreshKey(prev => prev + 1)}
                                 className="btn btn-info btn-sm text-white font-normal gap-1 transform transition hover:scale-105"

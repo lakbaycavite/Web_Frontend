@@ -9,7 +9,7 @@ import api from '../../lib/axios';
 import moment from 'moment';
 import { useToast } from '../../hooks/useToast';
 
-const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts }) => {
+const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts, adminUser }) => {
     const toast = useToast();
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
@@ -31,6 +31,7 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts }
                     ratingCounts={ratingCounts}
                     categoryCounts={categoryCounts}
                     reportTitle="Current Feedback Report"
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -96,6 +97,8 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts }
                     ratingCounts={allRatingCounts}
                     categoryCounts={allCategoryCounts}
                     reportTitle="All User Feedback"
+                    adminUser={adminUser}
+
                 />
             ).toBlob();
 
@@ -197,6 +200,7 @@ const FeedbackPDFGenerator = ({ currentFeedbacks, ratingCounts, categoryCounts }
                         rating: selectedRating,
                         category: selectedCategory
                     }}
+                    adminUser={adminUser}
                 />
             ).toBlob();
 

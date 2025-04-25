@@ -30,6 +30,7 @@ const Feedbacks = () => {
         rating: "",
         category: "",
     });
+    const [adminUser, setAdminUser] = useState(null);
 
     // Categories - update these based on your actual categories
     const categories = ['UI/UX', 'Performance', 'Features', 'Bug', 'Content', 'All/Other'];
@@ -102,6 +103,7 @@ const Feedbacks = () => {
             } else {
                 if (response.data && Array.isArray(response.data.data)) {
                     setFeedbacks(response.data.data);
+                    setAdminUser(response.data.adminUser || null);
                 } else {
                     console.error("Unexpected API response format:", response.data);
                     setFeedbacks([]);
@@ -440,6 +442,7 @@ const Feedbacks = () => {
                                 currentFeedbacks={feedbacks || []}
                                 ratingCounts={ratingCounts}
                                 categoryCounts={categoryCounts}
+                                adminUser={adminUser}
                             />
 
                         </div>

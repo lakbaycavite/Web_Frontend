@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const EventListPDF = ({ events, activeEvents, inactiveEvents, reportTitle = "Events Report", dateRange = null }) => {
+const EventListPDF = ({ events, activeEvents, inactiveEvents, reportTitle = "Events Report", dateRange = null, adminUser }) => {
     const currentDate = moment().format('MMMM Do, YYYY [at] h:mm A');
 
     // Function to truncate content to a reasonable length
@@ -206,6 +206,13 @@ const EventListPDF = ({ events, activeEvents, inactiveEvents, reportTitle = "Eve
                     <Text style={styles.title}>Lakbay Cavite</Text>
                     <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
+                    {adminUser.firstName || adminUser.lastName ? (
+                        <Text style={styles.date}>Prepared By: {adminUser?.firstName} {adminUser?.lastName} (Admin)</Text>
+                    ) : (
+                        <>
+                            <Text style={styles.date}>Prepared By: Admin</Text>
+                        </>
+                    )}
 
                     {dateRange && (
                         <Text style={styles.dateRange}>
