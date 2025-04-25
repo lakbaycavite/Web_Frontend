@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers, reportTitle = "User Management Report", dateRange = null }) => {
+const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers, reportTitle = "User Management Report", dateRange = null, adminUser }) => {
     const currentDate = moment().format('MMMM Do, YYYY [at] h:mm A');
 
     return (
@@ -172,6 +172,13 @@ const UserListPDF = ({ users, totalActiveUsers, totalInactiveUsers, reportTitle 
                     <Text style={styles.title}>Lakbay Cavite</Text>
                     <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
+                    {adminUser.firstName || adminUser.lastName ? (
+                        <Text style={styles.date}>Prepared By: {adminUser?.firstName} {adminUser?.lastName} (Admin)</Text>
+                    ) : (
+                        <>
+                            <Text style={styles.date}>Prepared By: Admin</Text>
+                        </>
+                    )}
 
                     {dateRange && (
                         <Text style={styles.dateRange}>

@@ -42,6 +42,7 @@ const Users = () => {
     const [totalInactiveUsers, setTotalInactiveUsers] = useState(0)
     const [currentActiveUsers, setCurrentActiveUsers] = useState(0)
     const [currentInactiveUsers, setCurrentInactiveUsers] = useState(0)
+    const [adminUser, setAdminUser] = useState({})
 
     // Fetch users data with search and pagination
     useEffect(() => {
@@ -67,6 +68,8 @@ const Users = () => {
             setTotalInactiveUsers(response.data.totalInactiveUsers)
             setCurrentActiveUsers(response.data.currentPageActiveUsers)
             setCurrentInactiveUsers(response.data.currentPageInactiveUsers)
+            setAdminUser(response.data.adminUser || {})
+
 
             console.log("Users fetched successfully:", response.data.users)
         } catch (error) {
@@ -252,6 +255,7 @@ const Users = () => {
                                 totalInactiveUsers={totalInactiveUsers}
                                 currentActiveUsers={currentActiveUsers}
                                 currentInactiveUsers={currentInactiveUsers}
+                                adminUser={adminUser}
                             />
 
                             {/* Refresh Button */}

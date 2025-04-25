@@ -65,6 +65,8 @@ const Dashboard = () => {
             })
     }, [])
 
+    console.log(dashboardData)
+
     return (
         <AdminDrawer>
             <AdminNavbar />

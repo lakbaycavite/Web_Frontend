@@ -233,6 +233,14 @@ const DashboardAnalyticsPDF = ({
                     <Text style={styles.title}>Lakbay Cavite</Text>
                     <Text style={styles.subtitle}>{reportTitle}</Text>
                     <Text style={styles.date}>Generated on: {currentDate}</Text>
+                    {dashboardData.adminUser.firstName || dashboardData.adminUser.lastName ? (
+                        <Text style={styles.date}>Prepared By: {dashboardData.adminUser?.firstName} {dashboardData.adminUser?.lastName} (Admin)</Text>
+                    ) : (
+                        <>
+                            <Text style={styles.date}>Prepared By: Admin</Text>
+                        </>
+                    )}
+
 
                     {dateRange && (
                         <Text style={styles.dateRange}>

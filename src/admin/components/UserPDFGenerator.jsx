@@ -7,7 +7,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import api from '../../lib/axios';
 import moment from 'moment';
 
-const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers, currentActiveUsers, currentInactiveUsers }) => {
+const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers, currentActiveUsers, currentInactiveUsers, adminUser }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const [showDateModal, setShowDateModal] = useState(false);
@@ -26,6 +26,7 @@ const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers, 
                     totalActiveUsers={currentActiveUsers}
                     totalInactiveUsers={currentInactiveUsers}
                     reportTitle="Current Page Users"
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -61,6 +62,7 @@ const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers, 
                     totalActiveUsers={allTotalActive}
                     totalInactiveUsers={allTotalInactive}
                     reportTitle="All Users"
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
@@ -128,6 +130,7 @@ const UserPDFGenerator = ({ currentUsers, totalActiveUsers, totalInactiveUsers, 
                         start: moment(start).format('YYYY-MM-DD'),
                         end: moment(end).format('YYYY-MM-DD')
                     }}
+                    adminUser={adminUser}
                 />
             ).toBlob();
 
