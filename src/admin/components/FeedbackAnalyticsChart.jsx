@@ -30,7 +30,7 @@ ChartJS.register(
     Filler
 );
 
-export const FeedbackAnalyticsChart = ({ feedbackAnalyticsm }) => {
+export const FeedbackAnalyticsChart = ({ feedbackAnalytics }) => {
     // Early return if data isn't loaded yet
     if (!feedbackAnalytics) {
         return (

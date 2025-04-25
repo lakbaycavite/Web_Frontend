@@ -280,12 +280,12 @@ export const PDFCategoryChart = ({ categoryDistribution }) => {
 
     // Category colors
     const categoryColors = {
-        'Site Experience': '#3B82F6',
-        'User Interface': '#10B981',
-        'Content Quality': '#F59E0B',
-        'Feature Request': '#8B5CF6',
-        'Bug Report': '#EF4444',
-        'Uncategorized': '#6B7280',
+        'UI/UX': 'rgb(59, 130, 246)',
+        'Performance': 'rgb(16, 185, 129)',
+        'Features': 'rgb(245, 158, 11)',
+        'Bug': 'rgb(239, 68, 68)',
+        'Content': 'rgb(139, 92, 246)',
+        'All/Other': 'rgb(107, 114, 128)'
     };
 
     return (
@@ -327,12 +327,12 @@ export const PDFRatingByCategoryChart = ({ ratingByCategory }) => {
 
     // Category colors
     const categoryColors = {
-        'Site Experience': '#3B82F6',
-        'User Interface': '#10B981',
-        'Content Quality': '#F59E0B',
-        'Feature Request': '#8B5CF6',
-        'Bug Report': '#EF4444',
-        'Uncategorized': '#6B7280',
+        'UI/UX': 'rgb(59, 130, 246)',
+        'Performance': 'rgb(16, 185, 129)',
+        'Features': 'rgb(245, 158, 11)',
+        'Bug': 'rgb(239, 68, 68)',
+        'Content': 'rgb(139, 92, 246)',
+        'All/Other': 'rgb(107, 114, 128)'
     };
 
     return (
