@@ -127,6 +127,7 @@ const Feedbacks = () => {
     };
 
     const handleToggleStatus = async (id) => {
+
         try {
             await api.put(
                 `/admin/feedback/toggle-status/${id}`,
@@ -486,7 +487,7 @@ const Feedbacks = () => {
                                         <th className="w-1/12">Rating</th>
                                         <th className="w-1/12">Date</th>
                                         <th className="w-1/12">Status</th>
-                                        {/* <th className="w-1/6 text-center">Actions</th> */}
+                                        <th className="w-1/12 text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -545,6 +546,49 @@ const Feedbacks = () => {
                                                 </span>
                                             </td>
 
+                                            {/* toggle status */}
+                                            <td>
+                                                <div className="flex justify-center space-x-2">
+                                                    {/* <button
+                                                        className="btn btn-sm btn-outline tooltip btn-"
+                                                        data-tip={feedback.isPublic ? "Hide Feedback" : "Show Feedback"}
+                                                        onClick={() => handleToggleStatus(feedback._id)}
+                                                    >
+                                                        {feedback.isPublic ? <FaEyeSlash /> Hide : <FaEye /> Show }
+                                                    </button> */}
+
+                                                    {/* <button
+                                                        className="btn btn-sm btn-info tooltip"
+                                                        data-tip="View Feedback"
+                                                        onClick={() => handleOpenResponseModal(feedback)}
+                                                    >
+                                                        <MdOutlineFeedback className="w-4 h-4" />
+                                                    </button> */}
+
+                                                    <button
+                                                        className={`btn btn-sm gap-1 min-w-[80px] ${feedback.isPublic ? 'btn-error' : 'btn-success'} text-white`}
+                                                        data-tip={feedback.isPublic ? "Hide Feedback" : "Show Feedback"}
+                                                        onClick={() => handleToggleStatus(feedback._id)}
+                                                    >
+                                                        {loading ? (
+                                                            <span className="loading loading-spinner loading-xs"></span>
+                                                        ) : (
+                                                            <>
+                                                                {feedback.isPublic ? (
+                                                                    <>
+                                                                        <FaEyeSlash className="w-4 h-4" /> Hide
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <FaEye className="w-4 h-4" /> Show
+                                                                    </>
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </button>
+
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
