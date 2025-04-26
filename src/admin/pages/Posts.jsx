@@ -12,7 +12,9 @@ import {
     MdOutlineKeyboardArrowRight,
     MdOutlineKeyboardDoubleArrowRight,
     MdDashboard,
-    MdArticle
+    MdArticle,
+    MdCalendarToday,
+    MdFilterAlt
 } from "react-icons/md"
 
 // Components
@@ -44,19 +46,29 @@ const Posts = () => {
     const [total, setTotal] = useState(0)
     const [inputPage, setInputPage] = useState('')
 
-
     // Filter and refresh states
     const [addRefresh, setAddRefresh] = useState(false)
     const [deleteRefresh, setDeleteRefresh] = useState(false)
     const [search, setSearch] = useState('')
     const [refreshKey, setRefreshKey] = useState(0)
 
+    // Date range filter states
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [showFilters, setShowFilters] = useState(false)
+
     const [adminUser, setAdminUser] = useState(null)
 
     // Fetch posts data
     useEffect(() => {
         setLoading(true)
-        api.get(`/admin/post?page=${currentPage}&limit=${limit}&search=${search}`, {
+        let queryString = `page=${currentPage}&limit=${limit}&search=${search}`;
+
+        // Add date filters if they exist
+        if (startDate) queryString += `&startDate=${startDate}`;
+        if (endDate) queryString += `&endDate=${endDate}`;
+
+        api.get(`/admin/post?${queryString}`, {
             headers: {
                 "Authorization": `Bearer ${user.token}`
             }
@@ -76,7 +88,7 @@ const Posts = () => {
             .finally(() => {
                 setLoading(false)
             })
-    }, [currentPage, limit, search, addRefresh, deleteRefresh, refreshKey])
+    }, [currentPage, limit, search, addRefresh, deleteRefresh, refreshKey, startDate, endDate])
 
     // Event handlers
     const handleEventAdded = () => {
@@ -116,6 +128,19 @@ const Posts = () => {
 
         return () => clearTimeout(timeoutId);
     }, [search]);
+
+    // Clear all filters
+    const clearFilters = () => {
+        setStartDate('');
+        setEndDate('');
+        setSearch('');
+        setCurrentPage(1);
+    };
+
+    // Check if any filter is active
+    const isFilterActive = () => {
+        return search || startDate || endDate;
+    };
 
     // Render pagination controls
     const renderPagination = () => (
@@ -246,13 +271,29 @@ const Posts = () => {
 
                         {/* Action Buttons */}
                         <div className="flex gap-2">
-                            {/* <button
-                                onClick={() => setVisible(true)}
-                                className="btn btn-primary btn-sm font-normal gap-1 transform transition hover:scale-105"
+                            {/* Date Filter Toggle Button */}
+                            <button
+                                onClick={() => setShowFilters(!showFilters)}
+                                className={`btn btn-sm ${showFilters ? 'btn-primary' : 'btn-outline'} font-normal gap-1`}
                             >
-                                <HiPlus className="w-4 h-4" /> New Post
-                            </button> */}
+                                <MdCalendarToday className="w-4 h-4" />
+                                {showFilters ? "Hide Filters" : "Date Filters"}
+                            </button>
+
+                            {/* Clear Filters Button */}
+                            {isFilterActive() && (
+                                <button
+                                    onClick={clearFilters}
+                                    className="btn btn-outline btn-sm font-normal gap-1"
+                                >
+                                    <MdFilterAlt className="w-4 h-4" /> Clear Filters
+                                </button>
+                            )}
+
+                            {/* PDF Generator */}
                             <PostPDFGenerator currentPosts={posts} adminUser={adminUser} />
+
+                            {/* Refresh Button */}
                             <button
                                 onClick={() => setRefreshKey(prev => prev + 1)}
                                 className="btn btn-info btn-sm text-white font-normal gap-1 transform transition hover:scale-105"
@@ -268,6 +309,54 @@ const Posts = () => {
                             </button>
                         </div>
                     </div>
+
+                    {/* Date Range Filters */}
+                    {showFilters && (
+                        <div className="mt-4 p-3 bg-base-200 rounded-lg">
+                            <div className="flex flex-wrap gap-4 items-end">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Start Date</span>
+                                    </label>
+                                    <input
+                                        type="date"
+                                        className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">End Date</span>
+                                    </label>
+                                    <input
+                                        type="date"
+                                        className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        min={startDate}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    {startDate && !endDate && (
+                                        <div className="badge bg-secondary text-white">
+                                            Showing posts from {new Date(startDate).toLocaleDateString()} onwards
+                                        </div>
+                                    )}
+                                    {!startDate && endDate && (
+                                        <div className="badge badge-info text-white">
+                                            Showing posts until {new Date(endDate).toLocaleDateString()}
+                                        </div>
+                                    )}
+                                    {startDate && endDate && (
+                                        <div className="badge badge-info text-white">
+                                            {new Date(startDate).toLocaleDateString()} - {new Date(endDate).toLocaleDateString()}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Table Container */}
@@ -317,16 +406,10 @@ const Posts = () => {
                                 <MdDashboard className="w-16 h-16 text-gray-300 mb-4" />
                                 <h3 className="text-xl font-semibold text-gray-700 mb-2">No posts found</h3>
                                 <p className="text-gray-500 mb-6 text-center max-w-md">
-                                    {search ?
-                                        `We couldn't find any posts matching "${search}"` :
+                                    {isFilterActive() ?
+                                        `We couldn't find any posts matching your filters` :
                                         "There are no posts available at the moment."}
                                 </p>
-                                {/* <button
-                                    onClick={() => setVisible(true)}
-                                    className="btn btn-primary gap-2"
-                                >
-                                    <HiPlus className="w-5 h-5" /> Create New Post
-                                </button> */}
                             </div>
                         </div>
                     )}
