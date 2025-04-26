@@ -16,6 +16,7 @@ const PostDTable = ({ posts, loading = false, characterLimit = 50 }) => {
         return text.length > limit ? text.substring(0, limit) + '...' : text;
     };
 
+    console.log("Posts: " + posts)
     const navigate = useNavigate()
 
     // Render loading skeleton
@@ -94,7 +95,17 @@ const PostDTable = ({ posts, loading = false, characterLimit = 50 }) => {
                                                 </div>
                                             )}
                                         </div>
-                                        <span>{post.user?.firstName || ''} {post.user?.lastName || ''}</span>
+                                        {post.user?.firstName && post.user?.lastName ? (
+                                            <span>{post.user?.firstName || ''} {post.user?.lastName || ''}</span>
+
+                                        ) : (
+                                            <>
+                                                {/* <span>{post.user?.email}</span> */}
+                                                <span>{post.user?.username}</span>
+                                            </>
+
+
+                                        )}
                                     </div>
                                 </td>
                                 <td className="py-3 px-6 text-left">
