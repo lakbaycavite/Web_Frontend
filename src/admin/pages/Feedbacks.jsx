@@ -29,6 +29,8 @@ const Feedbacks = () => {
     const [filters, setFilters] = useState({
         rating: "",
         category: "",
+        startDate: "", // Added startDate filter
+        endDate: ""    // Added endDate filter
     });
     const [adminUser, setAdminUser] = useState(null);
 
@@ -87,10 +89,14 @@ const Feedbacks = () => {
     const fetchFeedbacks = async () => {
         try {
             setLoading(true);
-            const { rating, category } = filters;
+            const { rating, category, startDate, endDate } = filters;
             let query = `page=${currentPage}&limit=${limit}`;
             if (rating) query += `&rating=${rating}`;
             if (category) query += `&category=${category}`;
+
+            // Add date range filters to query
+            if (startDate) query += `&startDate=${startDate}`;
+            if (endDate) query += `&endDate=${endDate}`;
 
             const response = await api.get(`/admin/feedback?${query}`, {
                 headers: {
@@ -198,8 +204,13 @@ const Feedbacks = () => {
     };
 
     const clearFilters = () => {
-        setFilters({ rating: "", category: "" });
+        setFilters({ rating: "", category: "", startDate: "", endDate: "" });
         setCurrentPage(1);
+    };
+
+    // Check if any filter is active
+    const isFilterActive = () => {
+        return filters.rating || filters.category || filters.startDate || filters.endDate;
     };
 
     // Render stars based on rating
@@ -417,11 +428,40 @@ const Feedbacks = () => {
                                 ))}
                             </select>
                         </div>
+
+                        {/* Date Range Filter - START */}
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Start Date</span>
+                            </label>
+                            <input
+                                type="date"
+                                className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                name="startDate"
+                                value={filters.startDate}
+                                onChange={handleFilterChange}
+                            />
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">End Date</span>
+                            </label>
+                            <input
+                                type="date"
+                                className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                name="endDate"
+                                value={filters.endDate}
+                                onChange={handleFilterChange}
+                                min={filters.startDate}
+                            />
+                        </div>
+                        {/* Date Range Filter - END */}
+
                         <div className="flex gap-2">
                             <button
                                 className="btn btn-outline"
                                 onClick={clearFilters}
-                                disabled={!filters.rating && !filters.category}
+                                disabled={!isFilterActive()}
                             >
                                 <FaFilter className="mr-1" /> Clear Filters
                             </button>
@@ -470,7 +510,7 @@ const Feedbacks = () => {
                                 <FaComments className="w-16 h-16 text-gray-300 mb-4" />
                                 <h3 className="text-xl font-semibold text-gray-700 mb-2">No feedback found</h3>
                                 <p className="text-gray-500 mb-6 text-center max-w-md">
-                                    {filters.rating || filters.category ?
+                                    {isFilterActive() ?
                                         `We couldn't find any feedback matching your filters.` :
                                         "There are no feedback submissions available at the moment."}
                                 </p>
