@@ -2,7 +2,7 @@ import AdminDrawer from "../components/AdminDrawer"
 import AdminNavbar from "../components/AdminNavbar"
 import { FaUsers } from "react-icons/fa";
 import { BsFillPostcardFill } from "react-icons/bs";
-import { MdOutlineEvent } from "react-icons/md";
+import { MdOutlineEvent, MdCalendarToday, MdFilterAlt } from "react-icons/md";
 import { TiContacts } from "react-icons/ti";
 import UserDTable from "../components/UserDTable";
 import PostDTable from "../components/PostDTable";
@@ -26,13 +26,55 @@ const Dashboard = () => {
     const [dashboardData, setDashboardData] = useState([]);
     const [feedbackAnalytics, setFeedbackAnalytics] = useState(null);
 
+    // Date range filter states
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [showFilters, setShowFilters] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const navigate = useNavigate()
+
+    // Check if any filter is active
+    const isFilterActive = () => {
+        return startDate || endDate;
+    };
+
+    // Clear all filters
+    const clearFilters = () => {
+        setStartDate('');
+        setEndDate('');
+        setRefreshTrigger(prev => prev + 1);
+    };
 
     useEffect(() => {
         setLoading(true)
 
-        api.get('/admin/dashboard')
+        let queryString = '';
+
+        // Add date filters if they exist
+        if (startDate) queryString += `startDate=${startDate}&`;
+        if (endDate) {
+            // If the dates are the same, modify the endDate to include the full day
+            if (startDate === endDate) {
+                const endDateObj = new Date(endDate);
+                endDateObj.setHours(23, 59, 59, 999);
+                queryString += `endDate=${endDateObj.toISOString()}&`;
+            } else {
+                queryString += `endDate=${endDate}&`;
+            }
+        }
+
+        // Remove trailing & if present
+        if (queryString.endsWith('&')) {
+            queryString = queryString.slice(0, -1);
+        }
+
+        // Add ? prefix if query string exists
+        if (queryString) {
+            queryString = `?${queryString}`;
+        }
+
+        api.get(`/admin/dashboard${queryString}`)
             .then((res) => {
                 setDashboardData(res.data);
                 // Set gender data for pie chart
@@ -63,7 +105,7 @@ const Dashboard = () => {
             .finally(() => {
                 setLoading(false)
             })
-    }, [])
+    }, [startDate, endDate, refreshTrigger])
 
     console.log(dashboardData)
 
@@ -71,6 +113,88 @@ const Dashboard = () => {
         <AdminDrawer>
             <AdminNavbar />
             <div className="flex flex-col max-h-none p-10">
+                {/* Date Filter Section */}
+                <div className="w-full mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-md">
+                        <div className="flex flex-wrap gap-4 justify-between items-center">
+                            <h2 className="text-xl font-medium text-gray-700 flex items-center gap-2">
+                                <MdCalendarToday className="text-primary" />
+                                Dashboard Analytics
+                            </h2>
+
+                            <div className="flex gap-2">
+                                {/* Date Filter Toggle Button */}
+                                <button
+                                    onClick={() => setShowFilters(!showFilters)}
+                                    className={`btn btn-sm ${showFilters ? 'bg-primary hover:bg-primary/80' : 'bg-secondary hover:bg-secondary/80'} font-normal gap-1 text-white`}
+                                >
+                                    <MdCalendarToday className="w-4 h-4" />
+                                    {showFilters ? "Hide Filters" : "Date Filters"}
+                                </button>
+
+                                {/* Clear Filters Button */}
+                                {isFilterActive() && (
+                                    <button
+                                        onClick={clearFilters}
+                                        className="btn btn-outline btn-sm font-normal gap-1"
+                                    >
+                                        <MdFilterAlt className="w-4 h-4" /> Clear Filters
+                                    </button>
+                                )}
+
+                                {/* PDF Export Button */}
+                                {!loading && (
+                                    <DashboardAnalyticsPDFGenerator
+                                        dashboardData={dashboardData}
+                                        chartData={chartData}
+                                        ageGroups={ageGroups}
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Date Range Filters */}
+                        {showFilters && (
+                            <div className="mt-4 p-3 bg-base-200 rounded-lg">
+                                <div className="flex flex-wrap gap-4 items-end">
+                                    <div className="form-control">
+                                        <label className="label">
+                                            <span className="label-text">Start Date</span>
+                                        </label>
+                                        <input
+                                            type="date"
+                                            className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                            value={startDate}
+                                            onChange={(e) => setStartDate(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="form-control">
+                                        <label className="label">
+                                            <span className="label-text">End Date</span>
+                                        </label>
+                                        <input
+                                            type="date"
+                                            className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                            value={endDate}
+                                            onChange={(e) => setEndDate(e.target.value)}
+                                            min={startDate}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        {isFilterActive() && (
+                                            <div className="badge badge-info text-white">
+                                                {startDate && !endDate && `Showing data from ${new Date(startDate).toLocaleDateString()} onwards`}
+                                                {!startDate && endDate && `Showing data until ${new Date(endDate).toLocaleDateString()}`}
+                                                {startDate && endDate && `Date range: ${new Date(startDate).toLocaleDateString()} - ${new Date(endDate).toLocaleDateString()}`}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
                 {/* Stats Cards */}
                 <div className="w-full">
                     <div className="w-full flex justify-evenly items-center gap-4 flex-wrap">
@@ -125,20 +249,6 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div className="w-full mt-10">
-                    <div className="flex items-center justify-end space-x-3">
-                        {!loading && (
-                            <>
-                                <DashboardAnalyticsPDFGenerator
-                                    dashboardData={dashboardData}
-                                    chartData={chartData}
-                                    ageGroups={ageGroups}
-                                />
-                            </>
-                        )}
                     </div>
                 </div>
 
