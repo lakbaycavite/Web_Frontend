@@ -15,7 +15,9 @@ import {
     MdOutlineKeyboardArrowRight,
     MdOutlineKeyboardDoubleArrowRight,
     MdPerson,
-    MdRefresh
+    MdRefresh,
+    MdCalendarToday,
+    MdFilterAlt
 } from "react-icons/md"
 import { HiMagnifyingGlass } from "react-icons/hi2"
 import { FaUserCheck, FaUserTimes } from "react-icons/fa"
@@ -37,6 +39,11 @@ const Users = () => {
     const [inputPage, setInputPage] = useState('')
     const [search, setSearch] = useState('')
 
+    // Date range filter states
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [showFilters, setShowFilters] = useState(false)
+
     // User statistics
     const [totalActiveUsers, setTotalActiveUsers] = useState(0)
     const [totalInactiveUsers, setTotalInactiveUsers] = useState(0)
@@ -47,13 +54,29 @@ const Users = () => {
     // Fetch users data with search and pagination
     useEffect(() => {
         fetchUsers()
-    }, [currentPage, limit, search, refreshKey])
+    }, [currentPage, limit, search, refreshKey, startDate, endDate])
 
     const fetchUsers = async () => {
         setLoading(true)
         try {
+            let queryString = `page=${currentPage}&limit=${limit}&search=${search}`;
+
+            // Add date filters if they exist
+            if (startDate) queryString += `&startDate=${startDate}`;
+            if (endDate) {
+                // If the dates are the same, modify the endDate to include the full day
+                if (startDate === endDate) {
+                    // Create a date object for the end date and set it to the end of the day
+                    const endDateObj = new Date(endDate);
+                    endDateObj.setHours(23, 59, 59, 999);
+                    queryString += `&endDate=${endDateObj.toISOString()}`;
+                } else {
+                    queryString += `&endDate=${endDate}`;
+                }
+            }
+
             const response = await api.get(
-                `/admin/user?page=${currentPage}&limit=${limit}&search=${search}`,
+                `/admin/user?${queryString}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${user.token}`
@@ -94,6 +117,19 @@ const Users = () => {
 
         return () => clearTimeout(timeoutId)
     }, [search])
+
+    // Clear all filters
+    const clearFilters = () => {
+        setStartDate('');
+        setEndDate('');
+        setSearch('');
+        setCurrentPage(1);
+    };
+
+    // Check if any filter is active
+    const isFilterActive = () => {
+        return search || startDate || endDate;
+    };
 
     // Render pagination controls
     const renderPagination = () => (
@@ -246,8 +282,27 @@ const Users = () => {
                             </div>
                         </div>
 
-                        {/* Refresh Button */}
+                        {/* Action Buttons */}
                         <div className="flex gap-2">
+                            {/* Date Filter Toggle Button */}
+                            <button
+                                onClick={() => setShowFilters(!showFilters)}
+                                className={`btn btn-sm ${showFilters ? 'bg-primary hover:bg-primary/80' : 'bg-secondary hover:bg-secondary/80'} font-normal gap-1 text-white`}
+                            >
+                                <MdCalendarToday className="w-4 h-4" />
+                                {showFilters ? "Hide Filters" : "Date Filters"}
+                            </button>
+
+                            {/* Clear Filters Button */}
+                            {isFilterActive() && (
+                                <button
+                                    onClick={clearFilters}
+                                    className="btn btn-outline btn-sm font-normal gap-1"
+                                >
+                                    <MdFilterAlt className="w-4 h-4" /> Clear Filters
+                                </button>
+                            )}
+
                             {/* PDF Export Button */}
                             <UserPDFGenerator
                                 currentUsers={users}
@@ -274,6 +329,54 @@ const Users = () => {
                             </button>
                         </div>
                     </div>
+
+                    {/* Date Range Filters */}
+                    {showFilters && (
+                        <div className="mt-4 p-3 bg-base-200 rounded-lg">
+                            <div className="flex flex-wrap gap-4 items-end">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Registration Start Date</span>
+                                    </label>
+                                    <input
+                                        type="date"
+                                        className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Registration End Date</span>
+                                    </label>
+                                    <input
+                                        type="date"
+                                        className="input input-bordered w-full max-w-xs focus:outline-primary"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        min={startDate}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    {startDate && !endDate && (
+                                        <div className="badge badge-info text-white">
+                                            Showing users registered from {new Date(startDate).toLocaleDateString()} onwards
+                                        </div>
+                                    )}
+                                    {!startDate && endDate && (
+                                        <div className="badge badge-info text-white">
+                                            Showing users registered until {new Date(endDate).toLocaleDateString()}
+                                        </div>
+                                    )}
+                                    {startDate && endDate && (
+                                        <div className="badge badge-info text-white">
+                                            Registration period: {new Date(startDate).toLocaleDateString()} - {new Date(endDate).toLocaleDateString()}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Table Container */}
@@ -315,8 +418,8 @@ const Users = () => {
                                 <MdPerson className="w-16 h-16 text-gray-300 mb-4" />
                                 <h3 className="text-xl font-semibold text-gray-700 mb-2">No users found</h3>
                                 <p className="text-gray-500 mb-6 text-center max-w-md">
-                                    {search ?
-                                        `We couldn't find any users matching "${search}"` :
+                                    {isFilterActive() ?
+                                        `We couldn't find any users matching your filters` :
                                         "There are no users available at the moment."}
                                 </p>
                             </div>

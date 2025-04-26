@@ -66,7 +66,17 @@ const Posts = () => {
 
         // Add date filters if they exist
         if (startDate) queryString += `&startDate=${startDate}`;
-        if (endDate) queryString += `&endDate=${endDate}`;
+        if (endDate) {
+            // If the dates are the same, modify the endDate to include the full day
+            if (startDate === endDate) {
+                // Create a date object for the end date and set it to the end of the day
+                const endDateObj = new Date(endDate);
+                endDateObj.setHours(23, 59, 59, 999);
+                queryString += `&endDate=${endDateObj.toISOString()}`;
+            } else {
+                queryString += `&endDate=${endDate}`;
+            }
+        }
 
         api.get(`/admin/post?${queryString}`, {
             headers: {
@@ -274,7 +284,7 @@ const Posts = () => {
                             {/* Date Filter Toggle Button */}
                             <button
                                 onClick={() => setShowFilters(!showFilters)}
-                                className={`btn btn-sm ${showFilters ? 'btn-primary' : 'btn-outline'} font-normal gap-1`}
+                                className={`btn btn-sm ${showFilters ? 'bg-primary hover:bg-primary/80' : 'bg-secondary hover:bg-secondary/80'} font-normal gap-1 text-white`}
                             >
                                 <MdCalendarToday className="w-4 h-4" />
                                 {showFilters ? "Hide Filters" : "Date Filters"}
