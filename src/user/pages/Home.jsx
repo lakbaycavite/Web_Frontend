@@ -7,6 +7,7 @@ import { SlInfo } from "react-icons/sl";
 import { useAuthContext } from '../../hooks/useAuthContext';
 
 import { useNavigate } from 'react-router-dom'
+import DownloadButton from '../components/DownloadButton';
 
 const Home = () => {
 
@@ -64,11 +65,8 @@ const Home = () => {
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">
                             <div className="dropdown dropdown-hover">
-                                <button className="btn bg-primary text-white hover:bg-primary/80 border-none">
-                                    <RxDownload size={20} />
 
-                                    Download App
-                                </button>
+                                <DownloadButton className="btn bg-primary text-white hover:bg-primary/80 border-none" />
                                 {/* <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                     <li>
                                         <a href="#" className="flex items-center">
@@ -147,12 +145,9 @@ const Home = () => {
 
                     <div className="flex flex-wrap justify-center gap-6">
                         <div className="w-64 h-16 transition-transform hover:scale-105">
-                            <button className="btn text-secondary">
-                                <RxDownload size={20} />
+                            <DownloadButton className="btn text-secondary" />
 
-                                Download App
-                            </button>                        </div>
-
+                        </div>
                     </div>
                 </div>
             </div>

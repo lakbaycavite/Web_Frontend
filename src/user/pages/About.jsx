@@ -14,6 +14,7 @@ import {
     FaLandmark
 } from 'react-icons/fa';
 import { MdTravelExplore, MdEmojiPeople, MdDirections } from 'react-icons/md';
+import DownloadButton from '../components/DownloadButton';
 
 const About = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -87,9 +88,8 @@ const About = () => {
                                 Your ultimate companion for navigating the historical and beautiful city of Imus.
                             </p>
                             <div className="flex flex-wrap gap-4">
-                                <button className="btn btn-success gap-2 text-white">
-                                    <MdTravelExplore size={20} /> Download the App
-                                </button>
+
+                                <DownloadButton className="btn btn-success gap-2 text-white" />
                                 {/* <button className="btn btn-outline text-white hover:bg-white hover:text-primary border-white gap-2">
                                     <MdDirections size={20} /> Get Started
                                 </button> */}
@@ -267,12 +267,9 @@ const About = () => {
                                 Download Lakbay Cavite today and start exploring the beautiful city of Imus Cavite with ease and confidence.
                             </p>
                             <div className="flex flex-wrap justify-center gap-4">
-                                <button className="btn bg-white text-secondary hover:bg-gray-200 gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-google-play" viewBox="0 0 16 16">
-                                        <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201.202.44.354.702.446.264.093.544.14.828.14.458 0 .935-.123 1.363-.369l6.704-3.458Zm-7.617-6.979 6.434-3.326-2.75-2.542c-.33-.314-.85-.456-1.363-.456-.492 0-.96.14-1.363.456L1.296 4.23c-.28.23-.451.537-.533.88.324-.14.684-.107 1.047.07l1.2.51Zm1.3-4.28c.24-.204.5-.317.776-.317.31 0 .571.1.763.283L8.25 2.776l3.012-1.55c.276-.138.503-.243.683-.243.282 0 .558.157.74.384.136.18.273.473.273.75 0 .26-.127.612-.379.995l.249-.172-.143.212c-.245.361-.377.716-.377.975 0 .267.136.553.375.736.165.134.369.21.558.21.193 0 .39-.066.565-.195l2.876-1.676c.495-.29.803-.79.803-1.322 0-.532-.308-1.031-.803-1.322l-8.39-4.883c-.475-.275-1.075-.463-1.692-.463-.621 0-1.209.213-1.614.61-.43.423-.696 1.035-.696 1.72 0 .918.506 1.826 1.3 2.261z" />
-                                    </svg>
-                                    Download App
-                                </button>
+
+                                <DownloadButton className="btn bg-white text-secondary hover:bg-gray-200 gap-2" />
+
                                 {/* <button className="btn bg-white text-secondary hover:bg-gray-200 gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-apple" viewBox="0 0 16 16">
                                         <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516.024.034 1.52.087 2.475-1.258.955-1.345.762-2.391.728-2.43Zm3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422.212-2.189 1.675-2.789 1.698-2.854.023-.065-.597-.79-1.254-1.157a3.692 3.692 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56.244.729.625 1.924 1.273 2.796.576.984 1.34 1.667 1.659 1.899.319.232 1.219.386 1.843.067.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758.347-.79.505-1.217.473-1.282Z" />
