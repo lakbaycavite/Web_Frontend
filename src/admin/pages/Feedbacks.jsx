@@ -168,8 +168,6 @@ const Feedbacks = () => {
 
     const handleSubmitResponse = async () => {
         if (!selectedFeedback) return;
-        console.log("Submitting response:", adminResponse);
-        console.log('id:', selectedFeedback._id);
         try {
             await api.put(
                 `/admin/feedback/update/${selectedFeedback._id}`,
@@ -320,8 +318,6 @@ const Feedbacks = () => {
             </div>
         </div>
     );
-
-    console.log("Feedbacks:", feedbacks);
 
     return (
         <AdminDrawer>
@@ -697,7 +693,7 @@ const Feedbacks = () => {
                                     {selectedFeedback.category}
                                 </span>
                             </div>
-                            
+
                             <p className="text-gray-700">{selectedFeedback.comment}</p>
                         </div>
 

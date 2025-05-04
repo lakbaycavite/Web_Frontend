@@ -94,7 +94,6 @@ const Users = () => {
             setAdminUser(response.data.adminUser || {})
 
 
-            console.log("Users fetched successfully:", response.data.users)
         } catch (error) {
             console.error("Error fetching users:", error)
         } finally {

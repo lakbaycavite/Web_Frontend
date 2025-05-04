@@ -89,7 +89,6 @@ const Posts = () => {
                 setTotal(response.data.total)
                 setAdminUser(response.data.adminUser)
 
-                console.log(response.data.posts)
             })
             .catch((error) => {
                 console.log(error)
