@@ -697,6 +697,7 @@ const Feedbacks = () => {
                                     {selectedFeedback.category}
                                 </span>
                             </div>
+                            
                             <p className="text-gray-700">{selectedFeedback.comment}</p>
                         </div>
 
